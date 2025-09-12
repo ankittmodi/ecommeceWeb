@@ -1,0 +1,163 @@
+.prod-detail1{
+  line-height: 22px;
+  background: rgb(243, 238, 238);
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.2),0 3px 6px rgba(0,0,0,0.5);
+  margin-bottom: 15px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap:10px;
+}
+/* .prod-detail:hover .actions{
+  display: block;
+  gap: 5px;
+} */
+.discount{
+  position: absolute;
+  top:10px;
+  left:10px;
+  color:#fff;
+  background: #ff5252;
+  padding: 3px 10px;
+  border-radius: 10px;
+  z-index: 50;
+}
+.actions{
+  position: absolute;
+  top:20px;
+  right:10px;
+  display: flex;
+  /* align-items: center; */
+  flex-direction: column;
+  gap: 5px;
+  /* width: 80px; */
+  transition: all 0.3s ease-in-out;
+  /* top:-100px; */
+  opacity: 0;
+  z-index: 2;
+}
+.group:hover .actions{
+  top:10px;
+  opacity: 1;
+}
+.actions .btn-icon{
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  background: #fff;
+  color: #ff5252;
+  transition: all 0.2s ease-in-out;
+}
+.actions .btn-icon:hover{
+  background: #ff5252;
+  color: #fff;
+}
+.actions .btn-icon svg{
+  font-size: 20px;
+  transition: all 0.2s ease-in-out;
+}
+.actions .btn-icon svg:hover{
+  background: #ff5252;
+  color: #fff;
+}
+.prod-detail1 img{
+  border-radius: 10px;
+}
+.img-part1 {
+  width: 100%;
+  height: 260px; 
+  overflow: hidden;
+}
+
+.img-part1 img {
+  width: 500px;
+  height: 260px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.prod-detail1 .infor{
+  padding: 10px 25px;
+}
+
+.prod-detail1 .infor h6{
+  font-size: 18px;
+  opacity: 0.8;
+}
+
+.prod-detail1 .infor h6 a{
+  font-size: 18px;
+  color:#000;
+  text-decoration: none;
+}
+.prod-detail1 .infor h3{
+  font-size: 20px;
+  margin-top: 5px;
+  font-weight: 500;
+  color:rgba(0,0,0,0.9);
+  transition: all 0.3s ease-in-out;
+}
+.prod-detail1 .infor h3 a{
+  font-weight: 500;
+  color:rgba(0,0,0,0.9);
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+  margin-bottom: 5px;
+  margin-top: 15px;
+}
+.prod-detail1 .infor h6 a:hover{
+  color:#ff5252;
+}
+.prod-detail1 .infor h3 a:hover{
+  color:#ff5252;
+  
+}
+.prod-detail1 .price{
+  display: flex;
+  align-items: center;
+  /* justify-content: space-between; */
+  margin-top: 5px;
+  margin-bottom: 5px;
+  gap: 20px;
+}
+.prod-detail1 .price .old-price{
+  text-decoration: line-through;
+  color:gray;
+  font-size: 14px;
+  font-weight: 500;
+}
+.prod-detail1 .price .new-price{
+  font-size:16px;
+  color:#ff5252
+}
+.img-part{
+  position: relative;
+}
+.top-img{
+  position: absolute;
+  top:0px;
+  left:0px;
+  opacity: 0 ;
+  transition: all 0.3s ease-in-out;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.group:hover .top-img{
+  opacity: 1;
+}
+.infor .MuiRating-root{
+  color:gold !important;
+}
+.infor .btn-icon{
+  background-color: #ff5252;
+  color: #fff;
+  padding: 5px 25px;
+  font-size: 18px;
+  margin-top: 10px;
+  text-transform: capitalize;
+}
+.swiper-wrapper{
+  padding: 15px 0px;
+}

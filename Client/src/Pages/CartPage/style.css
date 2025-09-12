@@ -1,0 +1,154 @@
+.add-section{
+  padding: 15px 0px;
+}
+.add-section .container{
+  display: flex;
+  width: 80%;
+  max-width: 80%;
+  gap:30px;
+}
+.add-section .left-part{
+  width: 70%;
+}
+.add-section .right-part{
+  width: 30%;
+  padding: 15px;
+}
+.add-section .left-part p{
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: 10px;
+
+}
+.add-section .left-part p span{
+  color:#ff5252;
+  font-size: 18px;
+  font-weight: 500;
+}
+.add-section .left-part .cart-box{
+  /* margin-top: 10px; */
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0), 0px 3px 6px rgba(0, 0, 0, 0);
+  background-color: #fff;
+  padding: 10px;
+}
+.add-section .left-part .cart-box .cart-item{
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  gap:20px;
+  width: 100%;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1), 0px 3px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 7px;
+  margin-top: 7px;
+}
+.cart-box .cart-item .img{
+  width: 10%;
+  overflow: hidden;
+  border-radius: 8px;
+  height: auto;
+}
+.cart-box .cart-item .img img{
+  width: 100%;
+  border-radius: 8px;
+}
+.cart-box .cart-item .group:hover img{
+  transform: scale(1.05);
+  transition: all 0.2s ease-in-out;
+}
+.cart-box .cart-item .info{
+  width: 90%;
+  position: relative;
+  
+}
+.cart-box .cart-item .info .cross-icon{
+  position: absolute;
+  right: 20px;
+  top: 30px;
+  font-size: 24px;
+  cursor: pointer;
+}
+.cart-box .cart-item .info h6{
+  margin-bottom: 5px;
+}
+.cart-box .cart-item .info h6 a{
+  color:#ff5252;
+  font-size: 14px;
+  text-decoration: none;
+}
+.cart-box .cart-item .info h3 a{
+  color:#000;
+  font-size: 18px;
+  text-decoration: none;
+  transition: all 0.2s ease-in;
+}
+.cart-box .cart-item .info h3 a:hover{
+  color: #ff5252;
+
+}
+.cart-box .cart-item .info .size-dropdown{
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+.cart-box .cart-item .info .size-dropdown .relative{
+  position: relative;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+.cart-box .cart-item .info .size-dropdown .span{
+  font-size: 12px;
+  font-weight: 600;
+  background: #f1f1f1;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+}
+.cart-box .cart-item .info .price{
+  margin-top: 5px;}
+.cart-box .cart-item .info span{
+  color:#000;
+  margin-right: 15px;
+  margin-top: 5px;
+}
+.cart-box .cart-item .info span:nth-child(1){
+  color:#000;
+  font-size: 18px;
+  font-weight: 500;
+  opacity: 0.8;
+}
+.cart-box .cart-item .info span:nth-child(2){
+  color:#000;
+  font-size: 14px;
+  font-weight: 500;
+  opacity: 0.8;
+  text-decoration: line-through;
+}
+.cart-box .cart-item .info span:nth-child(3){
+  color:#ff5252;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.add-section .right-part .cart-total{
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 10px;
+}
+.add-section .right-part .cart-total Button{
+  width: 100%;
+  background-color: #ff5252;
+  color:#fff;
+  text-transform: capitalize;
+  font-size: 18px;
+}
+.add-section .right-part .cart-total .cart-btn Button:hover{
+  background-color: #363333;
+  color:#fff;
+  font-weight: 600;
+}
+.add-section .right-part .cart-total .cart-btn Button svg{
+  font-size: 24px;
+  margin-right: 5px;
+}

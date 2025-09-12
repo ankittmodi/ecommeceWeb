@@ -1,0 +1,90 @@
+.add{
+  background: #fff;
+  /* padding: 20px 0px; */
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+}
+.freeshipping{
+  padding: 10px;border:2px solid #f29c9c;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 5px;
+  margin-bottom: 25px;
+}
+.container .freeshipping .col11{
+  display: flex;
+  align-items: center;
+}
+.freeshipping .icon1{
+  font-size: 50px;
+  margin-right: 8px;
+  opacity: 0.8;
+}
+.freeshipping h3{
+  font-size: 20px;
+  font-weight:500;
+  text-transform: uppercase;
+}
+.freeshipping p{
+  font-weight: 500;
+  font-size: 16px;
+  margin-bottom: 0px;
+}
+.freeshipping .price{
+  font-weight: 600;
+  font-size: 25px;
+  color:#ff5252;
+}
+
+
+/* product section */
+.product{
+  background: #fff;
+  padding: 25px 0px;
+}
+.product-section{
+  display: flex;align-items: center; justify-content: space-between;
+}
+ .product-section .heading{
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 0px;
+}
+ .product-section p{
+  font-size: 14px;
+  font-weight: 400;
+ }
+
+.MuiTabs-indicator{
+  background-color: #ff5252 !important;
+}
+.MuiTab-textColorPrimary.Mui-selected{
+  color: #fff !important;
+}
+
+
+/* latest product section   */
+.latest-product{
+  margin-top: 15px;
+  padding: 10px 0px;
+}
+.latest-banner{
+  margin-top: 15px;
+}
+/* banner section */
+.banner{
+  width: 100%;
+  margin-top: 15px;
+}
+.banner .container img{
+  width: 100%;
+  height: 250px;
+  border-radius: 10px;
+}
+
+/* blog section */
+.blog-section{
+  margin: 20px 0px;
+  background-color: #fff;
+}

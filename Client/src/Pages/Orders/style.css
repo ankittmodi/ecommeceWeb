@@ -1,0 +1,52 @@
+
+
+.table-wrapper {
+  overflow-x: auto;
+  overflow-y: scroll;
+  height: 200px;
+  margin-top: 15px;
+  position: relative;
+}
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  margin-right: 10px;
+}
+
+td, th {
+  /* border: 1px solid #dddddd; */
+  text-align: left;
+  padding: 8px;
+}
+.order-table {
+  min-width: 1000px;
+  white-space: nowrap;
+  margin-bottom: 20px;
+}
+.table-wrapper table tbody tr td Button{
+  width: 35px;
+  height: 35px;
+  min-width: 35px;
+  border-radius: 50%;
+  color:#000;
+  border:1px solid rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.table-wrapper table tr th Button svg{
+  font-size: 18px;
+  opacity: 0.8;
+}
+.table-img{
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+}
+.order-table1{
+  margin-left: 45px;
+  margin-top: 0px;
+}

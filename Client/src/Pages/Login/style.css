@@ -1,0 +1,86 @@
+.login{
+  padding: 30px 0px;
+}
+.login .card{
+  width: 400px;
+  margin: auto;
+  background: #fff;
+  padding: 15px;
+}
+.login .card h3{
+  font-size: 20px;
+  text-align: center;
+
+}
+.login-form{
+  width: 100%;
+}
+.login-form .form-group{
+  width: 100%;
+  margin-bottom: 20px;
+  
+}
+.login-form .form-group .text{
+  width: 100% !important;
+}
+.login-form .text1{
+  position: relative;
+}
+.login-form .form-group Button{
+  position: absolute;
+  top: 20px;
+  right: 15px;
+  color: #000;
+  z-index: 50;
+  height: 35px;
+  width: 35px;
+  min-width: 35px;
+  border-radius: 50%;
+
+}
+.login-form .form-group Button svg{
+  font-size: 20px !important;
+  opacity: 75;
+}
+.login-form a{
+  color:#000;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: 600;
+}
+.login-form .login-btn Button{
+  background-color: #ff5252;
+  padding: 5px 35px;
+  color:#fff;
+  text-transform: capitalize;
+  font-size: 16px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+}
+.login-form p{
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+.login-form p a{
+  color:#ff5252;
+}
+.login-form .sign-btn{
+  background-color: #fff;
+  padding: 5px 35px;
+  color:#000;
+  text-transform: capitalize;
+  font-size: 16px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  width: 100%;
+  margin-left: 5px;
+  border:1px solid rgba(0,0,0,0.5)
+}
+.login-form .sign-btn svg{
+  font-size: 20px !important;
+  margin-right: 10px;
+}

@@ -1,0 +1,10 @@
+/* header part */
+@media(min-width:320px) and(max-width:992px){
+  html,body{
+    overflow-x:hidden;
+  }
+  .mobile-nav a.active Button{
+  color:orange;
+  text-transform: capitalize !important;
+}
+}

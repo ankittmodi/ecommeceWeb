@@ -1,0 +1,162 @@
+.navbar{
+  padding: 8px 0px;
+}
+.navbar .container{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap:8;
+}
+.navbar .container .col1{
+  width: 20%;
+}
+.navbar .container .col1 Button{
+  text-transform: capitalize;
+  color:#000;
+  font-size: 16px;
+  width: 100%;
+}
+.navbar .container .col2{
+  text-transform: capitalize;
+  width: 55%;
+}
+.navbar .container .col3{
+  width: 15%;
+  text-align: center;
+}
+.icon{
+  font-size: 20px;
+  margin-right: 5px;
+  
+}
+.icon1{
+  margin-left: 5px;
+  font-size: 14px;
+  font-weight: 800;
+  align-items: center;
+}
+
+.navbar .container .col2 ul{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap:25px;
+}
+.navbar .container .col2 ul li{
+  position: relative;
+}
+/* .navbar .container .col2 ul li:hover .submenu{
+  visibility: hidden;
+  z-index: 1000;
+}
+.navbar .container .col2 ul li:hover .submenu{
+  opacity: 10;
+  visibility: inherit;
+} */
+ /* Hide submenu initially */
+.navbar .container .col2 .submenu {
+  position: absolute;
+  top: 38px;
+  left: 5px;
+  min-width: 150px;
+  background: #fff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none; /* Prevent mouse events */
+  transition: all 0.3s ease-in-out;
+  z-index: 999;
+}
+
+/* Show submenu on hover */
+.navbar .container .col2 ul li:hover .submenu {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto; /* Enable mouse events */
+  z-index: 10;
+}
+
+.navbar .container .col2 ul li a{
+  font-size: 16px;
+  font-weight: 500;
+  opacity: 0.8;
+
+}
+.navbar .container .col2 ul li a:hover{
+  color:#ff5252;
+  transition: all 0.3s ease-in-out;
+}
+.navbar .container .col2 .submenu{
+  position: absolute;
+  top:38px;
+  left:5px;
+  min-width: 150px;
+  background: #fff;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.16),0 3px 6px rgba(0,0,0,0.23);
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
+}
+.navbar .container .col2 .submenu .sub-list{
+    display: block;
+    padding: 10px;
+}
+.navbar .container .col2 .submenu .sub-list li{
+  margin-bottom: 5px;
+}
+.navbar .container .col2 .submenu .sub-list li Button{
+  width: 100%;
+  text-transform: capitalize;
+  color:#000;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.8;
+}
+.navbar .container .col2 .submenu .sub-list li Button:hover{
+  color: #ff5252;
+}
+.navbar .container .col3{
+  display: block;
+}
+.navbar .container .col3 p{
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 0px;
+}
+
+
+/* mobile nav css */
+.mobile-nav{
+  background-color: #fff;
+  padding: 1rem;width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5,1fr);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  place-items: center;
+}
+
+.mobile-btn{
+  display: flex;
+  flex-direction: column;
+  width: 40px;
+  min-width: 40px;
+  text-transform: capitalize !important;
+  color: gray;
+  gap: 8;
+}
+.mobile-btn svg{
+  color:#000;
+  font-size: 20px;
+}
+.mobile-btn span{
+  color:#000;
+  font-size: 14px;
+}
+
+@media(min-width:320px) and (max-width:992px){
+  .navbar .container .col3{
+    display: none;
+  }
+}

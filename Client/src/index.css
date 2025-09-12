@@ -1,0 +1,90 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body{
+  font-family: "Roboto", sans-serif;
+  font-optical-sizing: auto;
+  background-color: #f5f0f0;
+}
+::-webkit-scrollbar{
+  width: 13px !important;
+  height: 8px !important;
+  cursor: pointer;
+}
+::-webkit-scrollbar-thumb{background-color: #ccc; height: 10px;}
+::-webkit-scrollbar-track{background-color: #fff;}
+.container{
+  width: 95%;
+  margin: auto;
+}
+.text-size{
+  font-size: 14px;
+}
+.bg-org{
+  background: #ff5252 !important;
+  color:#fff !important;
+  text-transform: capitalize !important;
+  width: 150px;
+  font-size: 18px;
+}
+.link{
+  color:#ff5252;
+}
+.link-color:hover{
+  color: #ff5252;
+  cursor: pointer;
+}
+
+.list-style li{
+  list-style: none;
+  
+}
+.list-style li a{
+  text-decoration: none;
+  color: #000;
+  font-weight: 500;
+}
+
+/* model css */
+.model-box{
+  display: flex;
+  align-items: flex-start;
+  width: 100%;
+  position: relative;
+  flex-wrap: nowrap;
+}
+.model-box .model-btn{
+  position: absolute;
+  height: 45px;
+  width: 45px;
+  min-width: 45px;
+  top:10px;
+  right:10px;
+  border-radius: 50%;
+  background-color: #f1f1f1;
+}
+.model-box .model-btn svg{
+  font-size: 25px;
+  font-weight: 600;
+  color:#000;
+}
+.model-box .col1{
+  width: 40%;
+  padding: 15px;
+}
+.model-box .col2{
+  width: 60%;
+  padding: 10px !important;
+}
+.productDetailModel .MuiDialogContent-root{
+  padding: 0px !important;
+}
+
+/* cart panel */
+.drawer .MuiPaper-root{
+  width: 400px !important;
+  height: 100vh !important;
+  overflow: hidden;
+}

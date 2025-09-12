@@ -1,0 +1,74 @@
+.product-list{
+  padding: 20px 0px;
+  background-color: #fff;
+}
+.product-list .product-group{
+  display: flex;gap:10px;
+  background-color: #fff;
+  margin-top: 10px;
+}
+.sidebar-wrapper{
+  width: 20%;
+  background: #fff;
+  padding: 10px;
+}
+.right-content{
+  width: 80%;
+  padding: 10px;
+}
+.right-content .right-box{
+  background-color: #f0eded;
+  padding: 8px 12px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  display: flex;align-items: center;
+  justify-content: space-between;
+}
+.right-content .right-box .right-col1,.right-col2{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+}
+.right-content .right-box .right-col1 Button{
+  width: 40px;height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+
+}
+.right-content .right-box .right-col1 Button svg{
+  color:rgba(0,0,0,0.7);
+  font-size: 20px;
+}
+.right-content .right-box .text-size{
+  color:#000;
+  font-size: 14px;
+  font-weight: 500;padding-left: 5px;
+}
+.right-prod{
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+.list-prod{
+  grid-template-columns: repeat(auto-fill, minmax(100%, 2fr));
+}
+.right-content .right-box .right-col2 .btn-icon{
+  background-color: #fff;
+  color:#000;
+  text-transform: capitalize;
+}
+
+.itemViewAction Button.active svg{
+  color:#ff5252 !important;
+}
+.pagination{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 25px;
+}
+.Mui-selected{
+  background-color: #ff5252
+  !important;
+}

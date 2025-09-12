@@ -1,0 +1,161 @@
+.header1{
+  background-color: #fff;
+}
+.top-strip{
+  border-top:1px solid gray;
+  border-bottom:1px solid gray;
+  padding: 10px 0px;
+}
+.top-strip .container .top-item{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.top-strip .container .top-item .col1{
+  width: 50%;
+  
+}
+.top-strip .container .top-item .col1 .text-size{
+    display: block !important;
+  }
+.top-strip .container .top-item .col1 .text-size{
+  font-weight: 500;
+}
+.top-strip .container .top-item .col2 .list-style{
+  display: flex;
+  align-items: center;
+  gap:10px;
+}
+.top-strip .container .top-item .col2 .list-style li a:hover{
+  color:#ff5252;
+}
+
+.header{
+  padding: 15px 0px;
+  border-bottom:1px solid gray;
+}
+.header .container{
+  display: flex;
+  align-items: center;
+  /* gap:40px; */
+}
+.header .container .col1{
+  width: 25%;
+}
+.header .container .col2{
+  width: 40%;
+  position: static;
+  display: block;
+}
+.header .container .col3{
+  width: 35%;
+}
+.header .container .col3 .list-style{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  background-color: #fff;
+  z-index: 2000;
+}
+.css-d63spj-MuiBadge-root .MuiBadge-badge{
+  background-color: #ff5252;
+}
+.header-icon{
+  color:#000;
+  font-size: 25px;
+}
+.MuiSvgIcon-root{
+  fill: orange !important;
+  font-size: 24px !important;
+}
+
+.myAccount{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: capitalize !important;
+  color:#000 !important;
+}
+.myAccount Button{
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  background-color: #f1f1f1;
+  text-transform: capitalize;
+}
+.myAccount Button svg{
+  font-size: 18px;
+  color:rgba(0,0,0,0.7);
+}
+.myAccount .info{
+  display: flex;
+  flex-direction: column;
+  line-height: normal;
+}
+.myAccount .info h4{
+  font-size: 14px;
+  color:rgba(0,0,0,0.7);
+  cursor: pointer;
+  text-align: left;
+  justify-content: flex-start;
+  text-transform: capitalize !important;
+  margin-bottom: 0px;
+}
+.myAccount .info span{
+  color:rgba(0,0,0,0.7);
+  font-size: 14px;
+  text-align: left;
+  justify-content: flex-start;
+} 
+.menu-item{
+  display: flex !important;
+  gap:5px !important;
+  padding: 8px 0px;
+}
+.menu-item a{
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color:rgba(0,0,0,0.8);
+  gap:8px;
+}
+.menu-item svg{
+  font-size: 18px !important;
+}
+.MuiPaper-root{
+  width: 200px !important;
+}
+
+
+@media(min-width:320px) and (max-width:992px){
+  .top-strip .container .top-item .col1 .text-size{
+    display: none !important;
+  }
+  .top-strip .container .top-item .col2 .list-style{
+    justify-content: space-between;
+  }
+  .header .container{
+    justify-content: space-between;
+  }
+  .header .container .col1{
+    width: 50%;
+  }
+  .header .container .col1 a img{
+    width: 100%;
+    overflow: hidden;
+  }
+  .header .container .col2{
+    position: fixed;
+    top:0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 1rem;
+    display: none;
+  }
+  .header .container .col3 .list-style{
+    gap: 0px;
+  }
+}

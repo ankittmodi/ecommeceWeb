@@ -1,0 +1,84 @@
+.ReactCollapse--collapse {
+  transition: height 400ms;
+}
+.sidebar-heading{
+  display: flex;
+  align-items: center;
+  gap:5px;
+}
+.sidebar-heading .btn-icon{
+  height: 30px;
+  width: 30px;
+  min-width: 30px;
+  border-radius: 50%;
+  color: #000;
+  background-color: rgb(227, 230, 233);
+  margin-left: auto;
+}
+
+.sidebar-box h3{
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  margin-top: 10px;
+  padding-right: 10px;
+  
+}
+.sidebar .scroll{
+  max-height: 200px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding: 0px 10px;
+}
+.sidebar .scroll::-webkit-scrollbar{
+  height: 5px !important;
+  width: 5px !important;
+}
+.scroll .check{
+  width: 100%;
+}
+.scroll .MuiSvgIcon-root{
+  font-size: 16px;
+  /* padding: 6px !important; */
+}
+
+/* price section */
+.price-range{
+  display: flex;
+  align-items: center;
+  margin-top: 15px;
+  justify-content: space-between;
+}
+.text-size{
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.range-slider{
+  height: 5px !important;
+}
+.range-slider .range-slider__range{
+  height: 3px;
+  background-color: #ff5252 !important;
+}
+.range-slider .range-slider__thumb{
+  background-color: #ff5252 !important;
+  width: 16px !important;
+  height: 16px !important;
+}
+
+/* rating */
+.sidebar-box .title{
+  margin-top: 25px;
+  margin-bottom: 15px;
+}
+.rating{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.rating .rate{
+  color:yellow !important;
+  /* background-color: yellow; */
+}
+
