@@ -50,7 +50,7 @@ const VerificationEmail = (username, otp) => {
     </div>
     <div class="content">
       <p>Hi <strong>${username}</strong>,</p>
-      <p>Thank you for registering with Spicez Gold. Please use the OTP below to verify your email address:</p>
+      <p>Thank you for registering withEcommerce App. Please use the OTP below to verify your email address:</p>
       <div class="otp">${otp}</div>
       <p>If you didn’t create an account, you can safely ignore this email.</p>
     </div>

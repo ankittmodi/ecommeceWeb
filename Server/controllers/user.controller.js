@@ -3,6 +3,8 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import sendEmailFun from "../config/sendEmail.js";
 import VerificationEmail from "../utils/verificationEmailTemplate.js";
+import generateAccessToken from "../utils/generateAccessToken.js";
+import generateRefreshToken from "../utils/generateRefreshToken.js";
 // import { use } from "react";
 export async function registerUserController(req,res){
   try{
@@ -95,6 +97,99 @@ export async function verifyEmailController(req,res){
     else{
       return res.status(400).json({error:true,success:false,message:"OTO expired"});
     }
+  }
+  catch(err){
+    return res.status(500).json({
+      message:err.message || err,
+      error:true,
+      success:false
+    })
+  }
+}
+
+
+// login and logout user API
+export async function loginUserController(req,res){
+  try{
+    const {email,password}=req.body;
+  const user=await userModel.findOne({email:email});
+  if(!user){
+    res.status(400).json({
+      message:"User not register",
+      error:true,
+      success:false
+    })
+  }
+  if(user.status!=="Active"){
+    res.status(400).json({
+      message:"Contact to admin",
+      error:true,
+      success:false
+    })
+  }
+  const checkPassword=await bcrypt.compare(password,user.password);
+  if(!checkPassword){
+    return res.status(400).json({
+      message:"Check your password",
+      error:true,
+      success:false
+    })
+  }
+  const accessToken=await generateAccessToken(user._id);
+  const refreshToken=await generateRefreshToken(user._id);
+
+  const updateUser=await userModel.findByIdAndUpdate(user?._id,{
+    last_login_date:new Date()
+  });
+
+  // adding cookies
+  const cookiesOption={
+    httpOnly:true,
+    secure:true,
+    sameSite:"None"
+  }
+  res.cookie('accessToken',accessToken,cookiesOption);
+  res.cookie('refreshToken',refreshToken,cookiesOption);
+
+  return res.json({
+    message:"Login SuccessFully",
+    error:false,
+    success:true,
+    data:{
+      accessToken,
+      refreshToken
+    }
+  })
+  }
+  catch(err){
+    return res.status(500).json({
+      message:err.message || err,
+      error:true,
+      success:false
+    })
+  }
+}
+
+// logout controler
+export async function logoutController(req,res){
+  try{
+    const userid=req.userId; //middleware
+    const cookiesOption={
+      httpOnly:true,
+      secure:true,
+      sameSite:"None"
+    }
+    res.clearCookie('accessToken',cookiesOption);
+    res.clearCookie('refreshToken',cookiesOption);
+
+    const removeRefreshToken=await userModel.findByIdAndUpdate(userid,{
+      refresh_token:""
+    })
+    return res.json({
+      message:"Logout Successfully",
+      error:false,
+      success:true
+    })
   }
   catch(err){
     return res.status(500).json({

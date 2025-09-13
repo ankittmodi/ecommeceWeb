@@ -35,6 +35,7 @@ const userSchema=new mongoose.Schema({
     enum:["Active","Inactive","Suspended"],
     default:"Active"
   },
+  refresh_token: { type: String },
   address_details:[{
     type:mongoose.Schema.ObjectId,
     ref:"address"
