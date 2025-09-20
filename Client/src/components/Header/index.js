@@ -17,13 +17,6 @@ import Button from '@mui/material/Button';
 import { FaRegUser } from "react-icons/fa";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
-import PersonAdd from '@mui/icons-material/PersonAdd';
-import Settings from '@mui/icons-material/Settings';
-import Logout from '@mui/icons-material/Logout';
-import Avatar from '@mui/material/Avatar';
 import { IoBagHandleOutline } from "react-icons/io5";
 import { IoIosLogOut } from "react-icons/io";
 

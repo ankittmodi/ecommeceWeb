@@ -1,0 +1,21 @@
+
+.dash{
+  width: 100%;
+  padding: 1.2rem;
+  border:1px solid rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 1.2rem;
+  border-radius: 5px;
+  background-color: #fff;
+}
+.dash .info h1{
+  line-height: 1.5;
+}
+.dash .info img{
+  width: 2rem;
+  height: 2rem;
+  margin-left: 10px;
+  margin-top: 5px;
+}

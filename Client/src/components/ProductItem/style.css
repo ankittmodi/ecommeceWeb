@@ -25,12 +25,9 @@
   top:20px;
   right:10px;
   display: flex;
-  /* align-items: center; */
   flex-direction: column;
   gap: 5px;
-  /* width: 80px; */
   transition: all 0.3s ease-in-out;
-  /* top:-100px; */
   opacity: 0;
   z-index: 2;
 }
@@ -144,4 +141,8 @@
 }
 .infor .MuiRating-root{
   color:gold !important;
+}
+
+@media(max-width:992px){
+  
 }

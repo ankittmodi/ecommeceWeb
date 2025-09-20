@@ -1,0 +1,28 @@
+body{
+  font-family: "Roboto", sans-serif;
+  background-color: #f1f1f1;
+}
+.content-main{
+  width: 100%;
+  display: flex;
+}
+.sidebar-wrapper{
+  width: 15%;
+}
+.content-right{
+  width: 85%;
+  padding: 2rem 2rem;
+}
+.btn-blue{
+  margin-top: 2rem !important;
+  background: #3872fa !important;
+   color:#fff !important;
+   text-transform: capitalize !important;
+   display: flex !important;
+   align-items: center !important;
+   gap: 5px;
+   width: 40%;
+}
+.btn-blue:hover{
+  background: #2b5fd9 !important;
+}

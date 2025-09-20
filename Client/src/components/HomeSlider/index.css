@@ -40,3 +40,9 @@
   color: #fff;
   font-weight: 800;
 }
+
+@media(max-width:992px){
+  .homeslider{
+    padding: 0px 10px;
+  }
+}

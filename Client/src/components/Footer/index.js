@@ -22,10 +22,6 @@ import CartPanel from '../CartPanel';
 import { myContext } from '../../App';
 const Footer = () => {
   const context=useContext(myContext);
-  // const [openCart, setOpenCart] =useState(false); //cart panel
-  // const toggleCartPanel = (newOpen) => () => {
-  //   setOpenCart(newOpen);
-  // };
   return (
     <>
     <div className="footer-section">

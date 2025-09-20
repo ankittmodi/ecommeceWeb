@@ -43,7 +43,7 @@
   display: flex;
   align-items: center;
   gap:10px;
-  top:270px;
+  top:0px;
   right:0px;
   position: absolute;
   background-color: #ff5252;
@@ -82,4 +82,24 @@
 }
 .infor a:hover{
   color:#ff5252;
+}
+
+@media(max-width:345px){
+  .blog-group{
+    display: grid;
+    grid-template-columns: repeat(1,1fr);
+  }
+}
+@media(max-width:576px){
+  .blog-group{
+    display: grid;
+    grid-template-columns: repeat(1,1fr);
+  }
+}
+@media(max-width:992px){
+  .blog-group{
+    display: grid;
+    grid-template-columns: repeat(1,1fr);
+    gap: 2rem;
+  }
 }

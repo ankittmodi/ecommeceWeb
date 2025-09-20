@@ -30,7 +30,9 @@ const Home = () => {
             <p>Do not miss the current offers until the end of August</p>
           </div>
           <div className="right">
-            <Box sx={{ maxWidth: { xs: 320, sm: 480 }, bgcolor: 'background.paper' }}>
+            <Box sx={{ 
+              width: '100%',
+              maxWidth: { xs: 320, sm: 480 }, bgcolor: 'background.paper' }}>
               <Tabs
                 value={value}
                 onChange={handleChange}

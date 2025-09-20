@@ -5,6 +5,15 @@ import sendEmailFun from "../config/sendEmail.js";
 import VerificationEmail from "../utils/verificationEmailTemplate.js";
 import generateAccessToken from "../utils/generateAccessToken.js";
 import generateRefreshToken from "../utils/generateRefreshToken.js";
+import {v2 as cloudinary} from 'cloudinary';
+import fs from 'fs';
+cloudinary.config({
+  cloud_name:process.env.cloudinary_Config_cloud_name,
+  api_key:process.env.cloudinary_Config_cloud_api_key,
+  api_secret:process.env.cloudinary_Config_cloud_api_secret,
+  secure:true
+});
+var imagesArr=[];
 // import { use } from "react";
 export async function registerUserController(req,res){
   try{
@@ -173,7 +182,7 @@ export async function loginUserController(req,res){
 // logout controler
 export async function logoutController(req,res){
   try{
-    const userid=req.userId; //middleware
+    const userid=req.userId; //auth middleware
     const cookiesOption={
       httpOnly:true,
       secure:true,
@@ -197,5 +206,90 @@ export async function logoutController(req,res){
       error:true,
       success:false
     })
+  }
+}
+
+// image upload api
+
+export async function userAvatarController(req, res) {
+  try {
+    let imagesArr = [];
+    const userId = req.userId;
+    const image = req.files;
+
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+        error: true,
+        success: false,
+      });
+    }
+
+    // --- Remove old image if ?img=... is provided ---
+    const imgUrl = req.query.img;
+    if (imgUrl) {
+      const urlArr = imgUrl.split("/");
+      const avatarimage = urlArr[urlArr.length - 1]; // e.g. avatar123.jpg
+      const imageName = avatarimage.split(".")[0];   // e.g. avatar123
+
+      if (imageName) {
+        await cloudinary.uploader.destroy(imageName);
+      }
+    }
+
+    // --- Upload new image(s) ---
+    const options = {
+      use_filename: true,
+      unique_filename: false,
+      overwrite: false,
+    };
+
+    for (let i = 0; i < image?.length; i++) {
+      const result = await cloudinary.uploader.upload(image[i].path, options);
+      imagesArr.push(result.secure_url);
+      fs.unlinkSync(image[i].path); // delete local file after upload
+    }
+
+    // --- Save first uploaded image ---
+    if (imagesArr.length > 0) {
+      user.avatar = imagesArr[0];
+      await user.save();
+    }
+
+    return res.status(200).json({
+      _id: userId,
+      avatar: user.avatar,
+    });
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message,
+      error: true,
+      success: false,
+    });
+  }
+}
+
+export default userAvatarController;
+
+
+// delete upload image
+export async function removeImageFromCloudinary(req,res){
+  const imgUrl=req.query.img;
+  // "https://res.cloudinary.com/dtlhmmcer/image/upload/v1758021182/1758021178101_ankitphoto.jpg"  ye is tarah se lega urlArr
+  const urlArr=imgUrl.split("/");
+  // ["https:","res.cloudinary.com","dtlhmmcer","image","upload","v1758021182","1758021178101_ankitphoto.jpg"] ye neeche wala array is tarah se lega
+  const image=urlArr[urlArr.length-1];
+  const imageName=image.split(".")[0];
+  if(imageName){
+    const result=await cloudinary.uploader.destroy(
+    imageName,
+    (error,result)=>{
+
+    }
+  );
+  if(result){
+    res.status(200).send(result);
+  }
   }
 }

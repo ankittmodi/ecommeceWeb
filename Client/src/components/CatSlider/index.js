@@ -18,7 +18,43 @@ const CatSlider = () => {
         }}
         navigation={true}
         modules={[Autoplay, Pagination, Navigation]}
-        className="mySwiper">
+        className="mySwiper"
+        // ✅ Responsive breakpoints
+          breakpoints={{
+            320: {        // Mobile
+              slidesPerView: 1,
+              spaceBetween: 10,
+            },
+            350: {        // Mobile
+              slidesPerView: 2,
+              spaceBetween: 10,
+            },
+            375: {        // Mobile
+              slidesPerView: 3,
+              spaceBetween: 10,
+            },
+            640: {        // Small tablets
+              slidesPerView: 4,
+              spaceBetween: 15,
+            },
+            768: {        // Tablets
+              slidesPerView: 5,
+              spaceBetween: 20,
+            },
+            992: {        // Tablets
+              slidesPerView: 6,
+              spaceBetween: 20,
+            },
+            1024: {       // Laptops
+              slidesPerView: 6,
+              spaceBetween: 20,
+            },
+            1280: {       // Large desktops
+              slidesPerView: 7,
+              spaceBetween: 25,
+            },
+          }}
+        >
           <SwiperSlide><div className="item">
             <img src="https://serviceapi.spicezgold.com/download/1750853024086_1000006454.png" alt="" />
             <h3>Fashion</h3>

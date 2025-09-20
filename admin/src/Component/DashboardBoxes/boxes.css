@@ -1,0 +1,44 @@
+.swiper {
+  width: 100%;
+  height: 100%;
+}
+
+.swiper-slide {
+  text-align: center;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.boxes{
+  margin-bottom: 1.5rem;
+}
+.boxes .box{
+  padding: 1rem;
+  border-radius: 5px;
+  border: 1px solid rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  background-color: #ffffff;
+}
+.boxes .box:hover{
+  background-color: #f1f1f1;
+}
+.info{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+.info p{
+  text-align: left;
+}
+.box-icon{
+  font-size: 30px;
+}
+.box-icon1{
+  height: 3rem;
+  width: 5rem;
+  color: #3872fa;
+}
