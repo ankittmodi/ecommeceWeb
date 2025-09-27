@@ -1,51 +1,162 @@
-.products {
-  padding: 15px 0;
-}
-
-.swiper {
-  width: 100%;
-  height: auto;
-  /* padding:0rem 2rem 0rem 4rem; */
-}
-.swiper-slide {
-  font-size: 18px;
-  height: auto;
-  display: flex;
-  justify-content: center;
-  margin: 0;
-}
-
 .prod-detail {
-  width: 100%;          /* full width for mobile */
+  line-height: 22px;
   background: rgb(243, 238, 238);
   border-radius: 10px;
   box-shadow: 0 3px 6px rgba(0,0,0,0.2), 0 3px 6px rgba(0,0,0,0.5);
+  margin-bottom: 15px;
+  position: relative;
+  height: 100%; /* Ensure the card takes full height of the slider slide */
+}
+
+.discount {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  color: #fff;
+  background: #ff5252;
+  padding: 3px 10px;
+  border-radius: 10px;
+  z-index: 50;
+}
+
+.actions {
+  position: absolute;
+  top: 20px;
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  transition: all 0.3s ease-in-out;
+  opacity: 0;
+  z-index: 2;
+}
+
+.group:hover .actions {
+  top: 10px;
+  opacity: 1;
+}
+
+.actions .btn-icon {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  background: #fff;
+  color: #ff5252;
+  transition: all 0.2s ease-in-out;
+}
+
+.actions .btn-icon:hover {
+  background: #ff5252;
+  color: #fff;
+}
+
+.actions .btn-icon svg {
+  font-size: 20px;
+  transition: all 0.2s ease-in-out;
+}
+
+.actions .btn-icon svg:hover {
+  background: #ff5252;
+  color: #fff;
+}
+
+.prod-detail img {
+  border-radius: 10px;
+}
+
+.img-part {
+  width: 100%;
+  height: 400px; /* Set a fixed height for the image container */
+  overflow: hidden;
   position: relative;
 }
 
-/* Product images hover */
-.img-part {
-  position: relative;
+.img-part img {
   width: 100%;
-  overflow: hidden;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.prod-detail .infor {
+  padding: 10px;
+}
+
+.prod-detail .infor h6 {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+.prod-detail .infor h6 a {
+  font-size: 14px;
+  color: #000;
+  text-decoration: none;
+}
+
+.prod-detail .infor h3 {
+  font-size: 16px;
+  margin-top: 5px;
+  font-weight: 500;
+  color: rgba(0,0,0,0.9);
+  transition: all 0.3s ease-in-out;
+}
+
+.prod-detail .infor h3 a {
+  font-weight: 500;
+  color: rgba(0,0,0,0.9);
+  text-decoration: none;
+  transition: all 0.3s ease-in-out;
+  margin-bottom: 5px;
+}
+
+.prod-detail .infor h6 a:hover {
+  color: #ff5252;
+}
+
+.prod-detail .infor h3 a:hover {
+  color: #ff5252;
+}
+
+.prod-detail .price {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.prod-detail .price .old-price {
+  text-decoration: line-through;
+  color: gray;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.prod-detail .price .new-price {
+  font-size: 16px;
+  color: #ff5252;
 }
 
 .top-img {
   position: absolute;
   top: 0;
   left: 0;
+  opacity: 0;
+  transition: all 0.3s ease-in-out;
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0;
-  transition: all 0.3s ease-in-out;
 }
 
 .group:hover .top-img {
   opacity: 1;
 }
 
-/* Swiper navigation buttons */
+.infor .MuiRating-root {
+  color: gold !important;
+}
+
 .swiper-button-prev,
 .swiper-button-next {
   background: #ff5252;
@@ -63,4 +174,8 @@
 
 .swiper-button-next {
   right: 5px;
+}
+
+@media(max-width:992px) {
+  /* You can add responsive CSS here if needed */
 }

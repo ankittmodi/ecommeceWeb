@@ -261,16 +261,3 @@
 .related-product .products .swiper-wrapper{
   padding: 15px 10px;
 }
-
-@media (max-width:992px) {
-  .zoom-container{
-    width: 100%;
-  }
-  .zoom-product{
-    flex-direction: column;
-  }
-  .details .container{
-    flex-direction: column;
-  }
-  
-}

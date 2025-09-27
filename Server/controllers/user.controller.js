@@ -123,15 +123,23 @@ export async function loginUserController(req,res){
     const {email,password}=req.body;
   const user=await userModel.findOne({email:email});
   if(!user){
-    res.status(400).json({
+    return res.status(400).json({
       message:"User not register",
       error:true,
       success:false
     })
   }
   if(user.status!=="Active"){
-    res.status(400).json({
+    return res.status(400).json({
       message:"Contact to admin",
+      error:true,
+      success:false
+    })
+  }
+  // for verifying user updated email
+  if(user.verify_email!==true){
+    return res.status(400).json({
+      message:"Your email is not verify yet please verify your email first",
       error:true,
       success:false
     })
@@ -291,5 +299,159 @@ export async function removeImageFromCloudinary(req,res){
   if(result){
     res.status(200).send(result);
   }
+  }
+}
+
+
+// update user details
+export async function updateUserDetails(req,res){
+  try{
+    const userId=req.userId; //auth middleware
+    const {name,email,mobile,password}=req.body;
+    const userExist=await userModel.findById(userId);
+    if(!userExist){
+      return res.status(400).send('The user can not be updated');
+    }
+    // verifying user if user exist
+    let verifyCode="";
+    if(email!==userExist.email){
+      verifyCode=Math.floor(100000+Math.random()*900000).toString();
+    }
+    let hashPassword="";
+    if(password){
+      const salt=await bcrypt.genSalt(10);
+      hashPassword=await bcrypt.hash(password,salt);
+    }
+    else{
+      hashPassword=userExist.password;
+    }
+    const updateUser=await userModel.findByIdAndUpdate(userId,{
+      name:name,
+      mobile:mobile,
+      email:email,
+      varify_email:email!==userExist.email?false:true,
+      password:hashPassword,
+      otp:verifyCode!==""?verifyCode:null,
+      otpExpires:verifyCode!==""?Date.now()+600000:''
+    },{new:true});
+
+    // send verification email
+    if(email!==userExist.email){
+      await sendEmailFun({
+        sendTo:email,
+        subject:"Verify email from Ecommerce App",
+        text:"",
+        html:VerificationEmail(email,verifyCode)
+      })
+    }
+    return res.json({
+      message:"User updated successfully",
+      error:false,
+      success:true,
+      user:updateUser
+    })
+  }catch(err){
+    return res.status(500).json({
+      message:err.message|| err,
+      err:true,
+      success:false
+    })
+  }
+}
+
+// forgot password
+export async function forgotPasswordController(req, res) {
+  try {
+    const { email } = req.body;
+    const user = await userModel.findOne({ email: email });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "Email not exist",
+        error: true,
+        success: false
+      });
+    }
+
+    // generate OTP
+    let verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
+    user.otp=verifyCode;
+    user.otpExpires=Date.now() + 600000;
+    await user.save();
+
+    // send email
+    await sendEmailFun({
+      sendTo: email,
+      subject: "Verify email from Ecommerce App",
+      text: "",
+      html: VerificationEmail(user.name, verifyCode)
+    });
+
+    return res.json({
+      message: "Check Your Email",
+      error: false,
+      success: true
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      message: err.message || err,
+      error: true,  // ✅ fixed
+      success: false
+    });
+  }
+}
+
+// verify forgot password otp
+export async function forgotPasswordOtp(req,res){
+  try{
+    const{email,otp}=req.body;
+  const user=await userModel.findOne({email:email})
+  if(!user){
+    return res.status(400).json({
+      message:"Email not available",
+      error:true,
+      success:false
+    })
+  }
+  if(!email || !otp){
+    return res.status(400).json({
+      message:"Provide required feild email, otp",
+      error:true,
+      success:false
+    })
+  }
+  if(otp!==user.otp){
+    return res.status(400).json({
+      message:"Invalid OTP",
+      error:true,
+      success:false
+    })
+  }
+  // check otp is expired or not
+  const currentTime=new Date().toISOString();
+  if(user.otpExpires<currentTime){
+    return res.status(400).json({
+      message:"Otp is expired",
+      error:true,
+      success:false
+    })
+  }
+
+  user.otp="";
+  user.otpExpires="";
+  user.save();
+  return res.status(400).json({
+      message:"otp verified successfully",
+      error:true,
+      success:false
+    })
+  }
+  catch(err){
+    return res.status(500).json({
+      message: err.message || err,
+      err: true,
+      success: false
+    });
   }
 }
