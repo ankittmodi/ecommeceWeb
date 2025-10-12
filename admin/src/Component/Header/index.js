@@ -1,67 +1,75 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react';
 import './style.css';
 import Button from '@mui/material/Button';
-import { RiMenu2Fill } from "react-icons/ri";
-import { IoSettingsOutline } from "react-icons/io5";
-import { IoNotificationsOutline } from "react-icons/io5";
+import { AiOutlineMenuUnfold } from "react-icons/ai";
+import { AiOutlineMenuFold } from "react-icons/ai";
+import { IoNotificationsOutline, IoPersonOutline } from "react-icons/io5";
 import Badge from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
-import { IoPersonOutline } from "react-icons/io5";
 import { MdManageAccounts } from "react-icons/md";
 import { FiActivity } from "react-icons/fi";
 import { PiSignOut } from "react-icons/pi";
+import { MyContext } from '../../App';
 
 const Header = () => {
+  // 🔹 Styled MUI badge
   const StyledBadge = styled(Badge)(({ theme }) => ({
-  '& .MuiBadge-badge': {
-    right: -3,
-    top: 13,
-    border: `2px solid ${(theme.vars ?? theme).palette.background.paper}`,
-    padding: '0 4px',
-  },
-}));
+    '& .MuiBadge-badge': {
+      right: -3,
+      top: 13,
+      border: `2px solid ${(theme.vars ?? theme).palette.background.paper}`,
+      padding: '0 4px',
+    },
+  }));
 
-const [myAcc, setmyAcc] =useState(null);
+  // 🔹 Menu state
+  const [myAcc, setMyAcc] = useState(null);
   const open = Boolean(myAcc);
+
   const handleClick = (event) => {
-    setmyAcc(event.currentTarget);
+    setMyAcc(event.currentTarget);
   };
+
   const handleClose = () => {
-    setmyAcc(null);
+    setMyAcc(null);
   };
+
+  const context=useContext(MyContext);
   return (
-    <header className='header'>
+    <header className={`${context.isSidebarOpen===true?"header":"header-width"}`}>
+      {/* LEFT SECTION */}
       <div className="part1">
-        <Button className='menu-btn'><RiMenu2Fill/></Button>
+        <Button className='menu-btn' onClick={() => context.setIsSidebarOpen(!context.isSidebarOpen)}>{context.isSidebarOpen===true?<AiOutlineMenuFold/>:<AiOutlineMenuUnfold/>}</Button>
       </div>
-      <div className="part2">
-        {/* <Button className='menu-btn'><RiMenu2Fill/></Button> */}
-        <IconButton aria-label="cart">
+
+      {/* RIGHT SECTION */}
+      <div className="part2 profile-part">
+        <IconButton aria-label="notifications">
           <StyledBadge badgeContent={4} color="secondary">
-            <IoNotificationsOutline/>
+            <IoNotificationsOutline />
           </StyledBadge>
         </IconButton>
-        <div className="avatar">
-          <img src="https://mui.com/static/images/avatar/2.jpg" alt="" onClick={handleClick}/>
+
+        <div className="avatar" onClick={handleClick}>
+          <img src="https://mui.com/static/images/avatar/2.jpg" alt="user" />
         </div>
 
+        {/* Account Dropdown Menu */}
         <Menu
-        myAcc={myAcc}
-        id="account-menu"
-        open={open}
-        onClose={handleClose}
-        onClick={handleClose}
-        slotProps={{
-          paper: {
+          anchorEl={myAcc}       // ✅ Correct anchor
+          id="account-menu"
+          open={open}
+          onClose={handleClose}
+          PaperProps={{
             elevation: 0,
             sx: {
               overflow: 'visible',
               filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
-              mt: 1.5,
+              mt: 1.2, // ✅ Slight spacing below avatar
               '& .MuiAvatar-root': {
                 width: 32,
                 height: 32,
@@ -81,44 +89,43 @@ const [myAcc, setmyAcc] =useState(null);
                 zIndex: 0,
               },
             },
-          },
-        }}
-        transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-        anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-      >
-        <MenuItem onClick={handleClose} className='menu-item'>
-          <div className="dropdown">
-            <div className="avatar">
-              <img src="https://mui.com/static/images/avatar/2.jpg" alt="" />
+          }}
+          transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        >
+          <MenuItem onClick={handleClose} className='menu-item'>
+            <div className="dropdown">
+              <div className="avatar">
+                <img src="https://mui.com/static/images/avatar/2.jpg" alt="profile" />
+              </div>
+              <div className="info">
+                <h3>Ankit Kumar</h3>
+                <p>Ankit20302@gmail.com</p>
+              </div>
             </div>
-            <div className="info">
-              <h3>Ankit Kumar</h3>
-              <p>Ankit20302@gmail.com</p>
-            </div>
-          </div>
-        </MenuItem>
-        <Divider/>
-        <MenuItem onClick={handleClose} className='menu-item'>
-          <span><IoPersonOutline/></span>
-          <span>Profile</span>
-        </MenuItem>
-        <MenuItem onClick={handleClose} className='menu-item'>
-          <span><MdManageAccounts/></span>
-          <span>Account Setting</span>
-        </MenuItem>
-        <MenuItem onClick={handleClose} className='menu-item'>
-          <span><FiActivity/></span>
-          <span>Activity Log</span>
-        </MenuItem>
-        <Divider/>
-        <MenuItem onClick={handleClose} className='menu-item'>
-          <span><PiSignOut/></span>
-          <span>Sign Out</span>
-        </MenuItem>
-      </Menu>
+          </MenuItem>
+          <Divider />
+          <MenuItem onClick={handleClose} className='menu-item'>
+            <span><IoPersonOutline /></span>
+            <span>Profile</span>
+          </MenuItem>
+          <MenuItem onClick={handleClose} className='menu-item'>
+            <span><MdManageAccounts /></span>
+            <span>Account Setting</span>
+          </MenuItem>
+          <MenuItem onClick={handleClose} className='menu-item'>
+            <span><FiActivity /></span>
+            <span>Activity Log</span>
+          </MenuItem>
+          <Divider />
+          <MenuItem onClick={handleClose} className='menu-item'>
+            <span><PiSignOut /></span>
+            <span>Sign Out</span>
+          </MenuItem>
+        </Menu>
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;

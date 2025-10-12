@@ -1,0 +1,16 @@
+span.badge{
+  /* color:#000; */
+  font-size: 14px;
+  padding: 5px 12px;
+  text-transform: capitalize;
+}
+.pend-color{
+  background-color: #ff5252;
+  color:#fff;
+  border-radius: 15px;
+}
+.succ-color{
+  background-color: rgb(11, 145, 11);
+  color: #fff;
+  border-radius: 15px;
+}

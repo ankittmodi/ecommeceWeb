@@ -8,10 +8,20 @@ body{
 }
 .sidebar-wrapper{
   width: 15%;
+  opacity: 1;
+}
+.sidebar-width{
+  width: 0%;
+  opacity: 0;
+  transition: all 0.1s ease-in-out;
 }
 .content-right{
   width: 85%;
   padding: 2rem 2rem;
+  transition: all 0.1s ease-in-out;
+}
+.content-left{
+  width: 100%;
 }
 .btn-blue{
   margin-top: 2rem !important;
@@ -25,4 +35,12 @@ body{
 }
 .btn-blue:hover{
   background: #2b5fd9 !important;
+}
+
+::-webkit-scrollbar{
+  width: 10px !important;
+  height: 10px !important;
+}
+::-webkit-scrollbar-thumb{
+  background: #ccc !important;
 }

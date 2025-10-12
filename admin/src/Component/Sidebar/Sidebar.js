@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import './sidebar.css';
 import logo from '../../assests/logo.png';
 import { Link } from 'react-router-dom';
@@ -12,8 +12,10 @@ import { BsBagCheck } from "react-icons/bs";
 import { FiLogOut } from "react-icons/fi";
 import { FaAngleDown } from "react-icons/fa6";
 import {Collapse} from 'react-collapse';
+import { MyContext } from '../../App';
 const Sidebar = () => {
   const [submenu,setSubmenu]=useState(null);
+  const context=useContext(MyContext);
   const isOpenSubMenu=(index)=>{
     if(submenu===index){
       setSubmenu(null);
@@ -23,7 +25,7 @@ const Sidebar = () => {
     }
   }
   return (
-    <div className='sidebar'>
+    <div className={`${context.isSidebarOpen===true?"sidebar":"sidebar-width1"}`}>
       <div className="logo">
         <Link><img src={logo} alt="" className='logo-img'/></Link>
       </div>
@@ -48,7 +50,7 @@ const Sidebar = () => {
           </ul>
         </Collapse>
         </li>
-        <li><Link to='/category'><Button className='side-btn'  onClick={()=>isOpenSubMenu(3)}><TbCategory/>Category <span className='angle'><FaAngleDown className={`angle-down ${submenu===3?'active':''}`}/></span></Button></Link>
+        <li><Button className='side-btn'  onClick={()=>isOpenSubMenu(3)}><TbCategory/>Category <span className='angle'><FaAngleDown className={`angle-down ${submenu===3?'active':''}`}/></span></Button>
         {/* submenu */}
         <Collapse isOpened={submenu===3?true:false}>
           <ul className='submenu'>

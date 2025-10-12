@@ -20,7 +20,7 @@ const userSchema=new mongoose.Schema({
   },
   mobile:{
     type:Number,
-    default:false
+    // default:false
   },
   verify_email:{
     type:Boolean,

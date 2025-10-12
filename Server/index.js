@@ -7,7 +7,10 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import connectDB from './config/connectDb.js';
 import userRouter from './Route/user.route.js';
-
+import categoryRouter from './Route/category.route.js';
+import productRouter from './Route/product.route.js';
+import cartRouter from './Route/cartroute.js';
+import myListRouter from './Route/myList.route.js';
 const app=express();
 app.use(cors());
 app.options('*',cors());
@@ -27,6 +30,10 @@ app.get('/',(request,response)=>{
 });
 
 app.use('/api/user',userRouter);
+app.use('/api/category',categoryRouter);
+app.use('/api/product',productRouter);
+app.use('/api/cart',cartRouter);
+app.use('/api/myList',myListRouter);
 
 connectDB()
   .then(() => {

@@ -1,92 +1,719 @@
-import React from 'react'
+import React, { useState } from 'react';
 import './dashboard.css';
 import Boxes from '../Component/DashboardBoxes/Boxes';
 import hand from '../assests/hand.png';
 import Button from '@mui/material/Button';
 import { IoAdd } from "react-icons/io5";
-import { styled } from '@mui/material/styles';
+import { FaAngleDown, FaAngleUp } from "react-icons/fa6";
+import Badges from '../Component/Badges';
+import Checkbox from '@mui/material/Checkbox';
+import { Link } from 'react-router-dom';
+import ProgressBar from '../Component/progressBar';
+import { FiEdit3 } from "react-icons/fi";
+import { IoEye } from "react-icons/io5";
+import { MdOutlineDelete } from "react-icons/md";
+import Tooltip from '@mui/material/Tooltip';
+import Pagination from '@mui/material/Pagination';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
+import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } }; 
+const columns = [
+  { id: 'product', label: 'PRODUCT', minWidth: 150 },
+  { id: 'category', label: 'CATEGORY', minWidth: 100 },
+  {
+    id: 'subcategory',
+    label: 'SUB CATEGORY',
+    minWidth: 150,
   },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
+  {
+    id: 'price',
+    label: 'PRICE',
+    minWidth: 130,
   },
-}));
-
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
+  {
+    id: 'sales',
+    label: 'SALES',
+    minWidth: 130,
   },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
+  {
+    id: 'action',
+    label: 'Action',
+    minWidth: 130,
   },
-}));
-
-function createData(name, color, category, price, action) {
-  return { name, color, category, price, action };
-}
-
-const rows = [
-  createData('Apple MacBook Pro 17', 'Silver','Laptop', 'Rs. 1,20,000', 'Edit'),
-  createData('Apple MacBook Pro 17', 'Silver','Laptop', 'Rs. 1,20,000', 'Edit'),
-  createData('Apple MacBook Pro 17', 'Silver','Laptop', 'Rs. 1,20,000', 'Edit'),
-  createData('Apple MacBook Pro 17', 'Silver','Laptop', 'Rs. 1,20,000', 'Edit'),
-  createData('Apple MacBook Pro 17', 'Silver','Laptop', 'Rs. 1,20,000', 'Edit'),
-  createData('Apple MacBook Pro 17', 'Silver','Laptop', 'Rs. 1,20,000', 'Edit'),
-  createData('Apple MacBook Pro 17', 'Silver','Laptop', 'Rs. 1,20,000', 'Edit'),
-  createData('Apple MacBook Pro 17', 'Silver','Laptop', 'Rs. 1,20,000', 'Edit'),
 ];
+
 const Dashboard = () => {
+  const [isOpenOrder, setIsOpenOrder] = useState(null);
+  const [page, setPage] =useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+   const [categoryFilter, setCategoryFilter] = useState('');
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(+event.target.value);
+    setPage(0);
+  };
+  const toggleOrder = (index) => {
+    setIsOpenOrder(isOpenOrder === index ? null : index);
+  };
+
+  const handleChangeFilter = (event) => {
+    setCategoryFilter(event.target.value);
+  };
+
   return (
     <div className='dashboard'>
+      {/* ---------- HEADER ---------- */}
       <div className="dash">
         <div className="info">
-          <h1>Good Morning,<br />Ankit <img src={hand} alt="" /></h1>
-          <p>Here's What happening on your store today. See the statics at once.</p>
-          <Button className='btn-blue'><IoAdd />Add Product</Button>
+          <h1>
+            Good Morning,<br />Ankit <img src={hand} alt="wave" />
+          </h1>
+          <p>Here's what's happening on your store today. See all the stats at once.</p>
+          <Button className='btn-blue'>
+            <IoAdd /> Add Product
+          </Button>
         </div>
-        <img src="" alt="" />
       </div>
-      <Boxes/>
-      <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>PRODUCT NAME</StyledTableCell>
-            <StyledTableCell align="right">COLOR</StyledTableCell>
-            <StyledTableCell align="right">CATEGORY</StyledTableCell>
-            <StyledTableCell align="right">PRICE</StyledTableCell>
-            <StyledTableCell align="right">ACTION</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.color}</StyledTableCell>
-              <StyledTableCell align="right">{row.category}</StyledTableCell>
-              <StyledTableCell align="right">{row.price}</StyledTableCell>
-              <StyledTableCell align="right">{row.action}</StyledTableCell>
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-    </div>
-  )
-}
 
-export default Dashboard
+      {/* ---------- DASHBOARD BOXES ---------- */}
+      <Boxes />
+
+    {/* ---------- ORDERS TABLE ---------- */}
+      <div className='tables-card'>
+        <div className='table-flex'>
+          <h2>Products</h2>
+        </div>
+        <div className='dropdown'>
+            <div className='column'>
+              <h4>Category</h4>
+                <Select
+                  className='drop-menu'
+                  size='small'
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={categoryFilter}
+                  label="Category"
+                  onChange={handleChangeFilter}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={10}>Ten</MenuItem>
+                  <MenuItem value={20}>Twenty</MenuItem>
+                  <MenuItem value={30}>Thirty</MenuItem>
+                </Select>
+            </div>
+        </div>
+
+        <div className="table-wrapper">
+          <table className="order-table">
+            <thead className='table-container'>
+              <tr className='table-header'>
+                <th><Checkbox {...label} size='small'/></th>
+                <th>Product</th>
+                <th>Category</th>
+                <th>Sub Category</th>
+                <th>Price</th>
+                <th>Rating</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr>
+                <td className='table-body'>
+                  <Checkbox {...label} size='small'/>
+                </td>
+
+                <td>
+                  <div className='body-flex'>
+                    <div className='body-img'>
+                      <img src='https://www.houseofmasaba.com/cdn/shop/files/Masaba100410copy.jpg?v=1720173528' alt="img"/>
+                    </div>
+                    <div className='body-info'>
+                      <h3><Link to='/product/9894375'>Pink Whispering Lily Crush Saree</Link></h3>
+                      <p>Saree- Beautiful printed saree with Mystic print crushed palla</p>
+                    </div>
+                  </div>
+                </td>
+                <td>Electronics</td>
+                <td>Women</td>
+                <td><p>Rs. 1300</p></td>
+                <td>
+                  <p className="progress-bar">234 Sales</p>
+                  <ProgressBar value={60} type="error" />
+                </td>
+                <td>
+                  <div className='dash-btns'>
+                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
+                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
+                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className='table-body'>
+                  <Checkbox {...label} size='small'/>
+                </td>
+
+                <td>
+                  <div className='body-flex'>
+                    <div className='body-img'>
+                      <img src='https://www.houseofmasaba.com/cdn/shop/files/Masaba100410copy.jpg?v=1720173528' alt="img"/>
+                    </div>
+                    <div className='body-info'>
+                      <h3><Link to='/product/9894375'>Pink Whispering Lily Crush Saree</Link></h3>
+                      <p>Saree- Beautiful printed saree with Mystic print crushed palla</p>
+                    </div>
+                  </div>
+                </td>
+                <td>Electronics</td>
+                <td>Women</td>
+                <td><p>Rs. 1300</p></td>
+                <td>
+                  <p className="progress-bar">234 Sales</p>
+                  <ProgressBar value={60} type="error" />
+                </td>
+                <td>
+                  <div className='dash-btns'>
+                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
+                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
+                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className='table-body'>
+                  <Checkbox {...label} size='small'/>
+                </td>
+
+                <td>
+                  <div className='body-flex'>
+                    <div className='body-img'>
+                      <img src='https://www.houseofmasaba.com/cdn/shop/files/Masaba100410copy.jpg?v=1720173528' alt="img"/>
+                    </div>
+                    <div className='body-info'>
+                      <h3><Link to='/product/9894375'>Pink Whispering Lily Crush Saree</Link></h3>
+                      <p>Saree- Beautiful printed saree with Mystic print crushed palla</p>
+                    </div>
+                  </div>
+                </td>
+                <td>Electronics</td>
+                <td>Women</td>
+                <td><p>Rs. 1300</p></td>
+                <td>
+                  <p className="progress-bar">234 Sales</p>
+                  <ProgressBar value={60} type="error" />
+                </td>
+                <td>
+                  <div className='dash-btns'>
+                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
+                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
+                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td className='table-body'>
+                  <Checkbox {...label} size='small'/>
+                </td>
+
+                <td>
+                  <div className='body-flex'>
+                    <div className='body-img'>
+                      <img src='https://www.houseofmasaba.com/cdn/shop/files/Masaba100410copy.jpg?v=1720173528' alt="img"/>
+                    </div>
+                    <div className='body-info'>
+                      <h3><Link to='/product/9894375'>Pink Whispering Lily Crush Saree</Link></h3>
+                      <p>Saree- Beautiful printed saree with Mystic print crushed palla</p>
+                    </div>
+                  </div>
+                </td>
+                <td>Electronics</td>
+                <td>Women</td>
+                <td><p>Rs. 1300</p></td>
+                <td>
+                  <p className="progress-bar">234 Sales</p>
+                  <ProgressBar value={60} type="error" />
+                </td>
+                <td>
+                  <div className='dash-btns'>
+                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
+                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
+                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div className='pagination'>
+          <Pagination count={10} />
+        </div>
+      </div>
+      <div className='tables-card'>
+        <div className='table-flex'>
+          <h2>Products (material ui)</h2>
+        </div>
+
+        <TableContainer sx={{ maxHeight: 440 }}>
+        <Table stickyHeader aria-label="sticky table">
+          <TableHead>
+            <TableRow>
+              <TableCell>
+                <Checkbox {...label} size="small"/>
+              </TableCell>
+              {columns.map((column) => (
+                <TableCell
+                  key={column.id}
+                  align={column.align}
+                  style={{ minWidth: column.minWidth }}
+                >
+                  {column.label}
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <Checkbox {...label} size="small"/>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <div className='body-flex'>
+                    <div className='body-img'>
+                      <img src='https://www.houseofmasaba.com/cdn/shop/files/Masaba100410copy.jpg?v=1720173528' alt="img"/>
+                    </div>
+                    <div className='body-info'>
+                      <h3><Link to='/product/9894375'>Pink Whispering Lily Crush Saree</Link></h3>
+                      <p>Saree- Beautiful printed saree with Mystic print crushed palla</p>
+                    </div>
+                  </div>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                Electronics
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                Women
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <p>Rs. 1300</p>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <p className="progress-bar">234 Sales</p>
+                  <ProgressBar value={60} type="error" />
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <div className='dash-btns'>
+                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
+                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
+                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                  </div>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <Checkbox {...label} size="small"/>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <div className='body-flex'>
+                    <div className='body-img'>
+                      <img src='https://www.houseofmasaba.com/cdn/shop/files/Masaba100410copy.jpg?v=1720173528' alt="img"/>
+                    </div>
+                    <div className='body-info'>
+                      <h3><Link to='/product/9894375'>Pink Whispering Lily Crush Saree</Link></h3>
+                      <p>Saree- Beautiful printed saree with Mystic print crushed palla</p>
+                    </div>
+                  </div>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                Electronics
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                Women
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <p>Rs. 1300</p>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <p className="progress-bar">234 Sales</p>
+                  <ProgressBar value={60} type="error" />
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <div className='dash-btns'>
+                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
+                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
+                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                  </div>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <Checkbox {...label} size="small"/>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <div className='body-flex'>
+                    <div className='body-img'>
+                      <img src='https://www.houseofmasaba.com/cdn/shop/files/Masaba100410copy.jpg?v=1720173528' alt="img"/>
+                    </div>
+                    <div className='body-info'>
+                      <h3><Link to='/product/9894375'>Pink Whispering Lily Crush Saree</Link></h3>
+                      <p>Saree- Beautiful printed saree with Mystic print crushed palla</p>
+                    </div>
+                  </div>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                Electronics
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                Women
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <p>Rs. 1300</p>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <p className="progress-bar">234 Sales</p>
+                  <ProgressBar value={60} type="error" />
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <div className='dash-btns'>
+                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
+                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
+                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                  </div>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <Checkbox {...label} size="small"/>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <div className='body-flex'>
+                    <div className='body-img'>
+                      <img src='https://www.houseofmasaba.com/cdn/shop/files/Masaba100410copy.jpg?v=1720173528' alt="img"/>
+                    </div>
+                    <div className='body-info'>
+                      <h3><Link to='/product/9894375'>Pink Whispering Lily Crush Saree</Link></h3>
+                      <p>Saree- Beautiful printed saree with Mystic print crushed palla</p>
+                    </div>
+                  </div>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                Electronics
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                Women
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <p>Rs. 1300</p>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <p className="progress-bar">234 Sales</p>
+                  <ProgressBar value={60} type="error" />
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <div className='dash-btns'>
+                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
+                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
+                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                  </div>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <Checkbox {...label} size="small"/>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <div className='body-flex'>
+                    <div className='body-img'>
+                      <img src='https://www.houseofmasaba.com/cdn/shop/files/Masaba100410copy.jpg?v=1720173528' alt="img"/>
+                    </div>
+                    <div className='body-info'>
+                      <h3><Link to='/product/9894375'>Pink Whispering Lily Crush Saree</Link></h3>
+                      <p>Saree- Beautiful printed saree with Mystic print crushed palla</p>
+                    </div>
+                  </div>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                Electronics
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                Women
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <p>Rs. 1300</p>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <p className="progress-bar">234 Sales</p>
+                  <ProgressBar value={60} type="error" />
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <div className='dash-btns'>
+                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
+                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
+                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                  </div>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <Checkbox {...label} size="small"/>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <div className='body-flex'>
+                    <div className='body-img'>
+                      <img src='https://www.houseofmasaba.com/cdn/shop/files/Masaba100410copy.jpg?v=1720173528' alt="img"/>
+                    </div>
+                    <div className='body-info'>
+                      <h3><Link to='/product/9894375'>Pink Whispering Lily Crush Saree</Link></h3>
+                      <p>Saree- Beautiful printed saree with Mystic print crushed palla</p>
+                    </div>
+                  </div>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                Electronics
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                Women
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <p>Rs. 1300</p>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <p className="progress-bar">234 Sales</p>
+                  <ProgressBar value={60} type="error" />
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <div className='dash-btns'>
+                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
+                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
+                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                  </div>
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <Checkbox {...label} size="small"/>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <div className='body-flex'>
+                    <div className='body-img'>
+                      <img src='https://www.houseofmasaba.com/cdn/shop/files/Masaba100410copy.jpg?v=1720173528' alt="img"/>
+                    </div>
+                    <div className='body-info'>
+                      <h3><Link to='/product/9894375'>Pink Whispering Lily Crush Saree</Link></h3>
+                      <p>Saree- Beautiful printed saree with Mystic print crushed palla</p>
+                    </div>
+                  </div>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                Electronics
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                Women
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <p>Rs. 1300</p>
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <p className="progress-bar">234 Sales</p>
+                  <ProgressBar value={60} type="error" />
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <div className='dash-btns'>
+                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
+                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
+                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                  </div>
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 100]}
+        component="div"
+        count=""
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
+      </div> 
+
+      {/* ---------- ORDERS TABLE ---------- */}
+      <div className='tables-card'>
+        <div className='table-flex'>
+          <h2>Recent Orders</h2>
+        </div>
+
+        <div className="table-wrapper">
+          <table className="order-table">
+            <thead className='table-container'>
+              <tr className='table-header'>
+                <th>&nbsp;</th>
+                <th>Order Id</th>
+                <th>Payment Id</th>
+                <th>Name</th>
+                <th>Phone Number</th>
+                <th>Address</th>
+                <th>Pincode</th>
+                <th>Total Amount</th>
+                <th>Email</th>
+                <th>User Id</th>
+                <th>Order Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {/* ---------- ORDER 1 ---------- */}
+              <tr>
+                <td>
+                  <Button onClick={() => toggleOrder(0)}>
+                    {isOpenOrder === 0 ? <FaAngleUp /> : <FaAngleDown />}
+                  </Button>
+                </td>
+                <td>3h4g56g476g4g4h5j7</td>
+                <td>h4g56g476g4</td>
+                <td>Ankit Kumar</td>
+                <td>5485158415</td>
+                <td>Maithon, Dhanbad, Jharkhand, India</td>
+                <td>828407</td>
+                <td>₹1499.00</td>
+                <td>murad345@gmail.com</td>
+                <td>Ankit123445</td>
+                <td><Badges status='pending' /></td>
+                <td>25-07-2025</td>
+              </tr>
+              {isOpenOrder === 0 && (
+                <>
+                  <tr>
+                    <td colSpan="12">
+                      <hr />
+                      <table className="order-table1">
+                        <thead>
+                          <tr>
+                            <th>Product Id</th>
+                            <th>Product Title</th>
+                            <th>Image</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Subtotal</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>3h4g56g476g4g4h5j7</td>
+                            <td>Koskii Saree</td>
+                            <td>
+                              <img
+                                src="https://serviceapi.spicezgold.com/download/1742462383493_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-1-202308161431.jpg"
+                                alt=""
+                                className='table-img'
+                              />
+                            </td>
+                            <td>1</td>
+                            <td>₹1500.00</td>
+                            <td>₹1540.00</td>
+                          </tr>
+                          <tr>
+                            <td>3h4g56g476g4g4h5j7</td>
+                            <td>Koskii Saree</td>
+                            <td>
+                              <img
+                                src="https://serviceapi.spicezgold.com/download/1742462383493_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-1-202308161431.jpg"
+                                alt=""
+                                className='table-img'
+                              />
+                            </td>
+                            <td>1</td>
+                            <td>₹1500.00</td>
+                            <td>₹1540.00</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </>
+              )}
+
+              {/* ---------- ORDER 2 ---------- */}
+              <tr>
+                <td>
+                  <Button onClick={() => toggleOrder(1)}>
+                    {isOpenOrder === 1 ? <FaAngleUp /> : <FaAngleDown />}
+                  </Button>
+                </td>
+                <td>8j4l56g4k6g4g4h5k9</td>
+                <td>h8l56g476g4</td>
+                <td>Ravi Kumar</td>
+                <td>7845124598</td>
+                <td>Delhi, India</td>
+                <td>110001</td>
+                <td>₹2499.00</td>
+                <td>ravi123@gmail.com</td>
+                <td>Ravi0098</td>
+                <td><Badges status='confirmed' /></td>
+                <td>01-08-2025</td>
+              </tr>
+
+              {isOpenOrder === 1 && (
+                <>
+                  <tr>
+                    <td colSpan="12">
+                      <hr />
+                      <table className="order-table1">
+                        <thead>
+                          <tr>
+                            <th>Product Id</th>
+                            <th>Product Title</th>
+                            <th>Image</th>
+                            <th>Quantity</th>
+                            <th>Price</th>
+                            <th>Subtotal</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>8j4l56g4k6g4g4h5k9</td>
+                            <td>Lehenga Set</td>
+                            <td>
+                              <img
+                                src="https://serviceapi.spicezgold.com/download/1742462383493_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-1-202308161431.jpg"
+                                alt=""
+                                className='table-img'
+                              />
+                            </td>
+                            <td>1</td>
+                            <td>₹2500.00</td>
+                            <td>₹2540.00</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                </>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Dashboard;

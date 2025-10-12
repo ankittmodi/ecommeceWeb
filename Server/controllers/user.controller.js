@@ -18,7 +18,7 @@ var imagesArr=[];
 export async function registerUserController(req,res){
   try{
     let user;
-    const {name,email,password}=req.body;
+    const {name,email,password,mobile}=req.body;
     if(!name || !email || !password){
       return res.status(400).json({
         message:"Provide email, name, password",
@@ -44,6 +44,7 @@ export async function registerUserController(req,res){
       email:email,
       password:hashPassword,
       name:name,
+      mobile,
       otp:verifyCode,
       otpExpires:Date.now()+600000
     });
@@ -452,6 +453,121 @@ export async function forgotPasswordOtp(req,res){
       message: err.message || err,
       err: true,
       success: false
+    });
+  }
+}
+
+// reset password
+export async function resetPassword(req, res) {
+  try {
+    const { email, newPassword, confirmPassword } = req.body;
+
+    // Check required fields
+    if (!email || !newPassword || !confirmPassword) {
+      return res.status(400).json({
+        message: "Provide required fields: email, newPassword, confirmPassword",
+        error: true,
+        success: false,
+      });
+    }
+
+    // Find user
+    const user = await userModel.findOne({ email });
+    if (!user) {
+      return res.status(400).json({
+        message: "Email not found",
+        error: true,
+        success: false,
+      });
+    }
+
+    // Check password match
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({
+        message: "newPassword and confirmPassword must be the same",
+        error: true,
+        success: false,
+      });
+    }
+
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(confirmPassword, salt);
+
+    // Update user password
+    user.password = hashPassword;
+    await user.save();
+
+    return res.json({
+      message: "Password updated successfully.",
+      error: false,
+      success: true,
+    });
+  } catch (err) {
+    console.error("Reset password error:", err);
+    return res.status(500).json({
+      message: err.message || "Internal Server Error",
+      error: true,
+      success: false,
+    });
+  }
+}
+
+
+// refresh token
+export async function refreshToken(req,res){
+  try{
+    const refreshToken=req.cookies.refreshToken || req.headers.authorization.split(" ")[1]; // bearer token
+    if(!refreshToken){
+      return res.status(401).json({
+        message:"Invalid token",
+        error:true,
+        success:false
+      })
+    }
+    const verifyToken=await jwt.verify(refreshToken,process.env.SECRET_KEY_REFRESH_TOKEN);
+    if(!verifyToken){
+      return res.status(401).json({
+        message:"token is expired",
+        error:true,
+        success:false
+      })
+    }
+    const userId=verifyToken._id;
+    const newAccessToken=await generateAccessToken(userId);
+    const cookiesOption={
+      httpOnly:true,
+      secure:true,
+      sameSite:"None"
+    }
+    res.cookie('accessToken',newAccessToken,cookiesOption);
+  }catch(err){
+    return res.status(500).json({
+      message: err.message || "Internal Server Error",
+      error: true,
+      success: false,
+    });
+  }
+}
+
+// get login user details
+export async function userDetails(req,res) {
+  try{
+    const userId=req.userId;
+
+    const user=await userModel.findById(userId).select('-password -refresh_token');
+
+    return res.json({
+      message:"User details",
+      data:user,
+      error:false,
+      success:true
+    })
+  }catch(err){
+    return res.status(500).json({
+      message: "Something is wrong!",
+      error: true,
+      success: false,
     });
   }
 }
