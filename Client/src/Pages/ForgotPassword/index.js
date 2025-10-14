@@ -7,42 +7,23 @@ import { IoMdEyeOff } from "react-icons/io";
 import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";
 import { myContext } from '../../App';
-const Login = () => {
+const ForgotPassword = () => {
   const[isShowPassword,setIsShowPassword]=useState(false);
-  const [formFeilds,setFormFeilds]=useState(
-    {
-      email:'',
-      password:''
-    }
-  );
+  const[isShowPassword2,setIsShowPassword2]=useState(false);
   const context=useContext(myContext);
   const history=useNavigate();
-  const forgotPassword=(e)=>{
-    e.preventDefault();
-    if(formFeilds.email!==true){
-      context.openAlertBox("success", "OTP sent successfully!");
-      history('/verify');
-    }
-  }
+
   return (
     <section className="login">
       <div className="container">
         <div className="card">
-          <h3>Login to your Account</h3>
+          <h3>Forgot Password</h3>
           <form action="" className='login-form'>
-            <div className="form-group">
-              <TextField
-                type='email'
-                id="email"
-                label="Email Id *"
-                variant="outlined" className='text'
-                name='name'></TextField>
-            </div>
             <div className="form-group text1">
               <TextField
               type={isShowPassword===false?'password':'text'}
                 id="password"
-                label="Password *"
+                label="New Password *"
                 name='password'
                 variant="outlined" className='text text1'></TextField>
                 <Button type='submit' className='form-btn' onClick={()=>setIsShowPassword(!isShowPassword)} >
@@ -51,14 +32,23 @@ const Login = () => {
                 }
                   </Button>
             </div>
-            <Link to='#' className='link-color' onClick={forgotPassword}>Forgot Password ?</Link>
+            <div className="form-group text1">
+              <TextField
+              type={isShowPassword2===false?'password':'text'}
+                id="Confirm_assword"
+                label="Confirm Password *"
+                name='password'
+                variant="outlined" className='text text1'></TextField>
+                <Button type='submit' className='form-btn' onClick={()=>setIsShowPassword2(!isShowPassword2)} >
+                {
+                  isShowPassword2===false?<IoMdEyeOff/>:<IoEye/>
+                }
+                  </Button>
+            </div>
 
             <div className="login-btn">
-              <Button className='bg-org'>Login</Button>
+              <Button type='submit' className='bg-org'>Change Password</Button>
             </div>
-            <p>Not Registerd? <Link to='/register' className='link link-color '>Sign Up</Link></p>
-            <p>Or continue with social Account</p>
-            <Button className='sign-btn'><FcGoogle/> Login with Google</Button>
           </form>
         </div>
       </div>
@@ -66,4 +56,4 @@ const Login = () => {
   )
 }
 
-export default Login;
+export default ForgotPassword;

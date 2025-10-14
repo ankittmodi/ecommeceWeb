@@ -42,15 +42,15 @@ const CatSlider = () => {
               spaceBetween: 20,
             },
             992: {        // Tablets
-              slidesPerView: 6,
+              slidesPerView: 8,
               spaceBetween: 20,
             },
             1024: {       // Laptops
-              slidesPerView: 6,
+              slidesPerView: 8,
               spaceBetween: 20,
             },
             1280: {       // Large desktops
-              slidesPerView: 7,
+              slidesPerView: 10,
               spaceBetween: 25,
             },
           }}

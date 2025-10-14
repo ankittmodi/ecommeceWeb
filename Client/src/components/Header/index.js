@@ -3,7 +3,6 @@ import './index.css';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/logo.jpg';
 import Search from '../Search';
-// import Button from '@mui/material/Button';
 import Badge from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';

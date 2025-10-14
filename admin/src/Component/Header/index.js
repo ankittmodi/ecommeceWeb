@@ -54,10 +54,11 @@ const Header = () => {
           </StyledBadge>
         </IconButton>
 
-        <div className="avatar" onClick={handleClick}>
+        {
+          context.isLogin===true ?<>
+          <div className="avatar" onClick={handleClick}>
           <img src="https://mui.com/static/images/avatar/2.jpg" alt="user" />
         </div>
-
         {/* Account Dropdown Menu */}
         <Menu
           anchorEl={myAcc}       // ✅ Correct anchor
@@ -123,6 +124,11 @@ const Header = () => {
             <span>Sign Out</span>
           </MenuItem>
         </Menu>
+        </>
+        :
+        <Button className='admin-login'>Sign In</Button>
+        }
+        
       </div>
     </header>
   );

@@ -92,3 +92,11 @@
   font-weight: 400;
   opacity: 0.7;
 }
+
+.admin-login{
+  padding: 5px 16px !important;
+  background-color: blue !important;
+  text-transform: capitalize !important;
+  color: #fff !important;
+  font-weight: 600 !important;
+}

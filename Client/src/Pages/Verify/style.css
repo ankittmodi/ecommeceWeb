@@ -1,0 +1,25 @@
+.sheild-img{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+.verify-btn{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1rem;
+    padding: 0rem 1.5rem;
+    margin-bottom: 0.7rem;
+}
+.verify-btn Button{
+    width: 100% !important;
+}
+p{
+    text-align: center;
+    margin-top: 1rem;
+}
+.otp-sent{
+    color:#ff5252;
+    font-weight: 500;
+}

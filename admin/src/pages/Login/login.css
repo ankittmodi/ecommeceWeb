@@ -1,0 +1,47 @@
+
+.login .login-header{
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 50;
+}
+.login .login-header a{
+    text-decoration: none;
+    color:#000;
+}
+.login .login-header a img{
+    opacity: 1;
+    height: 3rem;
+    width: 5rem;
+}
+.login img{
+    width: 100%;
+    top: 0;left: 0;
+    opacity: 0.2;
+}
+.header-btns{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+.header-btns a{
+    text-decoration: none;
+    color:#000;
+}
+.header-btns a.active Button{
+    background-color: #dcdcdc;
+    transform: rotate(180deg);
+}
+.header-btns .btn{
+    color: rgba(0,0,0,0.8);
+    border-radius: 2rem;
+    padding: 5px 15px;
+    font-size: 14px;
+    text-transform: capitalize !important;
+    font-weight: 500;
+}

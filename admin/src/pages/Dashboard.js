@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,PureComponent } from 'react';
 import './dashboard.css';
 import Boxes from '../Component/DashboardBoxes/Boxes';
 import hand from '../assests/hand.png';
@@ -12,7 +12,7 @@ import ProgressBar from '../Component/progressBar';
 import { FiEdit3 } from "react-icons/fi";
 import { IoEye } from "react-icons/io5";
 import { MdOutlineDelete } from "react-icons/md";
-import Tooltip from '@mui/material/Tooltip';
+import TooltipMUI from '@mui/material/Tooltip';
 import Pagination from '@mui/material/Pagination';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -23,7 +23,8 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }; 
 const columns = [
@@ -51,11 +52,26 @@ const columns = [
   },
 ];
 
+
 const Dashboard = () => {
   const [isOpenOrder, setIsOpenOrder] = useState(null);
   const [page, setPage] =useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-   const [categoryFilter, setCategoryFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [chart1Data, setChart1Data] = useState([
+    { name: "JAN", TotalSales: 4000, TotalUsers: 2400, amt: 2400 },
+    { name: "FEB", TotalSales: 3000, TotalUsers: 1398, amt: 2210 },
+    { name: "MAR", TotalSales: 2000, TotalUsers: 9800, amt: 2290 },
+    { name: "APR", TotalSales: 2780, TotalUsers: 3908, amt: 2000 },
+    { name: "MAY", TotalSales: 1890, TotalUsers: 4800, amt: 2181 },
+    { name: "JUN", TotalSales: 2390, TotalUsers: 3800, amt: 2500 },
+    { name: "JUL", TotalSales: 3490, TotalUsers: 4300, amt: 2100 },
+    { name: "AUG", TotalSales: 3200, TotalUsers: 4100, amt: 2200 },
+    { name: "SEP", TotalSales: 3100, TotalUsers: 4000, amt: 2100 },
+    { name: "OCT", TotalSales: 3600, TotalUsers: 4200, amt: 2300 },
+    { name: "NOV", TotalSales: 3900, TotalUsers: 4400, amt: 2400 },
+    { name: "DEC", TotalSales: 4200, TotalUsers: 4600, amt: 2500 },
+  ]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -98,7 +114,7 @@ const Dashboard = () => {
         </div>
         <div className='dropdown'>
             <div className='column'>
-              <h4>Category</h4>
+              <h4>Category By</h4>
                 <Select
                   className='drop-menu'
                   size='small'
@@ -111,10 +127,14 @@ const Dashboard = () => {
                   <MenuItem value="">
                     <em>None</em>
                   </MenuItem>
-                  <MenuItem value={10}>Ten</MenuItem>
-                  <MenuItem value={20}>Twenty</MenuItem>
-                  <MenuItem value={30}>Thirty</MenuItem>
+                  <MenuItem value={10}>Men</MenuItem>
+                  <MenuItem value={20}>Women</MenuItem>
+                  <MenuItem value={30}>Kids</MenuItem>
                 </Select>
+            </div>
+            <div className='column2'>
+              <Button className='btn-blue col-btn'>Export</Button>
+              <Button className='btn-blue'>Add Product</Button>
             </div>
         </div>
 
@@ -158,9 +178,9 @@ const Dashboard = () => {
                 </td>
                 <td>
                   <div className='dash-btns'>
-                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
-                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
-                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                    <TooltipMUI title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></TooltipMUI>
+                    <TooltipMUI title="View"><Button className='dash-btn'><IoEye /></Button></TooltipMUI>
+                    <TooltipMUI title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></TooltipMUI>
                   </div>
                 </td>
               </tr>
@@ -189,9 +209,9 @@ const Dashboard = () => {
                 </td>
                 <td>
                   <div className='dash-btns'>
-                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
-                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
-                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                    <TooltipMUI title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></TooltipMUI>
+                    <TooltipMUI title="View"><Button className='dash-btn'><IoEye /></Button></TooltipMUI>
+                    <TooltipMUI title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></TooltipMUI>
                   </div>
                 </td>
               </tr>
@@ -220,9 +240,9 @@ const Dashboard = () => {
                 </td>
                 <td>
                   <div className='dash-btns'>
-                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
-                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
-                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                    <TooltipMUI title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></TooltipMUI>
+                    <TooltipMUI title="View"><Button className='dash-btn'><IoEye /></Button></TooltipMUI>
+                    <TooltipMUI title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></TooltipMUI>
                   </div>
                 </td>
               </tr>
@@ -251,9 +271,9 @@ const Dashboard = () => {
                 </td>
                 <td>
                   <div className='dash-btns'>
-                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
-                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
-                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                    <TooltipMUI title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></TooltipMUI>
+                    <TooltipMUI title="View"><Button className='dash-btn'><IoEye /></Button></TooltipMUI>
+                    <TooltipMUI title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></TooltipMUI>
                   </div>
                 </td>
               </tr>
@@ -268,7 +288,32 @@ const Dashboard = () => {
         <div className='table-flex'>
           <h2>Products (material ui)</h2>
         </div>
-
+        <div className='dropdown'>
+            <div className='column'>
+              <h4>Category By</h4>
+                <Select
+                  className='drop-menu'
+                  size='small'
+                  labelId="demo-simple-select-helper-label"
+                  id="demo-simple-select-helper"
+                  value={categoryFilter}
+                  label="Category"
+                  onChange={handleChangeFilter}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={10}>Men</MenuItem>
+                  <MenuItem value={20}>Women</MenuItem>
+                  <MenuItem value={30}>Kids</MenuItem>
+                </Select>
+            </div>
+            <div className='column2'>
+              <Button className='btn-blue col-btn'>Export</Button>
+              <Button className='btn-blue'>Add Product</Button>
+            </div>
+        </div>
+        <br/>
         <TableContainer sx={{ maxHeight: 440 }}>
         <Table stickyHeader aria-label="sticky table">
           <TableHead>
@@ -318,9 +363,9 @@ const Dashboard = () => {
               </TableCell>
               <TableCell style={{minWidth:columns.minWidth}}>
                 <div className='dash-btns'>
-                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
-                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
-                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                    <TooltipMUI title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></TooltipMUI>
+                    <TooltipMUI title="View"><Button className='dash-btn'><IoEye /></Button></TooltipMUI>
+                    <TooltipMUI title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></TooltipMUI>
                   </div>
               </TableCell>
             </TableRow>
@@ -354,9 +399,9 @@ const Dashboard = () => {
               </TableCell>
               <TableCell style={{minWidth:columns.minWidth}}>
                 <div className='dash-btns'>
-                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
-                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
-                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                    <TooltipMUI title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></TooltipMUI>
+                    <TooltipMUI title="View"><Button className='dash-btn'><IoEye /></Button></TooltipMUI>
+                    <TooltipMUI title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></TooltipMUI>
                   </div>
               </TableCell>
             </TableRow>
@@ -390,9 +435,9 @@ const Dashboard = () => {
               </TableCell>
               <TableCell style={{minWidth:columns.minWidth}}>
                 <div className='dash-btns'>
-                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
-                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
-                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                    <TooltipMUI title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></TooltipMUI>
+                    <TooltipMUI title="View"><Button className='dash-btn'><IoEye /></Button></TooltipMUI>
+                    <TooltipMUI title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></TooltipMUI>
                   </div>
               </TableCell>
             </TableRow>
@@ -426,9 +471,9 @@ const Dashboard = () => {
               </TableCell>
               <TableCell style={{minWidth:columns.minWidth}}>
                 <div className='dash-btns'>
-                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
-                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
-                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                    <TooltipMUI title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></TooltipMUI>
+                    <TooltipMUI title="View"><Button className='dash-btn'><IoEye /></Button></TooltipMUI>
+                    <TooltipMUI title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></TooltipMUI>
                   </div>
               </TableCell>
             </TableRow>
@@ -462,9 +507,9 @@ const Dashboard = () => {
               </TableCell>
               <TableCell style={{minWidth:columns.minWidth}}>
                 <div className='dash-btns'>
-                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
-                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
-                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                    <TooltipMUI title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></TooltipMUI>
+                    <TooltipMUI title="View"><Button className='dash-btn'><IoEye /></Button></TooltipMUI>
+                    <TooltipMUI title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></TooltipMUI>
                   </div>
               </TableCell>
             </TableRow>
@@ -498,9 +543,9 @@ const Dashboard = () => {
               </TableCell>
               <TableCell style={{minWidth:columns.minWidth}}>
                 <div className='dash-btns'>
-                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
-                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
-                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                    <TooltipMUI title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></TooltipMUI>
+                    <TooltipMUI title="View"><Button className='dash-btn'><IoEye /></Button></TooltipMUI>
+                    <TooltipMUI title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></TooltipMUI>
                   </div>
               </TableCell>
             </TableRow>
@@ -534,9 +579,9 @@ const Dashboard = () => {
               </TableCell>
               <TableCell style={{minWidth:columns.minWidth}}>
                 <div className='dash-btns'>
-                    <Tooltip title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></Tooltip>
-                    <Tooltip title="View"><Button className='dash-btn'><IoEye /></Button></Tooltip>
-                    <Tooltip title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></Tooltip>
+                    <TooltipMUI title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></TooltipMUI>
+                    <TooltipMUI title="View"><Button className='dash-btn'><IoEye /></Button></TooltipMUI>
+                    <TooltipMUI title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></TooltipMUI>
                   </div>
               </TableCell>
             </TableRow>
@@ -710,6 +755,38 @@ const Dashboard = () => {
               )}
             </tbody>
           </table>
+        </div>
+      </div>
+
+      {/* recharts */}
+      <div className='tables-card'>
+        <div className='table-flex ' style={{paddingBottom:"0"}}>
+          <h2>Total Users & Total Sales</h2>
+        </div>
+        <div className='table-flex table-group'>
+          <span className='total-group'><span className='total-user'></span>Total Users</span>
+          <span className='total-group'><span className='total-user'></span>Total Sales</span>
+        </div>
+        <div className="table-wrapper">
+              <LineChart
+              width={1000}
+              height={500}
+              data={chart1Data}
+              margin={{
+                top: 5,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" stroke='none'/>
+              <XAxis dataKey="name" tick={{fontSize:12}}/>
+              <YAxis tick={{fontSize:12}}/>
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="TotalUsers" stroke="#8884d8" activeDot={{ r: 8 }} strokeWidth={3}/>
+              <Line type="monotone" dataKey="TotalSales" stroke="#82ca9d" strokeWidth={3}/>
+            </LineChart>
         </div>
       </div>
     </div>

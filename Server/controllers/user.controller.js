@@ -14,106 +14,140 @@ cloudinary.config({
   secure:true
 });
 var imagesArr=[];
-// import { use } from "react";
-export async function registerUserController(req,res){
-  try{
-    let user;
-    const {name,email,password,mobile}=req.body;
-    if(!name || !email || !password){
+
+// --- Register User ---
+export async function registerUserController(req, res) {
+  try {
+    const { name, email, password, mobile } = req.body;
+    if (!name || !email || !password) {
       return res.status(400).json({
-        message:"Provide email, name, password",
-        error:true,
-        success:false
-      })
+        message: "Provide email, name, password",
+        error: true,
+        success: false,
+      });
     }
-    // if user exist or not
-    user=await userModel.findOne({email:email});
-    if(user){
-      return res.json({
-        message:"User already Registered with this email",
-        error:true,
-        success:false
-      })
+
+    let user = await userModel.findOne({ email });
+
+    // User already verified
+    if (user && user.isVerified) {
+      return res.status(400).json({
+        message: "User already verified",
+        error: true,
+        success: false,
+      });
     }
-    // generate 6 digit otp
-    const verifyCode=Math.floor(100000+Math.random()*900000).toString();
-    const salt=await bcrypt.genSalt(10);
-    const hashPassword=await bcrypt.hash(password,salt);
-    
-    user=new userModel({
-      email:email,
-      password:hashPassword,
-      name:name,
-      mobile,
-      otp:verifyCode,
-      otpExpires:Date.now()+600000
-    });
+
+    // Hash password
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 min
+
+    if (!user) {
+      // New user
+      user = new userModel({
+        name,
+        email,
+        password: hashPassword,
+        mobile,
+        otp,
+        otpExpires,
+        isVerified: false,
+      });
+    } else {
+      // Unverified user exists, resend OTP
+      user.otp = otp;
+      user.otpExpires = otpExpires;
+    }
+
     await user.save();
 
-    // send verification email
-    const verifyEmail=await sendEmailFun({
-      sendTo:email,
-      subject:"Verify email from Ecommerce App",
-      text:'',
-      // first create sendEmail file in config.js
-      html:VerificationEmail(name,verifyCode)
+    // Send OTP email
+    await sendEmailFun({
+      sendTo: email,
+      subject: "Verify your email",
+      html: VerificationEmail(name, otp),
     });
 
-    // create a jwt token for verification
-    const token=jwt.sign({email:user.email,id:user._id},
-      process.env.JSON_WEB_TOKEN_SECRET_KEY
-    );
-
     return res.status(200).json({
-      success:true,
-      error:false,
-      message:"User registered successfully! Please verify your email.",
-      token:token, //include this if needed for verification
-    })
-  }catch(error){
+      success: true,
+      error: false,
+      message: "OTP sent to email. Please verify.",
+    });
+  } catch (err) {
     return res.status(500).json({
-      message:error.message || error,
-      error:true,
-      success:false
-    })
+      message: err.message || "Internal server error",
+      error: true,
+      success: false,
+    });
   }
 }
 
-// verify email controller
-export async function verifyEmailController(req,res){
-  try{
-    const {email,otp}=req.body;
-    const user=await userModel.findOne({email:email});
-
-    if(!user){
+// --- Verify Email ---
+export async function verifyEmailController(req, res) {
+  try {
+    const { email, otp } = req.body;
+    if (!email || !otp) {
       return res.status(400).json({
-        message:"User not found",
-        error:true,
-        success:false
-      })
+        message: "Provide email and OTP",
+        error: true,
+        success: false,
+      });
     }
-    const isCodeValid=user.otp===otp;
-    const isNotExpired=user.otpExpires>Date.now();
-    if(isCodeValid && isNotExpired){
-      user.isVerified=true;
-      user.otp=null;
-      user.otpExpires=null;
-      await user.save();
-      return res.status(200).json({error:false,success:true,message:"Email verified successfully"});
+
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found",
+        error: true,
+        success: false,
+      });
     }
-    else if(!isCodeValid){
-      return res.status(400).json({error:true,success:false,message:"Invalid OTP"});
+
+    if (user.isVerified) {
+      return res.status(400).json({
+        message: "Email already verified",
+        error: true,
+        success: false,
+      });
     }
-    else{
-      return res.status(400).json({error:true,success:false,message:"OTO expired"});
+
+    if (!user.otp || user.otpExpires.getTime() < Date.now()) {
+      return res.status(400).json({
+        message: "OTP expired",
+        error: true,
+        success: false,
+      });
     }
-  }
-  catch(err){
+
+    if (String(user.otp) !== String(otp)) {
+      return res.status(400).json({
+        message: "Invalid OTP",
+        error: true,
+        success: false,
+      });
+    }
+
+    // OTP valid → verify user
+    user.isVerified = true;
+    user.otp = null;
+    user.otpExpires = null;
+    await user.save();
+
+    return res.status(200).json({
+      message: "Email verified successfully",
+      error: false,
+      success: true,
+    });
+  } catch (err) {
     return res.status(500).json({
-      message:err.message || err,
-      error:true,
-      success:false
-    })
+      message: err.message || "Internal server error",
+      error: true,
+      success: false,
+    });
   }
 }
 

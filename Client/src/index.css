@@ -27,7 +27,12 @@ body{
   color:#fff !important;
   text-transform: capitalize !important;
   width: 150px;
-  font-size: 18px;
+  font-size: 18px !important;
+}
+.bg-org:hover{
+  background-color: rgba(0,0,0,0.9) !important;
+  color:#ffff !important;
+  font-size: 18px !important;
 }
 .link{
   color:#ff5252;
@@ -48,13 +53,14 @@ body{
 }
 
 /* model css */
-.model-box{
+/* .model-box{
   display: flex;
   align-items: flex-start;
   width: 100%;
   position: relative;
   flex-wrap: nowrap;
-}
+} */
+/* 
 .model-box .model-btn{
   position: absolute;
   height: 45px;
@@ -82,9 +88,8 @@ body{
   padding: 0px !important;
 }
 
-/* cart panel */
 .drawer .MuiPaper-root{
   width: 400px !important;
   height: 100vh !important;
   overflow: hidden;
-}
+} */

@@ -4,17 +4,19 @@ import Header from './Component/Header';
 import Sidebar from './Component/Sidebar/Sidebar';
 import Dashboard from './pages/Dashboard';
 import { createContext, useState } from 'react';
+import Login from './pages/Login';
 
 export const MyContext = createContext();
 function App() {
   const [isSidebarOpen,setIsSidebarOpen]=useState(true);
+  const[isLogin,setIsLogin]=useState(false);
   const router=createBrowserRouter([
     {
-      path:'/',
+      path:'/login',
       exact:true,
       element:(<>
         <section className="main">
-          <Header/>
+          {/* <Header/>
           <div className="content-main">
             <div className={` ${isSidebarOpen===true?"sidebar-wrapper":"sidebar-width"}`}>
               <Sidebar/>
@@ -22,7 +24,8 @@ function App() {
             <div className={`content-right ${isSidebarOpen===true?"content-right":"content-left"}`}>
               <Dashboard/>
             </div>
-          </div>
+          </div> */}
+          <Login/>
         </section>
       </>)
     }
@@ -30,7 +33,9 @@ function App() {
 
   const values={
     isSidebarOpen,
-    setIsSidebarOpen
+    setIsSidebarOpen,
+    isLogin,
+    setIsLogin
   };
   return (
     <MyContext.Provider value={values}>

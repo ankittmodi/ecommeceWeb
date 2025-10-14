@@ -23,6 +23,11 @@ import MyAccount from './Pages/MyAccount';
 import MyList from './Pages/MyList';
 import Orders from './Pages/Orders';
 import { useEffect } from 'react';
+// from react hot toast
+import toast, { Toaster } from 'react-hot-toast';
+import Verify from './Pages/Verify';
+import ForgotPassword from './Pages/ForgotPassword';
+
 
 const myContext=createContext();
 function App() {
@@ -30,7 +35,7 @@ function App() {
   const[fullWidth,setFullWidth]=useState(true);
   const[maxWidth,setMaxWidth]=useState('lg');
   const [openCart, setOpenCart] =useState(false); //cart panel
-  const[isLogin,setIsLogin]=useState(true); //for checking if user logged in then account show user 
+  const[isLogin,setIsLogin]=useState(false); //for checking if user logged in then account show user 
 
   const[windoWidth,setWindoWidth]=useState(window.innerWidth);
 
@@ -43,6 +48,15 @@ function App() {
   const toggleCartPanel = (newOpen) => () => {
     setOpenCart(newOpen);
   };
+
+  const openAlertBox=(status,msg)=>{
+    if(status==="success"){
+      toast.success(msg);
+    }
+    if(status==="error"){
+      toast.error(msg);
+    }
+  }
 
   useEffect(()=>{
     const handleResize=()=>{
@@ -61,6 +75,7 @@ function App() {
     isLogin,
     setIsLogin,
     windoWidth,
+    openAlertBox
   }
   return (
     <>
@@ -73,6 +88,8 @@ function App() {
         <Route path={'/product/:id'} exact={true} element={<ProductDetails/> }/>
         <Route path={'/login'} exact={true} element={<Login/> }/>
         <Route path={'/register'} exact={true} element={<Register/> }/>
+        <Route path={'/verify'} exact={true} element={<Verify/>}/>
+        <Route path={'/forgot-password'} exact={true} element={<ForgotPassword/>}/>
         <Route path={'/cart'} exact={true} element={<CartPage/> }/>
         <Route path={'/checkout'} exact={true} element={<Checkout/> }/>
         <Route path={'/myaccount'} exact={true} element={<MyAccount/> }/>
@@ -80,8 +97,11 @@ function App() {
         <Route path={'/myorder'} exact={true} element={<Orders/> }/>
       </Routes>
       <Footer/>
+          {/* toaster */}
+          <Toaster/>
     </myContext.Provider>
     </BrowserRouter>
+
     <Dialog
         fullWidth={fullWidth}
         maxWidth={maxWidth}

@@ -22,20 +22,34 @@
 .dropdown{
   display: flex;
   align-items: center;
+  justify-content: space-between;
   width: 100%;
   padding-left: 1.5rem;
   margin-bottom: 10px;
+  /* padding-right: 1.2rem; */
 }
 .dropdown .column{
-  width: 25%;
+  width: 20%;
 }
 .dropdown .column h4{
   font-weight: 700;
   font-size: 14px;
-  margin-bottom: 10px;
+  margin-bottom: 0.5rem;
 }
 .drop-menu{
   width: 80%;
+}
+.dropdown .column2{
+  width: 23%;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.col-btn{
+  padding: 8px 20px;
+  background-color: rgb(8, 193, 8) !important;
+  font-weight: 600;
 }
 /* tables part */
 .tables-card{
@@ -189,4 +203,25 @@ th.MuiTableCell-root{
   background-color: #f1f1f1 !important;
   padding-top: 5px;
   padding-bottom: 5px;
+}
+
+.table-group{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start !important;
+  gap: 1rem;
+  padding-top: 0;
+
+}
+.total-group{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.total-user{
+  display: block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: rgb(5, 193, 5);
 }
