@@ -27,6 +27,7 @@ import { useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import Verify from './Pages/Verify';
 import ForgotPassword from './Pages/ForgotPassword';
+import { fetchDataFromApi } from './utils/Api';
 
 
 const myContext=createContext();
@@ -36,6 +37,10 @@ function App() {
   const[maxWidth,setMaxWidth]=useState('lg');
   const [openCart, setOpenCart] =useState(false); //cart panel
   const[isLogin,setIsLogin]=useState(false); //for checking if user logged in then account show user 
+  // for adding username and email to home page by using backend
+  // const [userName, setUserName] = useState(localStorage.getItem("userName") || "");
+  // const [userEmail, setUserEmail] = useState(localStorage.getItem("userEmail") || "");
+  const[userData,setUserData]=useState({});
 
   const[windoWidth,setWindoWidth]=useState(window.innerWidth);
 
@@ -67,6 +72,20 @@ function App() {
       window.removeEventListener("resize",handleResize);
     };
   },[]);
+  useEffect(()=>{
+    const token=localStorage.getItem('accessToken');
+    if(token!==undefined && token!==null && token!==""){
+      setIsLogin(true);
+
+      fetchDataFromApi(`/api/user/user-details?token=${token}`).then((res)=>{
+        console.log(res);
+        setUserData(res.data);
+      })
+    }
+    else{
+      setIsLogin(false);
+    }
+  },[isLogin]);
   const values={
     setOpenProductDetailsModel,
     setOpenCart,
@@ -75,7 +94,13 @@ function App() {
     isLogin,
     setIsLogin,
     windoWidth,
-    openAlertBox
+    openAlertBox,
+    // userName,
+    // setUserName,
+    // userEmail,
+    // setUserEmail,
+    userData,
+    setUserData
   }
   return (
     <>

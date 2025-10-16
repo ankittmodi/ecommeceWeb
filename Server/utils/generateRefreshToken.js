@@ -1,15 +1,16 @@
-// for login and register part
-import userModel from "../models/user.model.js";
 import jwt from 'jsonwebtoken';
-const generateRefreshToken=async(userId)=>{
-  const token=await jwt.sign({id:userId},
+import userModel from '../models/user.model.js';
+
+const generateRefreshToken = (userId) => {
+  const token = jwt.sign(
+    { id: userId },
     process.env.SECRET_KEY_REFRESH_TOKEN,
-    {expiresIn:'7d'}
-  )
-  const updateRefreshTokenUser=await userModel.updateOne(
-    {_id:userId},
-    {refresh_token:token}
-  )
+    { expiresIn: '7d' }
+  );
+
+  userModel.updateOne({ _id: userId }, { refresh_token: token }).catch(console.error);
+
   return token;
-}
+};
+
 export default generateRefreshToken;

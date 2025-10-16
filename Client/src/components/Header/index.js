@@ -18,6 +18,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { IoBagHandleOutline } from "react-icons/io5";
 import { IoIosLogOut } from "react-icons/io";
+import { fetchDataFromApi } from '../../utils/Api';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
   '& .MuiBadge-badge': {
@@ -38,6 +39,20 @@ const Header = () => {
   };
   const context=useContext(myContext);
     const { windoWidth } = useContext(myContext);
+
+    // for logout from backend
+    const logout=()=>{
+      setAnchorEl(null);
+      fetchDataFromApi(`/api/user/logout?token=${localStorage.getItem('accessToken')}`,{withCredentials:true}).then((res)=>{
+        console.log(res);
+        if(res.error===false){
+          context.setIsLogin(false);
+          context.openAlertBox("success",res.message);
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
+        }
+      })
+    }
   return (
     <header className='header1'>
       <div className="top-strip">
@@ -67,14 +82,21 @@ const Header = () => {
           <div className="col3">
             <ul className="list-style">
               {context.isLogin===false?
-                <li><Link to='/login' className='link-color'>Login</Link> | <Link to='/register' className='link-color'>Register</Link></li>
+                <li style={{ opacity: context.isLogin ? 0 : 1, pointerEvents: context.isLogin ? 'none' : 'auto' }}>
+                  <Link to='/login' className='link-color'>Login</Link> | 
+                  <Link to='/register' className='link-color'>Register</Link>
+                </li>
                 :
                 <>
                 <Button className="myAccount" onClick={handleClick}>
                   <Button><FaRegUser/></Button>
-                  {windoWidth>992 && <div className="info">
+                  {/* {windoWidth>992 && <div className="info">
                     <h4>Ankit Kumar</h4>
                     <span>ankitkumar@gmail.com</span>
+                  </div>} */}
+                  {windoWidth>992 && <div className="info">
+                    <h4>{context.userData.name}</h4>
+                    <span>{context.userData.email}</span>
                   </div>}
                   
                 </Button>
@@ -124,7 +146,7 @@ const Header = () => {
                   <Link to='/myorder'>
                     <IoBagHandleOutline/> Orders</Link>
                   </MenuItem>
-                  <MenuItem onClick={handleClose} className='menu-item'>
+                  <MenuItem onClick={logout} className='menu-item'>
                     <IoIosLogOut /> Logout
                   </MenuItem>
                 </Menu>

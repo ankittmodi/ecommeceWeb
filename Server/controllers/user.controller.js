@@ -172,7 +172,7 @@ export async function loginUserController(req,res){
     })
   }
   // for verifying user updated email
-  if(user.verify_email!==true){
+  if(user.isVerified!==true){
     return res.status(400).json({
       message:"Your email is not verify yet please verify your email first",
       error:true,
@@ -209,7 +209,11 @@ export async function loginUserController(req,res){
     success:true,
     data:{
       accessToken,
-      refreshToken
+      refreshToken,
+      user: {
+      name: user.name,
+      email: user.email
+    }
     }
   })
   }
@@ -364,7 +368,7 @@ export async function updateUserDetails(req,res){
       name:name,
       mobile:mobile,
       email:email,
-      varify_email:email!==userExist.email?false:true,
+      isVerified:email!==userExist.email?false:true,
       password:hashPassword,
       otp:verifyCode!==""?verifyCode:null,
       otpExpires:verifyCode!==""?Date.now()+600000:''

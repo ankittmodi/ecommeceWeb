@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
   isVerified: { type: Boolean, default: false },
   last_login_date: { type: Date, default: null },
   status: { type: String, enum: ["Active","Inactive","Suspended"], default: "Active" },
+  access_token: { type: String },
   refresh_token: { type: String },
   address_details: [{ type: mongoose.Schema.ObjectId, ref: "address" }],
   shopping_cart: [{ type: mongoose.Schema.ObjectId, ref: "cartProduct" }],

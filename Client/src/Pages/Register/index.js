@@ -53,7 +53,7 @@ const Register = () => {
       // console.log(res);
       if(res.error!==true){
         setIsLoading(false);
-        context.openAlertBox("error",res.message);
+        context.openAlertBox("success",res.message);
         localStorage.setItem("userEmail",formFeilds.email);
         setFormFeilds({
         name:"",
