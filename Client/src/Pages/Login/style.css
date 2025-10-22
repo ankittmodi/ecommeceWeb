@@ -50,6 +50,7 @@
   font-weight: 600;
 }
 .login-form .login-btn Button{
+  height: 50px; /* fixed height */
   background-color: #ff5252;
   padding: 5px 35px;
   color:#fff;
@@ -58,7 +59,11 @@
   margin-top: 10px;
   margin-bottom: 10px;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 .login-form p{
   margin-bottom: 8px;
   font-size: 14px;

@@ -102,6 +102,8 @@ const Dashboard = () => {
             <IoAdd /> Add Product
           </Button>
         </div>
+
+        <img src=""/>
       </div>
 
       {/* ---------- DASHBOARD BOXES ---------- */}
@@ -769,7 +771,7 @@ const Dashboard = () => {
         </div>
         <div className="table-wrapper">
               <LineChart
-              width={1000}
+              width={1200}
               height={500}
               data={chart1Data}
               margin={{

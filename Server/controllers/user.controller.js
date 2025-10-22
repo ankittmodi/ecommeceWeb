@@ -232,7 +232,7 @@ export async function logoutController(req,res){
     const userid=req.userId; //auth middleware
     const cookiesOption={
       httpOnly:true,
-      secure:true,
+      secure: process.env.NODE_ENV === 'production', // only true in production
       sameSite:"None"
     }
     res.clearCookie('accessToken',cookiesOption);
@@ -295,7 +295,8 @@ export async function userAvatarController(req, res) {
     for (let i = 0; i < image?.length; i++) {
       const result = await cloudinary.uploader.upload(image[i].path, options);
       imagesArr.push(result.secure_url);
-      fs.unlinkSync(image[i].path); // delete local file after upload
+      // Delete local file immediately after upload
+      fs.unlinkSync(`uploads/${req.files[i].filename}`);
     }
 
     // --- Save first uploaded image ---
@@ -383,11 +384,17 @@ export async function updateUserDetails(req,res){
         html:VerificationEmail(email,verifyCode)
       })
     }
-    return res.json({
+    return res.status(200).json({
       message:"User updated successfully",
       error:false,
       success:true,
-      user:updateUser
+      user:{
+        name:updateUser?.name,
+        _id:updateUser?._id,
+        mobile:updateUser?.mobile,
+        email:updateUser?.email,
+        avatar:updateUser?.avatar
+      }
     })
   }catch(err){
     return res.status(500).json({
@@ -421,7 +428,7 @@ export async function forgotPasswordController(req, res) {
     // send email
     await sendEmailFun({
       sendTo: email,
-      subject: "Verify email from Ecommerce App",
+      subject: "Verify OTP from Ecommerce App",
       text: "",
       html: VerificationEmail(user.name, verifyCode)
     });
@@ -469,7 +476,7 @@ export async function forgotPasswordOtp(req,res){
   }
   // check otp is expired or not
   const currentTime=new Date().toISOString();
-  if(user.otpExpires<currentTime){
+  if(user.otpExpires.getTime()<currentTime){
     return res.status(400).json({
       message:"Otp is expired",
       error:true,
@@ -480,10 +487,10 @@ export async function forgotPasswordOtp(req,res){
   user.otp="";
   user.otpExpires="";
   user.save();
-  return res.status(400).json({
+  return res.status(200).json({
       message:"otp verified successfully",
-      error:true,
-      success:false
+      error:false,
+      success:true
     })
   }
   catch(err){
@@ -595,7 +602,7 @@ export async function userDetails(req,res) {
 
     const user=await userModel.findById(userId).select('-password -refresh_token');
 
-    return res.json({
+    return res.status(200).json({
       message:"User details",
       data:user,
       error:false,

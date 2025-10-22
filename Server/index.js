@@ -12,7 +12,10 @@ import productRouter from './Route/product.route.js';
 import cartRouter from './Route/cartroute.js';
 import myListRouter from './Route/myList.route.js';
 const app=express();
-app.use(cors());
+app.use(cors({
+  origin: ["http://localhost:3000", "http://localhost:3001"], // react app
+  credentials: true
+}));
 app.options('*',cors());
 app.use(express.json());
 app.use(cookieParser());
@@ -21,7 +24,6 @@ app.use(morgan('dev'));
 app.use(helmet({
   crossOriginResourcePolicy:false
 }))
-
 
 app.get('/',(request,response)=>{
   response.json({

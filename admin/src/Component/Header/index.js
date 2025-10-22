@@ -14,6 +14,7 @@ import { MdManageAccounts } from "react-icons/md";
 import { FiActivity } from "react-icons/fi";
 import { PiSignOut } from "react-icons/pi";
 import { MyContext } from '../../App';
+import {Link} from 'react-router-dom';
 
 const Header = () => {
   // 🔹 Styled MUI badge
@@ -126,7 +127,7 @@ const Header = () => {
         </Menu>
         </>
         :
-        <Button className='admin-login'>Sign In</Button>
+        <Link to='/login'><Button className='admin-login'>Sign In</Button></Link>
         }
         
       </div>

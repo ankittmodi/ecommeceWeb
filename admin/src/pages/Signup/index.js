@@ -1,5 +1,5 @@
 import React,{useState} from 'react'
-import './login.css';
+import './style.css';
 import logo from '../../assests/logo.png'
 import { Link, NavLink } from 'react-router-dom';
 import Button from '@mui/material/Button';
@@ -8,7 +8,7 @@ import { BiLogoFacebookCircle } from "react-icons/bi";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
-const Login = () => {
+const SignUp = () => {
   const [loadinggoogle, setLoadinggoogle] =useState(false);
   const [loadingfb, setLoadingfb] =useState(false);
   const [rememberMe, setRememberMe] = useState(false);
@@ -41,15 +41,15 @@ const Login = () => {
     <section className='login'>
       {/* ===== Header ===== */}
       <header className='login-header'>
-        <Link to='/'><img src={logo} alt='logo' /></Link>
+        <NavLink to='/'><img src={logo} alt='logo' /></NavLink>
 
         <div className='header-btns'>
           <Link to='/login' exact='true'>
             <Button className='btn'>Login</Button>
           </Link>
-          <NavLink to='/signup'>
+          <Link to='/signup'>
             <Button className='btn'>Sign Up</Button>
-          </NavLink>
+          </Link>
         </div>
       </header>
 
@@ -57,7 +57,7 @@ const Login = () => {
       <div className='login-box'>
         <div className='login-content'>
           <img src={logo} alt='logo' />
-          <h1>Welcome Back!<br/> <span style={{color:"blue"}}>Sign In with your credentials.</span></h1>
+          <h1>Join us today !<br/> <span style={{color:"blue"}}>Get special benefits and stay up-to-date.</span></h1>
 
           <div className='loading-button'>
             <Button
@@ -69,7 +69,7 @@ const Login = () => {
             variant="outlined"
             className='sign-google'
           >
-            Sign In with Google
+            Sign Up with Google
           </Button>
           <Button
             size="small"
@@ -80,7 +80,7 @@ const Login = () => {
             variant="outlined"
             className='sign-google'
           >
-            Sign In with Facebook
+            Sign Up with Facebook
           </Button>
           </div>
           <br/>
@@ -91,7 +91,18 @@ const Login = () => {
           </div>
 
           <form onSubmit={handleSubmit}>
-          
+          {/* Email Field */}
+          <TextField
+            label="Full Name"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            name="name"
+            value={formFields.email}
+            onChange={onChangeInput}
+            required
+            style={{ marginBottom: '20px' }}
+          />
           {/* Email Field */}
           <TextField
             label="Email"
@@ -146,7 +157,7 @@ const Login = () => {
             disabled={!formFields.email || !formFields.password}
             className='login-btn'
           >
-            Sign In
+            Sign Up
           </Button>
           </form>
         </div>
@@ -155,4 +166,4 @@ const Login = () => {
   )
 }
 
-export default Login;
+export default SignUp;

@@ -1,0 +1,39 @@
+.file{
+    padding: 1rem;
+    border-radius: 5px;
+    overflow: hidden;
+    border:2px dashed rgba(0,0,0,0.3);
+    height: 150px;
+    width: 100%;
+    background-color: rgba(0,0,0,0.05);
+    transition: all 0.2s ease-in-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: relative;
+}
+
+.file:hover{
+    background-color: rgba(0,0,0,0.09);
+}
+.file .image{
+    font-size: 30px;
+    opacity: 0.6;
+}
+.file h4{
+    font-size: 14px;
+    font-weight: 500;
+
+}
+.file-upload{
+    position: absolute;
+    top:0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 50;
+    opacity: 0;
+    cursor: pointer;
+}

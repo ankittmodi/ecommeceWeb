@@ -10,7 +10,7 @@ const generateRefreshToken = (userId) => {
 
   userModel.updateOne({ _id: userId }, { refresh_token: token }).catch(console.error);
 
-  return token;
+  return token; 
 };
 
 export default generateRefreshToken;

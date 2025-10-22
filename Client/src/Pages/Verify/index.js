@@ -13,6 +13,8 @@ const Verify = () => {
     }
     const context=useContext(myContext);
     const history=useNavigate();
+
+    const actionType=localStorage.getItem("actionType");
     const verifyOTP = (e) => {
     e.preventDefault();
     const email = localStorage.getItem("userEmail");
@@ -21,16 +23,31 @@ const Verify = () => {
       return;
     }
 
-  postData("/api/user/verifyEmail", { email, otp })
+    if(actionType!=="forgot-password"){
+      postData("/api/user/verifyEmail", { email, otp })
+    .then((res) => {
+        if(res?.error === false){
+          context.openAlertBox("success",res.message);
+          history("/login");
+        }
+        else{
+          context.openAlertBox("error",res.message);
+        }
+      });
+    }
+    // for calling change password  
+    else{
+      postData("/api/user/verify-forgot-password-otp", { email:localStorage.getItem("userEmail"), otp:otp })
     .then(res => {
       if(res.error===false){
         context.openAlertBox("success",res.message);
-        history("/login");
+        history("/forgot-password");
       }
       else{
         context.openAlertBox("error",res.message);
       }
     });
+    }
 }
   return (
     <section className="login">

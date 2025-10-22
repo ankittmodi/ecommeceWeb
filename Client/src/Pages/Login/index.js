@@ -9,83 +9,108 @@ import { FcGoogle } from "react-icons/fc";
 import { myContext } from '../../App';
 import { postData } from '../../utils/Api';
 import CircularProgress from '@mui/material/CircularProgress';
+
 const Login = () => {
-  const[isShowPassword,setIsShowPassword]=useState(false);
-  const[isLoading,setIsLoading]=useState(false);
-  const [formFeilds,setFormFeilds]=useState(
-    {
-      email:'',
-      password:''
-    }
-  );
-  const context=useContext(myContext);
-  const history=useNavigate();
-  const forgotPassword=(e)=>{
+  const [isShowPassword, setIsShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [formFeilds, setFormFeilds] = useState({
+    email: '',
+    password: ''
+  });
+
+  const context = useContext(myContext);
+  const history = useNavigate();
+
+  const forgotPassword = (e) => {
     e.preventDefault();
-    if(formFeilds.email!==true){
-      context.openAlertBox("success", "OTP sent successfully!");
-      history('/verify');
+    if (formFeilds.email==="") {
+      context.openAlertBox("error", "Please enter email Id!");
+      return false;
+    }
+    else{
+      localStorage.setItem("userEmail",formFeilds.email);
+      localStorage.setItem("actionType",'forgot-password');
+      postData("/api/user/forgot-password", { email:formFeilds.email})
+        .then(res => {
+            if(res.error===false){
+              context.openAlertBox("success",res.message);
+              history("/verify");
+            }
+            else{
+              context.openAlertBox("error",res.message);
+            }
+      });
+      // history('/verify');
     }
   }
 
-  const onChangeInput=(e)=>{
-    const{name,value}=e.target;
-    setFormFeilds(()=>{
-      return{
-        ...formFeilds,
-        [name]:value
-      }
-    })
+  const onChangeInput = (e) => {
+    const { name, value } = e.target;
+    setFormFeilds(prev => ({
+      ...prev,
+      [name]: value
+    }));
   }
-      // no one form feild will be empty
-    const valideValue=Object.values(formFeilds).every(el=>el);
-    const handleSubmit=(e)=>{
-      e.preventDefault();
-  
-      setIsLoading(true);
-      if(formFeilds.email===""){
-        context.openAlertBox("error","Please enter email Id ")
+
+  const valideValue = Object.values(formFeilds).every(el => el);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    if (!formFeilds.email) {
+      context.openAlertBox("error", "Please enter email Id");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!formFeilds.password) {
+      context.openAlertBox("error", "Please enter password");
+      setIsLoading(false);
+      return;
+    }
+
+    postData("/api/user/login", formFeilds, { withCredentials: true })
+      .then((res) => {
         setIsLoading(false);
-        return false;
-      }
-      if(formFeilds.password===""){
-        context.openAlertBox("error","Please enter password")
-        setIsLoading(false);
-        return false;
-      }
-      postData("/api/user/login", formFeilds,{withCredentials:true}).then((res)=>{
-        console.log(res);
-        if(res.error!==true){
-          setIsLoading(false);
-          context.openAlertBox("success",res.message);
-          localStorage.setItem("userEmail",formFeilds.email);
-          setFormFeilds({
-          email:"",
-          password:""
-        })
-        localStorage.setItem("userEmail", res.data.user.email);
-        localStorage.setItem("userName", res.data.user.name);
-        localStorage.setItem("accessToken", res.data.accessToken);
-        localStorage.setItem("refreshToken", res.data.refreshToken);
-        context.setIsLogin(true);
-        history('/');
-        }else{
-          context.openAlertBox("error",res.message);
-          setFormFeilds({
-            email:"",
-            password:""
-          })
-          setIsLoading(false);
+        if (!res.error) {
+          context.openAlertBox("success", res.message);
+
+          // Save tokens & user info in localStorage
+          localStorage.setItem("userEmail", res.data.user.email);
+          localStorage.setItem("userName", res.data.user.name);
+          localStorage.setItem("accessToken", res.data.accessToken);
+          localStorage.setItem("refreshToken", res.data.refreshToken);
+
+          // ✅ Update context immediately
+          context.setIsLogin(true);
+          context.setUserData({
+            name: res.data.user.name,
+            email: res.data.user.email
+          });
+
+          // Clear form
+          setFormFeilds({ email: "", password: "" });
+
+          history('/');
+        } else {
+          context.openAlertBox("error", res.message);
+          setFormFeilds({ email: "", password: "" });
         }
       })
-      
-    }
+      .catch(err => {
+        setIsLoading(false);
+        context.openAlertBox("error", "Something went wrong!");
+        console.error(err);
+      });
+  }
+
   return (
     <section className="login">
       <div className="container">
         <div className="card">
           <h3>Login to your Account</h3>
-          <form action="" className='login-form' onSubmit={handleSubmit}>
+          <form className='login-form' onSubmit={handleSubmit}>
             <div className="form-group">
               <TextField
                 type='email'
@@ -94,39 +119,52 @@ const Login = () => {
                 name='email'
                 value={formFeilds.email}
                 disabled={isLoading===true?true:false}
-                variant="outlined" className='text'
-                onChange={onChangeInput}></TextField>
+                variant="outlined"
+                className='text'
+                onChange={onChangeInput}
+              />
             </div>
+
             <div className="form-group text1">
               <TextField
-              type={isShowPassword===false?'password':'text'}
+                type={isShowPassword ? 'text' : 'password'}
                 id="password"
                 name='password'
                 value={formFeilds.password}
                 disabled={isLoading===true?true:false}
                 label="Password *"
-                variant="outlined" className='text text1'
-                onChange={onChangeInput}></TextField>
-                <Button type='submit' className='form-btn' onClick={()=>setIsShowPassword(!isShowPassword)} >
-                {
-                  isShowPassword===false?<IoMdEyeOff/>:<IoEye/>
-                }
-                  </Button>
+                variant="outlined"
+                className='text text1'
+                onChange={onChangeInput}
+              />
+              <Button
+                type='button'
+                className='form-btn'
+                onClick={() => setIsShowPassword(!isShowPassword)}
+              >
+                {isShowPassword ? <IoEye /> : <IoMdEyeOff />}
+              </Button>
             </div>
-            <Link to='#' className='link-color' onClick={forgotPassword}>Forgot Password ?</Link>
+
+            <Link to='#' className='link-color' onClick={forgotPassword}>
+              Forgot Password ?
+            </Link>
 
             <div className="login-btn">
               <Button
-                disabled={!valideValue}
+                disabled={!valideValue || isLoading}
                 type='submit'
                 className='bg-org'
               >
-                {isLoading ? <CircularProgress color="inherit" size={20} /> : 'Login'}
+                {isLoading ? <CircularProgress color="inherit" size={25} /> : 'Login'}
               </Button>
             </div>
-            <p>Not Registerd? <Link to='/register' className='link link-color '>Sign Up</Link></p>
+
+            <p>
+              Not Registered? <Link to='/register' className='link link-color'>Sign Up</Link>
+            </p>
             <p>Or continue with social Account</p>
-            <Button className='sign-btn'><FcGoogle/> Login with Google</Button>
+            <Button className='sign-btn'><FcGoogle /> Login with Google</Button>
           </form>
         </div>
       </div>

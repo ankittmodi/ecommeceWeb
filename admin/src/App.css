@@ -44,3 +44,13 @@ body{
 ::-webkit-scrollbar-thumb{
   background: #ccc !important;
 }
+
+.MuiAppBar-colorPrimary{
+    background: #e6e6e6 !important;
+    color:#000 !important;
+    font-weight: 800 !important;
+}
+.dailog-header{
+  color:#000 !important;
+  font-weight: 800 !important;
+}
