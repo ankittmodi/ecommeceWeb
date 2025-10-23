@@ -106,5 +106,43 @@ input::-webkit-inner-spin-button {
     width: 100%;
     display: grid;
     grid-template-columns: repeat(6,1fr);
-    gap: 1rem;
+    gap: 1.5rem;
+}
+
+.upload-file .file{
+    padding: 0rem;
+}
+.upload-file .file img{
+    width: 100% !important;
+    height: 100% !important;
+}
+.upload-file-wrapper{
+    position: relative;
+}
+.upload-file-wrapper .close-icon{
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: rgb(211, 2, 2);
+    top: -15px;
+    right: -12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    color: #fff;
+    font-weight: 800;
+    cursor: pointer;
+}
+.upload-file-wrapper .close-icon svg{
+    font-size: 17px;
+}
+
+.scroll-form{
+    max-height: 550px;
+    overflow: scroll;
+    overflow-y: scroll;
+    padding-right: 1rem;
 }

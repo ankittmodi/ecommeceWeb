@@ -17,6 +17,10 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
+import HomeSliderBanners from './pages/HomeSliderBanners';
+import AddHomeSlide from './pages/HomeSliderBanners/AddHomeSlide';
+import CategoryList from './pages/Category';
+import AddCategorySlide from './pages/Category/AddCategorySlide';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -74,10 +78,38 @@ function App() {
         </section>
       ),
     },
-    // {
-    //   path: '/products/upload',
-    //   element: <AddProduct />, 
-    // },
+    {
+      path: '/homeSlider/list',
+      element: (
+        <section className="main">
+          <Header />
+          <div className="content-main">
+            <div className={isSidebarOpen ? 'sidebar-wrapper' : 'sidebar-width'}>
+              <Sidebar />
+            </div>
+            <div className={isSidebarOpen ? 'content-right' : 'content-left'}>
+              <HomeSliderBanners/>
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: '/category/list',
+      element: (
+        <section className="main">
+          <Header />
+          <div className="content-main">
+            <div className={isSidebarOpen ? 'sidebar-wrapper' : 'sidebar-width'}>
+              <Sidebar />
+            </div>
+            <div className={isSidebarOpen ? 'content-right' : 'content-left'}>
+              <CategoryList/>
+            </div>
+          </div>
+        </section>
+      ),
+    },
   ]);
 
   const values = {
@@ -121,6 +153,13 @@ function App() {
         {
           isOpenFullScreen.model==="Add Product" && <AddProduct/>
         }
+        {
+          isOpenFullScreen.model==="Add Home Slide" && <AddHomeSlide/>
+        }
+        {
+          isOpenFullScreen.model==="Add New Category" && <AddCategorySlide/>
+        }
+        
       </Dialog>
     </MyContext.Provider>
   );

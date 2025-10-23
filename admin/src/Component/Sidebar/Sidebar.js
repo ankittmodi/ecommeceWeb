@@ -36,8 +36,11 @@ const Sidebar = () => {
         {/* submenu */}
         <Collapse isOpened={submenu===1?true:false}>
           <ul className='submenu'>
-            <li className='sub-list'><Button className='sub-btn'><span className='sub-item'></span>Home Banner List</Button></li>
-            <li className='sub-list'><Button className='sub-btn'><span className='sub-item'></span>Add Home Banner Slide</Button></li>
+            <li className='sub-list'><Link to='/homeSlider/list'><Button className='sub-btn'><span className='sub-item'></span>Home Banner List</Button></Link></li>
+            <li className='sub-list'><Button className='sub-btn' onClick={()=>context.setIsOpenFullScreen({
+                    open:true,
+                    model:"Add Home Slide"
+                })}><span className='sub-item'></span>Add Home Banner Slide</Button></li>
           </ul>
         </Collapse>
         </li>
@@ -46,7 +49,10 @@ const Sidebar = () => {
         <Collapse isOpened={submenu===2?true:false}>
           <ul className='submenu'>
             <li className='sub-list'><Link to='/products'><Button className='sub-btn'><span className='sub-item'></span>Product List</Button></Link></li>
-            <li className='sub-list'><Link to='/product/upload'><Button className='sub-btn'><span className='sub-item'></span>Product Upload</Button></Link></li>
+            <li className='sub-list'><Button className='sub-btn' onClick={()=>context.setIsOpenFullScreen({
+              open:true,
+              model:"Add Product"
+            })}><span className='sub-item' ></span>Product Upload</Button></li>
           </ul>
         </Collapse>
         </li>
@@ -54,8 +60,11 @@ const Sidebar = () => {
         {/* submenu */}
         <Collapse isOpened={submenu===3?true:false}>
           <ul className='submenu'>
-            <li className='sub-list'><Link to='categories'><Button className='sub-btn'><span className='sub-item'></span>Category List</Button></Link></li>
-            <li className='sub-list'><Link to='category/add'><Button className='sub-btn'><span className='sub-item'></span>Add a Category</Button></Link></li>
+            <li className='sub-list'><Link to='/category/list'><Button className='sub-btn'><span className='sub-item'></span>Category List</Button></Link></li>
+            <li className='sub-list'><Button className='sub-btn' onClick={()=>context.setIsOpenFullScreen({
+              open:true,
+              model:"Add New Category"
+            })}><span className='sub-item'></span>Add a Category</Button></li>
             <li className='sub-list'><Link to='/category/subCat'><Button className='sub-btn'><span className='sub-item'></span>Sub Category List</Button></Link></li>
             <li className='sub-list'><Link to='/category/subCat/add'><Button className='sub-btn'><span className='sub-item'></span>Add a Sub Category</Button></Link></li>
           </ul>

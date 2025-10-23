@@ -98,7 +98,7 @@ const SignUp = () => {
             fullWidth
             margin="normal"
             name="name"
-            value={formFields.email}
+            value={formFields.name}
             onChange={onChangeInput}
             required
             style={{ marginBottom: '20px' }}

@@ -1,4 +1,4 @@
-import React, { useState,PureComponent } from 'react';
+import React, { useState,PureComponent, useContext } from 'react';
 import './dashboard.css';
 import Boxes from '../Component/DashboardBoxes/Boxes';
 import hand from '../assests/hand.png';
@@ -24,6 +24,7 @@ import TableRow from '@mui/material/TableRow';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { MyContext } from '../App';
 
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }; 
@@ -73,6 +74,8 @@ const Dashboard = () => {
     { name: "DEC", TotalSales: 4200, TotalUsers: 4600, amt: 2500 },
   ]);
 
+  const context=useContext(MyContext);
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -98,7 +101,10 @@ const Dashboard = () => {
             Good Morning,<br />Ankit <img src={hand} alt="wave" />
           </h1>
           <p>Here's what's happening on your store today. See all the stats at once.</p>
-          <Button className='btn-blue'>
+          <Button className='btn-blue' onClick={()=>context.setIsOpenFullScreen({
+            open:true,
+            model:"Add Product"
+            })}>
             <IoAdd /> Add Product
           </Button>
         </div>
@@ -136,7 +142,10 @@ const Dashboard = () => {
             </div>
             <div className='column2'>
               <Button className='btn-blue col-btn'>Export</Button>
-              <Button className='btn-blue'>Add Product</Button>
+              <Button className='btn-blue' onClick={()=>context.setIsOpenFullScreen({
+                open:true,
+                model:"Add Product"
+                })}>Add Product</Button>
             </div>
         </div>
 
@@ -312,7 +321,10 @@ const Dashboard = () => {
             </div>
             <div className='column2'>
               <Button className='btn-blue col-btn'>Export</Button>
-              <Button className='btn-blue'>Add Product</Button>
+              <Button className='btn-blue' onClick={()=>context.setIsOpenFullScreen({
+                open:true,
+                model:"Add Product"
+                })}>Add Product</Button>
             </div>
         </div>
         <br/>
