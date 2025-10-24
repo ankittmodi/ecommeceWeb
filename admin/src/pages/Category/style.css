@@ -14,7 +14,7 @@
     margin-top: 0rem;
 }
 .homeSlide-header .column2 Button:nth-child(2){
-    width: 120px;
+    width: 150px;
     margin-top: 0rem;
 }
 .btn-blue{
@@ -91,4 +91,20 @@
     overflow: scroll;
     overflow-y: scroll;
     padding-right: 1rem;
+}
+
+.chip{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.sub-category .col{
+    width: 23%;
+}
+
+.sub-category{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }

@@ -7,6 +7,7 @@
   border:1px solid rgba(0,0,0,0.2);
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 2rem;
   margin-bottom: 1.2rem;
   border-radius: 5px;
@@ -14,6 +15,9 @@
 }
 .dash .info h1{
   line-height: 1.5;
+}
+.info p{
+  margin-bottom: 1rem;
 }
 .dash .info img{
   width: 2rem;
@@ -40,6 +44,15 @@
 }
 .drop-menu{
   width: 80%;
+}
+.dash-img{
+  width: 300px;
+  height: 250px;
+}
+.dash-img img{
+  width: 100%;
+  overflow: hidden;
+  height: 100%;
 }
 .dropdown .column2{
   width: 23%;

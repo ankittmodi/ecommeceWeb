@@ -5,7 +5,6 @@ import Button from '@mui/material/Button';
 import { IoEye } from "react-icons/io5";
 import { IoMdEyeOff } from "react-icons/io";
 import { Link, useNavigate } from 'react-router-dom';
-import { FcGoogle } from "react-icons/fc";
 import { myContext } from '../../App';
 import CircularProgress from '@mui/material/CircularProgress';
 import { postData } from '../../utils/Api';

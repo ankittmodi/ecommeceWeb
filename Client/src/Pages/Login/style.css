@@ -89,3 +89,20 @@
   font-size: 20px !important;
   margin-right: 10px;
 }
+
+
+@media (max-width: 480px){
+  .login .card{
+    width: 300px !important;
+  }
+}
+@media (min-width: 481px) and (max-width: 768px) {
+  .login .card{
+    width: 400px !important;
+  }
+}
+@media(min-width:769px) and (max-width:992px){
+  .login .card{
+    width: 400px !important;
+  }
+}

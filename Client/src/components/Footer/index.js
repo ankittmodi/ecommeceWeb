@@ -120,8 +120,8 @@ const Footer = () => {
             <p>Subscribe to our latest newsletter to get news about special discounts.</p>
             <form action="" className="form-section">
               <input type="text" name='email' placeholder='Your Email Address' required/>
-              <Button>Subscribe</Button>
                 <FormControlLabel required control={<Checkbox />} label="I agree to the terms and conditions and the privacy policy" />
+                <Button style={{marginTop:"1rem"}}>Subscribe</Button>
             </form>
           </div>
         </div>

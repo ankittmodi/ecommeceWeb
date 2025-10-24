@@ -12,16 +12,18 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
+import Chip from '@mui/material/Chip';
 import './style.css';
 import { MyContext } from '../../App';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }; 
 const columns = [
-  { id: 'image', label: 'IMAGE', minWidth: 250 },
-  { id: 'catName', label: 'CATEGORY NAME', minWidth: 250 },
+  { id: 'image', label: 'CATEGORY IMAGE', minWidth: 250 },
+  { id: 'catName', label: 'CATEGORY Name', minWidth: 250 },
+  { id: 'subcatName', label: 'SUB CATEGORY Name', minWidth: 250 },
   { id: 'action', label: 'Action', minWidth: 100 },
 ];
-const CategoryList = () => {
+const SubCatList = () => {
     const [page, setPage] =useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
     const [categoryFilter, setCategoryFilter] = useState('');
@@ -43,14 +45,14 @@ const CategoryList = () => {
     <>
         <div className='homeSlide-header'>
             <div className='table-flex'>
-            <h2>Category List</h2>
+            <h2>Sub Category List</h2>
             </div>
             <div className='column2'>
                 <Button className='btn-blue col-btn'>Export</Button>
                 <Button className='btn-blue' onClick={()=>context.setIsOpenFullScreen({
                     open:true,
-                    model:"Add New Category"
-                })}>Add Category</Button>
+                    model:"Add New Sub Category"
+                })}>Add SubCategory</Button>
             </div>
         </div>
         <div className='tables-card home-slide'>
@@ -85,12 +87,18 @@ const CategoryList = () => {
                     </div>
                 </TableCell>
                 <TableCell style={{minWidth:columns.minWidth}}>
-                    Fashion
+                    <Chip label="Fashion" />
+                </TableCell>
+                <TableCell style={{minWidth:columns.minWidth}}>
+                    <div className='chip' >
+                        <Chip label="Women" color='primary'/>
+                        <Chip label="Men" color='primary'/>
+                        <Chip label="Kids" color='primary'/>
+                    </div>
                 </TableCell>
                 <TableCell style={{minWidth:columns.minWidth}}>
                     <div className='dash-btns'>
                         <TooltipMUI title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></TooltipMUI>
-                        <TooltipMUI title="View"><Button className='dash-btn'><IoEye /></Button></TooltipMUI>
                         <TooltipMUI title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></TooltipMUI>
                     </div>
                 </TableCell>
@@ -113,4 +121,4 @@ const CategoryList = () => {
   )
 }
 
-export default CategoryList
+export default SubCatList

@@ -64,7 +64,7 @@
 }
 .footer .part1 p{
   font-size: 14px;
-
+  text-align: left;
 }
 .footer .part1 .phone{
   color: #ff5252;
@@ -89,6 +89,7 @@
 .footer .part1 .chat p{
   font-size: 16px;
   font-weight: 600;
+  
 }
 
 .footer .part2{
@@ -221,23 +222,18 @@
 }
 
 
-@media(max-width:992px){
-  .footer-section .part{
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-  margin-bottom: 20px;
-}
-.footer-icon{
-  font-size: 30px;
-}
-.footer-section .col-sec h4{
-  font-size: 16px;
-}
-.footer-section .col-sec p{
-  font-size: 14px;
-  text-align: center;
-}
+
+
+/* responsiveness */
+@media (max-width: 480px){
+  .footer-icon{
+    font-size: 20px;
+  }
+      .footer-section .col-sec h4{
+        font-size: 12px;
+        font-weight: 400;
+        text-align: center;
+      }
   .footer{
     display: grid;
     grid-template-columns: repeat(1,1fr);
@@ -246,6 +242,40 @@
   .footer .part1{
     width: 100%;
   }
+  .footer-section .col-sec p{
+    font-size: 10px;
+    font-weight: 400;
+    text-align: center;
+  }
+  .bottom-strip .container{
+    flex-direction: column;
+  }
+  .footer .part1{
+    gap: 6px;
+  }
+  .footer .part1 p{
+    text-align: left;
+    margin-top: 10px;
+  }
+  .payment{
+    display: none;
+  }
+  .part3 p{
+    text-align: left;
+    margin-top: 0px;
+  }
+  .footer .part3{
+    gap: 10px;
+  }
+}
+@media(max-width:992px){
+  .footer-section .part{
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 20px;
+}
+  
   .footer .part2{
     width: 100%;
     margin-top: 1.5rem;

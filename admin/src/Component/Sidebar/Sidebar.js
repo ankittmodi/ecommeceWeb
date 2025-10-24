@@ -30,7 +30,7 @@ const Sidebar = () => {
         <Link><img src={logo} alt="" className='logo-img'/></Link>
       </div>
       <ul className='sidebar-list'>
-        <li><Link to=''><Button className='side-btn'  ><RiDashboardHorizontalLine/>Dashboard </Button></Link></li>
+        <li><Link to='/'><Button className='side-btn'  ><RiDashboardHorizontalLine/>Dashboard </Button></Link></li>
         <li><Link to='/users'><Button className='side-btn'><FiUsers/>Users </Button></Link></li>
         <li><Link to=''><Button className='side-btn'  onClick={()=>isOpenSubMenu(1)}><FaImages/>Home Slides <span className='angle'><FaAngleDown className={`angle-down ${submenu===1?'active':''}`}/></span></Button></Link>
         {/* submenu */}
@@ -65,12 +65,15 @@ const Sidebar = () => {
               open:true,
               model:"Add New Category"
             })}><span className='sub-item'></span>Add a Category</Button></li>
-            <li className='sub-list'><Link to='/category/subCat'><Button className='sub-btn'><span className='sub-item'></span>Sub Category List</Button></Link></li>
-            <li className='sub-list'><Link to='/category/subCat/add'><Button className='sub-btn'><span className='sub-item'></span>Add a Sub Category</Button></Link></li>
+            <li className='sub-list'><Link to='/subCategory/list'><Button className='sub-btn'><span className='sub-item'></span>Sub Category List</Button></Link></li>
+            <li className='sub-list'><Button className='sub-btn' onClick={()=>context.setIsOpenFullScreen({
+              open:true,
+              model:"Add New Sub Category"
+            })}><span className='sub-item'></span>Add a Sub Category</Button></li>
           </ul>
         </Collapse>
         </li>
-        <li><Button className='side-btn'><BsBagCheck/>Orders </Button></li>
+        <li><Link to="/order"><Button className='side-btn'><BsBagCheck/>Orders </Button></Link></li>
         <li><Button className='side-btn'><FiLogOut/>Logout</Button></li>
       </ul>
     </div>

@@ -21,7 +21,7 @@ const Boxes = () => {
         className="mySwiper"
       >
         <SwiperSlide>
-          <div className="box" style={{color:"#3872fa"}}>
+          <div className="box box1">
             <IoGiftOutline className='box-icon'/>
             <div className="info">
               <p>Total Images</p>
@@ -31,33 +31,33 @@ const Boxes = () => {
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="box">
-            <HiOutlineChartPie  className='box-icon' style={{color:"#10b981"}}/>
+          <div className="box box2">
+            <HiOutlineChartPie  className='box-icon'/>
             <div className="info">
               <p>Sales</p>
               <p><strong>Rs. 57,890.00</strong></p>
             </div>
-            <RiBarChartGroupedLine className='box-icon1 ' style={{color:"#10b981"}}/>
+            <RiBarChartGroupedLine className='box-icon1 '/>
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="box">
-            <BsBank className='box-icon' style={{color:"#7928ca"}}/>
+          <div className="box box3">
+            <BsBank className='box-icon' />
             <div className="info">
               <p>Revenue</p>
               <p><strong>Rs. 93,797.00</strong></p>
             </div>
-            <RiBarChartGroupedLine className='box-icon1'style={{color:"#7928ca"}}/>
+            <RiBarChartGroupedLine className='box-icon1'/>
           </div>
         </SwiperSlide>
         <SwiperSlide>
-          <div className="box">
-            <TbBrandProducthunt className='box-icon' style={{color:"#ca28c2ff"}}/>
+          <div className="box box4">
+            <TbBrandProducthunt className='box-icon' />
             <div className="info">
               <p>Total Products</p>
               <p><strong>1,390</strong></p>
             </div>
-            <RiBarChartGroupedLine className='box-icon1' style={{color:"#ca28c2ff"}}/>
+            <RiBarChartGroupedLine className='box-icon1' />
           </div>
         </SwiperSlide>
       </Swiper>

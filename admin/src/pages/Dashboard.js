@@ -25,7 +25,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { MyContext } from '../App';
-
+import dash from '../assests/dash.jpg'
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }; 
 const columns = [
@@ -100,16 +100,16 @@ const Dashboard = () => {
           <h1>
             Good Morning,<br />Ankit <img src={hand} alt="wave" />
           </h1>
-          <p>Here's what's happening on your store today. See all the stats at once.</p>
+          <p style={{color:"#000"}}>Here's what's happening on your store today. See all the stats at once.</p>
           <Button className='btn-blue' onClick={()=>context.setIsOpenFullScreen({
             open:true,
             model:"Add Product"
-            })}>
+            })} style={{marginTop:"1rem"}}>
             <IoAdd /> Add Product
           </Button>
         </div>
 
-        <img src=""/>
+        <div className='dash-img'><img src={dash}/></div>
       </div>
 
       {/* ---------- DASHBOARD BOXES ---------- */}
@@ -646,8 +646,8 @@ const Dashboard = () => {
                     {isOpenOrder === 0 ? <FaAngleUp /> : <FaAngleDown />}
                   </Button>
                 </td>
-                <td>3h4g56g476g4g4h5j7</td>
-                <td>h4g56g476g4</td>
+                <td style={{color:"blue"}}>3h4g56g476g4g4h5j7</td>
+                <td style={{color:"blue"}}>h4g56g476g4</td>
                 <td>Ankit Kumar</td>
                 <td>5485158415</td>
                 <td>Maithon, Dhanbad, Jharkhand, India</td>
@@ -676,7 +676,7 @@ const Dashboard = () => {
                         </thead>
                         <tbody>
                           <tr>
-                            <td>3h4g56g476g4g4h5j7</td>
+                            <td >3h4g56g476g4g4h5j7</td>
                             <td>Koskii Saree</td>
                             <td>
                               <img
@@ -717,8 +717,8 @@ const Dashboard = () => {
                     {isOpenOrder === 1 ? <FaAngleUp /> : <FaAngleDown />}
                   </Button>
                 </td>
-                <td>8j4l56g4k6g4g4h5k9</td>
-                <td>h8l56g476g4</td>
+                <td style={{color:"blue"}}>8j4l56g4k6g4g4h5k9</td>
+                <td style={{color:"blue"}}>h8l56g476g4</td>
                 <td>Ravi Kumar</td>
                 <td>7845124598</td>
                 <td>Delhi, India</td>

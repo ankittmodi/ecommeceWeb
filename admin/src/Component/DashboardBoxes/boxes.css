@@ -23,8 +23,36 @@
   cursor: pointer;
   background-color: #ffffff;
 }
-.boxes .box:hover{
-  background-color: #f1f1f1;
+
+.boxes .box1{
+  background-color: rgb(62, 62, 248);
+  color:#fff;
+  transition: all 0.2s ease-in-out;
+}
+.boxes .box1:hover{
+  background-color: rgba(62, 62, 248,0.7);
+  color:#fff
+}
+.boxes .box2{
+  background-color: rgb(107, 160, 107) !important;
+  transition: all 0.2s ease-in-out;
+}
+.boxes .box2:hover{
+  background-color: rgba(107, 160, 107,0.7) !important;
+}
+.boxes .box3{
+  background-color: rgb(250, 66, 96);
+  transition: all 0.2s ease-in-out;
+}
+.boxes .box3:hover{
+  background-color: rgba(250, 66, 96,0.7);
+}
+.boxes .box4{
+  background-color: #f671e9;
+  transition: all 0.2s ease-in-out;
+}
+.boxes .box4:hover{
+  background-color: rgba(243, 94, 203, 0.7);
 }
 .info{
   display: flex;
@@ -33,13 +61,14 @@
 }
 .info p{
   text-align: left;
-  color:#000;
+  color:#fff;
 }
 .box-icon{
   font-size: 30px;
+  color:#fff;
 }
 .box-icon1{
   height: 3rem;
   width: 5rem;
-  color: #3872fa;
+  color: #fff;
 }

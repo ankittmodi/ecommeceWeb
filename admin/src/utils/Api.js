@@ -28,23 +28,56 @@ export const postData = async (url, formData) => {
 export const fetchDataFromApi = async (url) => {
   try {
     const token = localStorage.getItem("accessToken");
-    const params={
+
+    const { data } = await axios.get(apiUrl + url, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",
       },
-    }
-
-    const { data } = await axios.get(apiUrl + url,params);
+    });
 
     return data;
   } catch (err) {
     console.error("GET error:", err);
 
-    // ensure we always return a consistent object
     return {
       error: true,
       message: err.response?.data?.message || err.message || "Request failed",
     };
   }
 };
+
+
+// for image upload
+export const uploadImage=async(url,updateData)=>{
+  const token = localStorage.getItem("accessToken");
+  const params={
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "multipart/form-data",
+      },
+    }
+    var response;
+  await axios.put(apiUrl+url,updateData,params).then((res)=>{
+    console.log(res);
+    response=res;
+  })
+  return response;
+}
+
+// for edit user data
+export const editData=async(url,updatedData)=>{
+  const token = localStorage.getItem("accessToken");
+  const params={
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+    var response;
+  await axios.put(apiUrl+url,updatedData,params).then((res)=>{
+    console.log(res);
+    response=res;
+  })
+  return response;
+}

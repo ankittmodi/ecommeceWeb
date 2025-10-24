@@ -1,17 +1,25 @@
-import React,{useState} from 'react'
+import React,{useContext, useState} from 'react'
 import './style.css';
 import logo from '../../assests/logo.png'
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import { FcGoogle } from "react-icons/fc";
 import { BiLogoFacebookCircle } from "react-icons/bi";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
+import CircularProgress from '@mui/material/CircularProgress';
+import { postData } from '../../utils/Api';
+import { MyContext } from '../../App';
+
 const SignUp = () => {
   const [loadinggoogle, setLoadinggoogle] =useState(false);
   const [loadingfb, setLoadingfb] =useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isShowPassword, setIsShowPassword] = useState(false);
+  const context=useContext(MyContext);
+  const history=useNavigate();
   function handleClickGoogle() {
     setLoadinggoogle(true);
   }
@@ -19,7 +27,7 @@ const SignUp = () => {
     setLoadingfb(true);
   }
 
-  const [formFields, setFormFields] = useState({
+  const [formFeilds, setFormFeilds] = useState({
     email: '',
     password: ''
   });
@@ -27,16 +35,48 @@ const SignUp = () => {
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
-    setFormFields(prev => ({
+    setFormFeilds(prev => ({
       ...prev,
       [name]: value
     }));
   };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form Submitted:', formFields, 'Remember Me:', rememberMe);
-  };
+   const valideValue = Object.values(formFeilds).every(el => el);
+  const handleSubmit = async (e) => {
+      e.preventDefault();
+      setIsLoading(true);
+  
+      // basic validation
+      if (!formFeilds.name) return context.openAlertBox("error", "Please enter full name");
+      if (!formFeilds.email) return context.openAlertBox("error", "Please enter email ID");
+      if (!formFeilds.password) return context.openAlertBox("error", "Please enter password");
+  
+      try {
+        const res = await postData("/api/user/register", formFeilds);
+        
+        if (res?.error !== true) {
+          console.log(res);
+          context.openAlertBox("success", res.message);
+  
+          // ✅ Save details for Verify page
+          localStorage.setItem("userEmail", formFeilds.email);
+          localStorage.setItem("actionType", "register"); // ✅ important fix
+  
+          // clear form
+          setFormFeilds({ name: "", email: "", password: "" });
+  
+          // redirect to verify
+          // history("/verify");
+        } else {
+          context.openAlertBox("error", res?.message || "Registration failed");
+          setFormFeilds({ name: "", email: "", password: "" });
+        }
+      } catch (error) {
+        console.error("Register Error:", error);
+        context.openAlertBox("error", "Unexpected error occurred");
+      } finally {
+        setIsLoading(false);
+      }
+    };
   return (
     <section className='login'>
       {/* ===== Header ===== */}
@@ -97,8 +137,9 @@ const SignUp = () => {
             variant="outlined"
             fullWidth
             margin="normal"
-            name="name"
-            value={formFields.name}
+            name='name'
+            value={formFeilds.name}
+            disabled={isLoading}
             onChange={onChangeInput}
             required
             style={{ marginBottom: '20px' }}
@@ -109,8 +150,9 @@ const SignUp = () => {
             variant="outlined"
             fullWidth
             margin="normal"
-            name="email"
-            value={formFields.email}
+            name='email'
+            value={formFeilds.email}
+            disabled={isLoading}
             onChange={onChangeInput}
             required
             style={{ marginBottom: '20px' }}
@@ -118,13 +160,14 @@ const SignUp = () => {
 
           {/* Password Field */}
           <TextField
+            type={isShowPassword ? 'text' : 'password'}
             label="Password"
-            type="password"
             variant="outlined"
             fullWidth
             margin="normal"
-            name="password"
-            value={formFields.password}
+            name='password'
+            value={formFeilds.password}
+            disabled={isLoading}
             onChange={onChangeInput}
             required
           />
@@ -143,9 +186,9 @@ const SignUp = () => {
               }
               label="Remember Me"
             />
-            <Link to="/forgot-password" style={{ textDecoration: 'none', color: '#1976d2' }}>
+            {/* <Link to="/forgot-password" style={{ textDecoration: 'none', color: '#1976d2' }}>
               Forgot Password?
-            </Link>
+            </Link> */}
           </div>
 
           {/* Sign In Button */}
@@ -154,10 +197,10 @@ const SignUp = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={!formFields.email || !formFields.password}
+            disabled={!valideValue}
             className='login-btn'
           >
-            Sign Up
+            {isLoading ? <CircularProgress color="inherit" size={20} /> : 'Register'}
           </Button>
           </form>
         </div>

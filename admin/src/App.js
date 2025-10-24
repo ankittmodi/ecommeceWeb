@@ -21,6 +21,14 @@ import HomeSliderBanners from './pages/HomeSliderBanners';
 import AddHomeSlide from './pages/HomeSliderBanners/AddHomeSlide';
 import CategoryList from './pages/Category';
 import AddCategorySlide from './pages/Category/AddCategorySlide';
+import SubCatList from './pages/Category/SubCatList';
+import AddSubCategory from './pages/Category/AddSubCategory';
+import Users from './pages/Users';
+import Order from './pages/Orders';
+import ForgotPassword from './pages/ForgotPassword';
+import toast, { Toaster } from 'react-hot-toast';
+import Verify from './pages/Verify';
+import ChangePassword from './pages/ChangePassword';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -35,6 +43,11 @@ function App() {
     open:false,
     model:''
   });
+  // toast alert
+  const openAlertBox = (status, msg) => {
+    if (status === "success") toast.success(msg);
+    if (status === "error") toast.error(msg);
+  };
 
   // ✅ Define router properly
   const router = createBrowserRouter([
@@ -61,6 +74,18 @@ function App() {
     {
       path: '/signup',
       element: <SignUp />, // ✅ Signup page only (no sidebar/header)
+    },
+    {
+      path: '/forgot-password',
+      element: <ForgotPassword />,
+    },
+    {
+      path: '/verify',
+      element: <Verify />,
+    },
+    {
+      path: '/change-password',
+      element: <ChangePassword />,
     },
     {
       path: '/products',
@@ -110,6 +135,55 @@ function App() {
         </section>
       ),
     },
+    {
+      path: '/subCategory/list',
+      element: (
+        <section className="main">
+          <Header />
+          <div className="content-main">
+            <div className={isSidebarOpen ? 'sidebar-wrapper' : 'sidebar-width'}>
+              <Sidebar />
+            </div>
+            <div className={isSidebarOpen ? 'content-right' : 'content-left'}>
+              <SubCatList/>
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: '/users',
+      element: (
+        <section className="main">
+          <Header />
+          <div className="content-main">
+            <div className={isSidebarOpen ? 'sidebar-wrapper' : 'sidebar-width'}>
+              <Sidebar />
+            </div>
+            <div className={isSidebarOpen ? 'content-right' : 'content-left'}>
+              <Users/>
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: '/order',
+      element: (
+        <section className="main">
+          <Header />
+          <div className="content-main">
+            <div className={isSidebarOpen ? 'sidebar-wrapper' : 'sidebar-width'}>
+              <Sidebar />
+            </div>
+            <div className={isSidebarOpen ? 'content-right' : 'content-left'}>
+              <Order/>
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    
   ]);
 
   const values = {
@@ -118,7 +192,8 @@ function App() {
     isLogin,
     setIsLogin,
     isOpenFullScreen,
-    setIsOpenFullScreen
+    setIsOpenFullScreen,
+    openAlertBox
   };
 
   return (
@@ -159,7 +234,9 @@ function App() {
         {
           isOpenFullScreen.model==="Add New Category" && <AddCategorySlide/>
         }
-        
+        {
+          isOpenFullScreen.model==="Add New Sub Category" && <AddSubCategory/>
+        }
       </Dialog>
     </MyContext.Provider>
   );
