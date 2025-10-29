@@ -1,6 +1,6 @@
 import './App.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import Header from './Component/Header';
 import Sidebar from './Component/Sidebar/Sidebar';
 import Dashboard from './pages/Dashboard';
@@ -25,10 +25,13 @@ import SubCatList from './pages/Category/SubCatList';
 import AddSubCategory from './pages/Category/AddSubCategory';
 import Users from './pages/Users';
 import Order from './pages/Orders';
-import ForgotPassword from './pages/ForgotPassword';
 import toast, { Toaster } from 'react-hot-toast';
 import Verify from './pages/Verify';
 import ChangePassword from './pages/ChangePassword';
+import { fetchDataFromApi } from './utils/Api';
+import Profile from './pages/Profile';
+import Address from './pages/Address';
+
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -43,6 +46,18 @@ function App() {
     open:false,
     model:''
   });
+
+  // user info states (persistent)
+    const [userName, setUserName] = useState(localStorage.getItem("userName") || "");
+    const [userEmail, setUserEmail] = useState(localStorage.getItem("userEmail") || "");
+    const [userData, setUserData] = useState({
+      name: localStorage.getItem("userName") || "",
+      email: localStorage.getItem("userEmail") || "",
+      avatar: localStorage.getItem("avatar") || ""
+    });
+    // for taking address from backend
+    const[address,setAddress]=useState([]);
+
   // toast alert
   const openAlertBox = (status, msg) => {
     if (status === "success") toast.success(msg);
@@ -75,10 +90,10 @@ function App() {
       path: '/signup',
       element: <SignUp />, // ✅ Signup page only (no sidebar/header)
     },
-    {
-      path: '/forgot-password',
-      element: <ForgotPassword />,
-    },
+    // {
+    //   path: '/forgot-password',
+    //   element: <ForgotPassword />,
+    // },
     {
       path: '/verify',
       element: <Verify />,
@@ -183,9 +198,55 @@ function App() {
         </section>
       ),
     },
-    
+    {
+      path: '/profile',
+      element: (
+        <section className="main">
+          <Header />
+          <div className="content-main">
+            <div className={isSidebarOpen ? 'sidebar-wrapper' : 'sidebar-width'}>
+              <Sidebar />
+            </div>
+            <div className={isSidebarOpen ? 'content-right' : 'content-left'}>
+              <Profile/>
+            </div>
+          </div>
+        </section>
+      ),
+    },
   ]);
 
+
+    // fetch user details if token exists
+   // App.js
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+  
+    if (token) {
+      setIsLogin(true);
+  
+      // 💡 Fetch without the redundant ?token query parameter
+      fetchDataFromApi(`/api/user/user-details`).then((res) => {
+        // Handle success
+        if (res.success) {
+          setUserData(res.data);
+          // console.log(res);
+          setUserName(res.data.name);
+          setUserEmail(res.data.email);
+          localStorage.setItem("userName", res.data.name);
+          localStorage.setItem("userEmail", res.data.email);
+        } else {
+          setIsLogin(false);
+          localStorage.removeItem("accessToken");
+        }
+      }).catch(() => {
+        // General error handling (e.g., network issues)
+      });
+    } else {
+      setIsLogin(false);
+      setUserData({ name: "", email: "" });
+    }
+  }, []);
   const values = {
     isSidebarOpen,
     setIsSidebarOpen,
@@ -193,7 +254,11 @@ function App() {
     setIsLogin,
     isOpenFullScreen,
     setIsOpenFullScreen,
-    openAlertBox
+    openAlertBox,
+    userData,
+    setUserData,
+    address,
+    setAddress
   };
 
   return (
@@ -237,7 +302,12 @@ function App() {
         {
           isOpenFullScreen.model==="Add New Sub Category" && <AddSubCategory/>
         }
+        {
+          isOpenFullScreen.model==="Add New Address" && <Address/>
+        }
       </Dialog>
+
+      <Toaster />
     </MyContext.Provider>
   );
 }

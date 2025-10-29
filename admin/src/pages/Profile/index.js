@@ -1,34 +1,43 @@
 import React, { useContext, useEffect, useState } from 'react'
-import './style.css';
+import './profile.css';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import MyAccountSidebar from '../../components/MyAccountSidebar';
-import { myContext } from '../../App';
+import { MyContext} from '../../App';
 import { useNavigate } from 'react-router-dom';
-import { editData } from '../../utils/Api';
+import { editData, fetchDataFromApi} from '../../utils/Api';
 import CircularProgress from '@mui/material/CircularProgress';
+import MyAccountSidebar from '../../Component/AdminAccount';
 import { PhoneInput } from 'react-international-phone';
 import 'react-international-phone/style.css';
-const MyAccount = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const[userId,setUserId]=useState();
+import Radio from '@mui/material/Radio';
+
+
+const Profile = () => {
+    const [isLoading, setIsLoading] = useState(false);
+    const[userId,setUserId]=useState();
     const [formFeilds, setFormFeilds] = useState({
       name:"",
       email: "",
       mobile:""
     });
-    // const [phone, setPhone] = useState('');
-  const context=useContext(myContext);
-  const history=useNavigate();
-  useEffect(()=>{
-    const token=localStorage.getItem("accessToken");
-    if(token===null){
-      history("/");
-    }
-  },[context?.isLogin]);
+    const [phone, setPhone] = useState('');
+    
+    const [selectedValue, setSelectedValue] =useState('');
+    const context=useContext(MyContext);
+    const history=useNavigate();
+    useEffect(()=>{
+      const token=localStorage.getItem("accessToken");
+      if(token===null){
+        history("/");
+      }
+    },[context?.isLogin]);
 
   useEffect(() => {
       if(context?.userData?._id!=="" && context?.userData?._id!==undefined){
+        fetchDataFromApi(`/api/address/get?userId=${context.userData?._id}`).then((res)=>{
+          // console.log(res.data);
+          context.setAddress(res.data);
+        })
         setUserId(context?.userData?._id);
         setFormFeilds({
           name:context?.userData?.name,
@@ -38,7 +47,11 @@ const MyAccount = () => {
       }
     }, [context?.userData]);
 
-  const onChangeInput = (e) => {
+    const handleChange = (event) => {
+      setSelectedValue(event.target.value);
+    };
+
+    const onChangeInput = (e) => {
       const { name, value } = e.target;
       setFormFeilds(prev => ({
         ...prev,
@@ -75,24 +88,6 @@ const MyAccount = () => {
         if (!data.error) {
           setIsLoading(true);
           context.openAlertBox("success", data.message);
-
-          // ✅ Update context and localStorage
-          // localStorage.setItem("userName", data.user.name);
-          // localStorage.setItem("userEmail", data.user.email);
-          // localStorage.setItem("userMobile", data.user.mobile || "");
-
-          // context.setUserData({
-          //   ...context.userData,
-          //   name: data.user.name,
-          //   email: data.user.email,
-          //   mobile: data.user.mobile,
-          // });
-
-          // setFormFeilds({
-          //   name:"",
-          //   email:"",
-          //   mobile:""
-          // });
           history("/");
 
         } else {
@@ -107,7 +102,7 @@ const MyAccount = () => {
     };
 
   return (
-    <section className='my-account' >
+    <section className='my-account profile' >
     <div className="container">
       <div className="col1">
         <MyAccountSidebar/>
@@ -148,18 +143,51 @@ const MyAccount = () => {
             <div className="user-form">
               <div className="part1">
                 <PhoneInput
-                  defaultCountry="in"
-                                    value={String(formFeilds.mobile || "")}
-                                    disabled={isLoading===true?true:false}
-                                    onChange={(value) =>
-                                        setFormFeilds(prev => ({ ...prev, mobile: value }))
-                  }
+                    defaultCountry="in"
+                    value={String(formFeilds.mobile || "")}
+                    disabled={isLoading===true?true:false}
+                    onChange={(value) =>
+                        setFormFeilds(prev => ({ ...prev, mobile: value }))
+                    }
                 />
               </div>
             </div>
+            <div className='address' onClick={()=>context.setIsOpenFullScreen({
+                open:true,
+                model:"Add New Address"
+                })}>
+              <span >Add Address</span>
+            </div>
+
+            <div className='address-box'>
+                {context.address.length > 0 && context.address.map((item, index) => {
+                const value =
+                  item.address_line1 +
+                  item.city +
+                  item.state +
+                  item.pincode +
+                  item.country;
+
+                return (
+                  <div className="address-part" key={index}>
+                    <Radio
+                      checked={selectedValue === value}
+                      onChange={handleChange}
+                      value={value}
+                      name="radio-buttons"
+                    />
+                    <span>
+                      {item.address_line1}, {item.city}, {item.state} - {item.pincode},{" "}
+                      {item.country}
+                    </span>
+                  </div>
+                );
+              })}
+
+            </div>
             <br />
             <div className="profile-btn">
-              <Button className='bg-org' type='submit' disabled={!valideValue || isLoading}>{isLoading ? <CircularProgress color="inherit" size={25} /> : 'Update Profile'}</Button>
+              <Button className='login-btn' type='submit' disabled={!valideValue || isLoading}>{isLoading ? <CircularProgress color="inherit" size={25} /> : 'Update Profile'}</Button>
             </div>
           </form>
         </div>
@@ -169,4 +197,4 @@ const MyAccount = () => {
   )
 }
 
-export default MyAccount
+export default Profile

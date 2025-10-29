@@ -41,13 +41,19 @@ p{
     margin: 0 auto;
     margin-top: 1rem;
 }
-.login-btn{
- padding: 5px 1rem;
- background-color: blue !important;
- color: #fff !important;
- text-transform: capitalize !important;
- cursor: pointer !important;
- font-size: 16px !important;
- width: 100% !important;
- font-weight: 600 !important;
+.login-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px; /* for spacing if text + icon */
+  padding: 8px 1rem !important;
+  background-color: blue !important;
+  color: #fff !important;
+  text-transform: capitalize !important;
+  cursor: pointer !important;
+  font-size: 16px !important;
+  width: 100% !important;
+  font-weight: 600 !important;
+  height: 42px !important; /* ensures consistent height */
+  border-radius: 6px !important;
 }

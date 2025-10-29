@@ -32,7 +32,7 @@ export async function registerUserController(req, res) {
     // User already verified
     if (user && user.isVerified) {
       return res.status(400).json({
-        message: "User already verified",
+        message: "User already registered with this email",
         error: true,
         success: false,
       });
@@ -600,7 +600,7 @@ export async function userDetails(req,res) {
   try{
     const userId=req.userId;
 
-    const user=await userModel.findById(userId).select('-password -refresh_token');
+    const user=await userModel.findById(userId).populate("address_details").select('-password -refresh_token');
 
     return res.status(200).json({
       message:"User details",

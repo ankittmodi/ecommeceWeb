@@ -70,34 +70,38 @@ function App() {
 
   // fetch user details if token exists
  // App.js
-useEffect(() => {
-  const token = localStorage.getItem("accessToken");
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
 
-  if (token) {
-    setIsLogin(true);
+    if (token) {
+      setIsLogin(true);
 
-    // 💡 Fetch without the redundant ?token query parameter
-    fetchDataFromApi(`/api/user/user-details`).then((res) => {
-      // Handle success
-      if (res.success) {
-        setUserData(res.data);
-        // console.log(res);
-        setUserName(res.data.name);
-        setUserEmail(res.data.email);
-        localStorage.setItem("userName", res.data.name);
-        localStorage.setItem("userEmail", res.data.email);
-      } else {
-        setIsLogin(false);
-        localStorage.removeItem("accessToken");
-      }
-    }).catch(() => {
-      // General error handling (e.g., network issues)
-    });
-  } else {
-    setIsLogin(false);
-    setUserData({ name: "", email: "" });
-  }
-}, []);
+      // 💡 Fetch without the redundant ?token query parameter
+      fetchDataFromApi(`/api/user/user-details`).then((res) => {
+        // Handle success
+        if (res.success) {
+          setUserData(res.data);
+          // console.log(res);
+          if(res?.response?.data?.error === true){
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            openAlertBox("error","Your session is closed please login again!")
+            setIsLogin(false);
+          }
+          setUserName(res.data.name);
+          setUserEmail(res.data.email);
+          localStorage.setItem("userName", res.data.name);
+          localStorage.setItem("userEmail", res.data.email);
+        } else {
+          setIsLogin(false);
+          localStorage.removeItem("accessToken");
+        }
+      })
+    } else {
+      setIsLogin(false);
+      setUserData({ name: "", email: "" });
+    }
+  }, []);
 
   // context values for global access
   const values = {

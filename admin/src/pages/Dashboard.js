@@ -98,7 +98,7 @@ const Dashboard = () => {
       <div className="dash">
         <div className="info">
           <h1>
-            Good Morning,<br />Ankit <img src={hand} alt="wave" />
+            Good Morning,<br />{localStorage.getItem("userName")} <img src={hand} alt="wave" />
           </h1>
           <p style={{color:"#000"}}>Here's what's happening on your store today. See all the stats at once.</p>
           <Button className='btn-blue' onClick={()=>context.setIsOpenFullScreen({

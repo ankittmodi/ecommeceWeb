@@ -1,17 +1,23 @@
-import React,{useState} from 'react'
+import React,{useContext, useState} from 'react'
 import './login.css';
 import logo from '../../assests/logo.png'
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import { FcGoogle } from "react-icons/fc";
 import { BiLogoFacebookCircle } from "react-icons/bi";
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
+import { MyContext } from '../../App';
+import { postData } from '../../utils/Api';
+import CircularProgress from '@mui/material/CircularProgress';
 const Login = () => {
   const [loadinggoogle, setLoadinggoogle] =useState(false);
   const [loadingfb, setLoadingfb] =useState(false);
   const [rememberMe, setRememberMe] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const context = useContext(MyContext);
+    const history = useNavigate();
   function handleClickGoogle() {
     setLoadinggoogle(true);
   }
@@ -19,7 +25,7 @@ const Login = () => {
     setLoadingfb(true);
   }
 
-  const [formFields, setFormFields] = useState({
+  const [formFeilds, setFormFeilds] = useState({
     email: '',
     password: ''
   });
@@ -27,16 +33,73 @@ const Login = () => {
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
-    setFormFields(prev => ({
+    setFormFeilds(prev => ({
       ...prev,
       [name]: value
     }));
   };
+  const valideValue = Object.values(formFeilds).every(el => el);
+
+  const forgotPassword = (e) => {
+      e.preventDefault();
+      if (formFeilds.email==="") {
+        context.openAlertBox("error", "Please enter email Id!");
+        return false;
+      }
+      else{
+        localStorage.setItem("userEmail",formFeilds.email);
+        localStorage.setItem("actionType",'forgot-password');
+        postData("/api/user/forgot-password", { email:formFeilds.email})
+          .then(res => {
+              if(res.error===false){
+                context.openAlertBox("success",res.message);
+                history("/verify");
+              }
+              else{
+                context.openAlertBox("error",res.message);
+              }
+        });
+        // history('/verify');
+      }
+    }
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form Submitted:', formFields, 'Remember Me:', rememberMe);
-  };
+      e.preventDefault();
+      setIsLoading(true);
+  
+      if (!formFeilds.email) {
+        context.openAlertBox("error", "Please enter email Id");
+        setIsLoading(false);
+        return;
+      }
+  
+      if (!formFeilds.password) {
+        context.openAlertBox("error", "Please enter password");
+        setIsLoading(false);
+        return;
+      }
+  
+      postData("/api/user/login", formFeilds, { withCredentials: true })
+        .then((res) => {
+          setIsLoading(false);
+          if (!res.error) {
+            context.openAlertBox("success", res.message);
+            setFormFeilds({
+              email:"",
+              password:""
+            })
+            localStorage.setItem("accessToken", res.data.accessToken);
+            localStorage.setItem("refreshToken", res.data.refreshToken);
+  
+            // ✅ Update context immediately
+            context.setIsLogin(true);
+            history('/');
+          } else {
+            context.openAlertBox("error", res.message);
+            setFormFeilds({ email: "", password: "" });
+          }
+        })
+    }
   return (
     <section className='login'>
       {/* ===== Header ===== */}
@@ -98,8 +161,9 @@ const Login = () => {
             variant="outlined"
             fullWidth
             margin="normal"
-            name="email"
-            value={formFields.email}
+            name='email'
+            value={formFeilds.email}
+            disabled={isLoading===true?true:false}
             onChange={onChangeInput}
             required
             style={{ marginBottom: '20px' }}
@@ -113,7 +177,8 @@ const Login = () => {
             fullWidth
             margin="normal"
             name="password"
-            value={formFields.password}
+            disabled={isLoading===true?true:false}
+            value={formFeilds.password}
             onChange={onChangeInput}
             required
           />
@@ -132,8 +197,8 @@ const Login = () => {
               }
               label="Remember Me"
             />
-            <Link to="/forgot-password" style={{ textDecoration: 'none', color: '#1976d2' }}>
-              Forgot Password?
+            <Link to="#" onClick={forgotPassword} style={{ textDecoration: 'none', color: '#1976d2' }}>
+              {isLoading ? <CircularProgress color="inherit" size={20} /> : 'Forgot Password?'}
             </Link>
           </div>
 
@@ -143,10 +208,10 @@ const Login = () => {
             variant="contained"
             color="primary"
             fullWidth
-            disabled={!formFields.email || !formFields.password}
+            disabled={!valideValue}
             className='login-btn'
           >
-            Sign In
+            {isLoading ? <CircularProgress color="inherit" size={20} /> : 'Sign In'}
           </Button>
           </form>
         </div>

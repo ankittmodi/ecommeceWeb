@@ -1,0 +1,211 @@
+.profile{
+  background-color: #f1f1f1;
+  padding: 1.5rem 1rem;
+}
+.my-account .container{
+  display: flex;
+  gap: 20px;
+}
+.my-account .container .col1{
+  width: 20%;
+}
+.my-account .container .card{
+  background-color: #fff;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  border-radius: 10px;
+}
+.my-account .container .card .card-item{
+  width: 100%;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+.my-account .container .card .card-item .img{
+  height: 110px;
+  width: 110px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  position: relative;
+}
+.my-account .container .card .card-item .img .overlay{
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top:0px;
+  left:0px;
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  opacity:0;
+  transition: all 0.3s ease-in-out;
+}
+.my-account .container .card .card-item .img .overlay:hover{
+  opacity:100;
+}
+.my-account .container .card .card-item .img .overlay svg{
+  font-size: 24px;
+  color:#f1f1f1;
+}
+.my-account .container .card .card-item .img .overlay .file{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+.my-account .container .card .card-item .img img{
+  width: 100%;
+  object-fit: cover;
+  overflow: hidden;
+}
+
+.my-account .container .card .acc-list{
+  margin-top: 10px;
+  list-style: none;
+  padding-bottom: 10px;
+  background-color: #f1f1f1;
+}
+.my-account .container .card .myAcctab .active{
+  border:0;
+}
+.my-account .container .card .myAcctab li a{
+  position: relative;
+display: block;
+text-decoration: none ;
+}
+.my-account .container .card .myAcctab li a:before{
+  content:'';
+  width: 3px;
+  height: 50%;
+  position: absolute;
+  top:50%;
+  left:0px;
+  background-color: #ff5252;
+  transition: all 0.3s ease-in-out  ;
+  opacity: 0;
+}
+.my-account .container .card .myAcctab li a.active::before{
+  height: 100%;
+  opacity: 1;
+  top:0px;
+  
+}
+.my-account .container .card .myAcctab li a.active Button svg{
+  color:#ff5252;
+  opacity: 1;
+}
+.my-account .container .card .acc-list li{
+  padding-bottom: 10px;
+}
+.my-account .container .card .acc-list li .navAc{
+  position:relative;
+  text-decoration: none;
+}
+.my-account .container .card .acc-list li Button{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-transform: capitalize;
+  color:rgba(0,0,0,0.7) !important;
+  font-size: 18px;
+  width: 100%;
+  border-radius: none;
+  justify-content: flex-start;
+  padding-left: 20px;
+}
+.my-account .container .card .acc-list li Button svg{
+  font-size: 20px;
+}
+
+/* col2 */
+.my-account .container .col2{
+  width: 80%;
+
+}
+.my-account .container .col2 .submit-details{
+  background-color: #fff;
+  box-shadow: 0px 3px 3px rgba(0,0,0,0.3), 0px 3px 3px rgba(0,0,0,0.6);
+  border-radius: 10px;
+  padding: 15px 20px;
+}
+.my-account .container .col2 .submit-details h2{
+  padding-bottom: 10px;
+  font-weight: 500;
+  opacity: 0.9;
+}
+.my-account .container .col2 .submit-details .user-form{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  margin-top: 15px;
+}
+.my-account .container .col2 .submit-details .user-form .part1{
+  width: 50%;
+}
+.my-account .container .col2 .submit-details .user-form .part1 .input{
+  width: 100%;
+}
+.profile-btn{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 30%;
+}
+.login-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px; /* for spacing if text + icon */
+  padding: 8px 1rem !important;
+  background-color: blue !important;
+  color: #fff !important;
+  text-transform: capitalize !important;
+  cursor: pointer !important;
+  font-size: 16px !important;
+  width: 100% !important;
+  font-weight: 600 !important;
+  height: 42px !important; /* ensures consistent height */
+  border-radius: 6px !important;
+}
+
+.address{
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed gray;
+  background-color: #e9ebe9;
+  margin-top: 1rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+}
+
+.address:hover{
+  background-color: #e6e3f8;
+}
+
+.address-box{
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.address-box .address-part{
+  padding:0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  border: 1px dashed gray;
+  background-color: #e9ebe9;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+}

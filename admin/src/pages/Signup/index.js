@@ -65,7 +65,7 @@ const SignUp = () => {
           setFormFeilds({ name: "", email: "", password: "" });
   
           // redirect to verify
-          // history("/verify");
+          history("/verify");
         } else {
           context.openAlertBox("error", res?.message || "Registration failed");
           setFormFeilds({ name: "", email: "", password: "" });

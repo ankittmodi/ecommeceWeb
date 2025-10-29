@@ -103,7 +103,7 @@ const ChangePassword = () => {
                           disabled={isLoading===true?true:false}
                           variant="outlined" className='text text1'
                           onChange={onChangeInput}></TextField>
-                          <Button type='submit' className='form-btn' onClick={()=>setIsShowPassword(!isShowPassword)} >
+                          <Button type='button' className='form-btn' onClick={()=>setIsShowPassword(!isShowPassword)} >
                           {
                             isShowPassword===false?<IoMdEyeOff/>:<IoEye/>
                           }
@@ -119,7 +119,7 @@ const ChangePassword = () => {
                           disabled={isLoading===true?true:false}
                           variant="outlined" className='text text1'
                           onChange={onChangeInput}></TextField>
-                          <Button type='submit' className='form-btn' onClick={()=>setIsShowPassword2(!isShowPassword2)} >
+                          <Button  type='button' className='form-btn' onClick={()=>setIsShowPassword2(!isShowPassword2)} >
                           {
                             isShowPassword2===false?<IoMdEyeOff/>:<IoEye/>
                           }

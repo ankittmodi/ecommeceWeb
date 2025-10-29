@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 const addressSchema=new mongoose.Schema({
-  address_line:{
+  address_line1:{
     type:String,
     default:""
   },
@@ -22,13 +22,17 @@ const addressSchema=new mongoose.Schema({
     type:Number,
     default:null
   },
-  status:{
-    type : Boolean,
+  userId: {
+  type: mongoose.Schema.Types.ObjectId,
+  required: true
+  },
+  status: {
+    type: Boolean,
     default: true
   },
-  userId:{
-    type:mongoose.Schema.ObjectId,
-    default:""
+  selected: {
+    type: Boolean,
+    default: true
   }
 
 },

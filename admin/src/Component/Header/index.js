@@ -14,7 +14,8 @@ import { MdManageAccounts } from "react-icons/md";
 import { FiActivity } from "react-icons/fi";
 import { PiSignOut } from "react-icons/pi";
 import { MyContext } from '../../App';
-import {Link} from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
+import { fetchDataFromApi } from '../../utils/Api';
 
 const Header = () => {
   // 🔹 Styled MUI badge
@@ -30,6 +31,8 @@ const Header = () => {
   // 🔹 Menu state
   const [myAcc, setMyAcc] = useState(null);
   const open = Boolean(myAcc);
+  const history=useNavigate();
+  const context=useContext(MyContext);
 
   const handleClick = (event) => {
     setMyAcc(event.currentTarget);
@@ -39,7 +42,27 @@ const Header = () => {
     setMyAcc(null);
   };
 
-  const context=useContext(MyContext);
+  
+  const logout = async () => {
+    try {
+      const res = await fetchDataFromApi("/api/user/logout", { withCredentials: true });
+      if (res.success) {
+        context.openAlertBox("success", res.message); // show success toast
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("userName");
+        localStorage.removeItem("userEmail");
+        context.setIsLogin(false);
+        history("/");
+      } else {
+        context.openAlertBox("error", res.message || "Logout failed");
+      }
+    } catch (error) {
+      console.error("Logout failed", error);
+      const msg = error.response?.data?.message || "Something went wrong";
+      context.openAlertBox("error", msg); // show error toast
+    }
+  };
   return (
     <header className={`${context.isSidebarOpen===true?"header":"header-width"}`}>
       {/* LEFT SECTION */}
@@ -58,11 +81,11 @@ const Header = () => {
         {
           context.isLogin===true ?<>
           <div className="avatar" onClick={handleClick}>
-          <img src="https://mui.com/static/images/avatar/2.jpg" alt="user" />
+          <img src={localStorage.getItem("avatar")} alt="user" />
         </div>
         {/* Account Dropdown Menu */}
         <Menu
-          anchorEl={myAcc}       // ✅ Correct anchor
+          anchorEl={myAcc}
           id="account-menu"
           open={open}
           onClose={handleClose}
@@ -98,20 +121,22 @@ const Header = () => {
           <MenuItem onClick={handleClose} className='menu-item'>
             <div className="dropdown">
               <div className="avatar">
-                <img src="https://mui.com/static/images/avatar/2.jpg" alt="profile" />
+                <img src={localStorage.getItem("avatar")} alt="profile" />
               </div>
               <div className="info">
-                <h3>Ankit Kumar</h3>
-                <p>Ankit20302@gmail.com</p>
+                <h3>{localStorage.getItem("userName")}</h3>
+                <p>{localStorage.getItem("userEmail")}</p>
               </div>
             </div>
           </MenuItem>
           <Divider />
+          <Link to='/profile'>
           <MenuItem onClick={handleClose} className='menu-item'>
             <span><IoPersonOutline /></span>
             <span>Profile</span>
           </MenuItem>
-          <MenuItem onClick={handleClose} className='menu-item'>
+          </Link>
+          {/* <MenuItem onClick={handleClose} className='menu-item'>
             <span><MdManageAccounts /></span>
             <span>Account Setting</span>
           </MenuItem>
@@ -119,10 +144,11 @@ const Header = () => {
             <span><FiActivity /></span>
             <span>Activity Log</span>
           </MenuItem>
-          <Divider />
+          <Divider /> */}
+          
           <MenuItem onClick={handleClose} className='menu-item'>
             <span><PiSignOut /></span>
-            <span>Sign Out</span>
+            <span onClick={logout}>Sign Out</span>
           </MenuItem>
         </Menu>
         </>

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import './style.css';
+import './admin.css';
 import Button from '@mui/material/Button';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
@@ -7,13 +7,13 @@ import { IoWalletOutline } from "react-icons/io5";
 import { BsBagCheck } from "react-icons/bs";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { NavLink } from "react-router-dom";
+import { MyContext} from '../../App';
 import CircularProgress from '@mui/material/CircularProgress';
 import { uploadImage } from '../../utils/Api';
-import { myContext } from "../../App";
 const MyAccountSidebar = () => {
   const [previews,setPreviews]=useState([]);
   const [uploading,setUploading]=useState(false);
-  const context=useContext(myContext);
+  const context=useContext(MyContext);
   // creating onchange for uploading avatar
   useEffect(() => {
     const userAvatar=[];
@@ -88,25 +88,6 @@ const MyAccountSidebar = () => {
             <h3>{context?.userData?.name}</h3>
             <p>{context?.userData?.email}</p>
           </div>
-
-          <ul className="acc-list myAcctab">
-            <li>
-            <NavLink to='/myaccount' exact={true} activeClassName='isActive' className={({ isActive}) =>
-            isActive ? "active navAc" : ""}>
-            <Button><FaRegUser/> My Profile</Button></NavLink></li>
-            <li>
-            <NavLink to='/mylist' exact={true} activeClassName='isActive' className={({ isActive}) =>
-            isActive ? "active navAc" : ""}>
-            <Button><IoWalletOutline/> My List</Button></NavLink></li>
-            <li>
-            <NavLink to='/myorder' exact={true} activeClassName='isActive' className={({ isActive}) =>
-            isActive ? "active navAc" : ""}>
-            <Button><BsBagCheck/>My Orders</Button></NavLink></li>
-            <li>
-            <NavLink to='/logout' exact={true} activeClassName='isActive' className={({ isActive}) =>
-            isActive ? "active navAc" : ""}>
-            <Button><IoMdInformationCircleOutline/> Logout</Button></NavLink></li>
-          </ul>
         </div>
     </div>
   )
