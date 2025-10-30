@@ -25,7 +25,14 @@ import toast, { Toaster } from 'react-hot-toast';
 import Verify from './Pages/Verify';
 import ForgotPassword from './Pages/ForgotPassword';
 import { fetchDataFromApi } from './utils/Api';
+import Address from './Pages/MyAccount/Address';
+import CloseIcon from '@mui/icons-material/Close';
+import Slide from '@mui/material/Slide';
 
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 export const myContext = createContext();
 
 function App() {
@@ -42,8 +49,12 @@ function App() {
     name: localStorage.getItem("userName") || "",
     email: localStorage.getItem("userEmail") || ""
   });
-
+  const[address,setAddress]=useState([]);
   const [windoWidth, setWindoWidth] = useState(window.innerWidth);
+  const[isOpenFullScreen,setIsOpenFullScreen]=useState({
+      open:false,
+      model:''
+    });
 
   // close model
   const handleCloseProductDetailsModel = () => {
@@ -119,6 +130,10 @@ function App() {
     setUserEmail,
     userData,
     setUserData,
+    address,
+    setAddress,
+    isOpenFullScreen,
+    setIsOpenFullScreen,
   };
 
   return (
@@ -139,6 +154,7 @@ function App() {
             <Route path='/myaccount' element={<MyAccount />} />
             <Route path='/mylist' element={<MyList />} />
             <Route path='/myorder' element={<Orders />} />
+            <Route path='/address' element={<Address />} />
           </Routes>
           <Footer />
           <Toaster />
@@ -146,7 +162,7 @@ function App() {
       </BrowserRouter>
 
       {/* Product details dialog */}
-      <Dialog
+      {/* <Dialog
         fullWidth={fullWidth}
         maxWidth={maxWidth}
         open={openProductDetailsModel}
@@ -162,7 +178,7 @@ function App() {
             </div>
           </div>
         </DialogContent>
-      </Dialog>
+      </Dialog> */}
     </>
   );
 }

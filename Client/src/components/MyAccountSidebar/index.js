@@ -10,6 +10,7 @@ import { NavLink } from "react-router-dom";
 import CircularProgress from '@mui/material/CircularProgress';
 import { uploadImage } from '../../utils/Api';
 import { myContext } from "../../App";
+import { CiLocationOn } from "react-icons/ci";
 const MyAccountSidebar = () => {
   const [previews,setPreviews]=useState([]);
   const [uploading,setUploading]=useState(false);
@@ -93,11 +94,19 @@ const MyAccountSidebar = () => {
             <li>
             <NavLink to='/myaccount' exact={true} activeClassName='isActive' className={({ isActive}) =>
             isActive ? "active navAc" : ""}>
-            <Button><FaRegUser/> My Profile</Button></NavLink></li>
+            <Button><FaRegUser/> My Profile</Button></NavLink>
+            </li>
+            <li>
+            <NavLink to='/address' exact={true} activeClassName='isActive' className={({ isActive}) =>
+            isActive ? "active navAc" : ""}>
+            <Button><CiLocationOn style={{fontSize:"28px"}}/> Address</Button></NavLink>
+            </li>
             <li>
             <NavLink to='/mylist' exact={true} activeClassName='isActive' className={({ isActive}) =>
             isActive ? "active navAc" : ""}>
-            <Button><IoWalletOutline/> My List</Button></NavLink></li>
+            <Button><IoWalletOutline/> My List</Button></NavLink>
+            </li>
+
             <li>
             <NavLink to='/myorder' exact={true} activeClassName='isActive' className={({ isActive}) =>
             isActive ? "active navAc" : ""}>

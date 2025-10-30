@@ -81,3 +81,15 @@ export const editData=async(url,updatedData)=>{
   })
   return response;
 }
+
+export const deleteData=async(url)=>{
+  const token = localStorage.getItem("accessToken");
+  const params={
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  const{res}=await axios.delete(apiUrl+url,params)
+  return res;
+}

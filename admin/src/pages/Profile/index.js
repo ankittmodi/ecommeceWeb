@@ -49,6 +49,13 @@ const Profile = () => {
 
     const handleChange = (event) => {
       setSelectedValue(event.target.value);
+      // console.log(event);
+      // if(event.target.checked===true){
+      //   editData(`/api/address/selectAddress/${event.target.value}`,{selected:true})
+      // }
+      // else{
+      //   editData(`/api/address/selectAddress/${event.target.value}`,{selected:false})
+      // }
     };
 
     const onChangeInput = (e) => {
@@ -171,9 +178,9 @@ const Profile = () => {
                 return (
                   <div className="address-part" key={index}>
                     <Radio
-                      checked={selectedValue === value}
+                      checked={selectedValue === item._id}
                       onChange={handleChange}
-                      value={value}
+                      value={item._id}
                       name="radio-buttons"
                     />
                     <span>

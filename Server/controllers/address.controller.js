@@ -3,10 +3,9 @@ import userModel from "../models/user.model.js";
 
 export const addAddressController = async (req, res) => {
   try {
-    const { address_line1, city, state, pincode, country, mobile, status,selected } = req.body;
-    const userId = req.userId;
+    const { address_line1, city, state, pincode, country, mobile, status, selected, userId } = req.body;
 
-    // ✅ Check if address already exists for this user
+    // ✅ Check duplicates using body
     const existingAddress = await AddressModel.findOne({
       userId,
       address_line1,
@@ -14,7 +13,7 @@ export const addAddressController = async (req, res) => {
       state,
       pincode,
       country,
-      mobile
+      mobile,
     });
 
     if (existingAddress) {
@@ -43,7 +42,7 @@ export const addAddressController = async (req, res) => {
       { _id: userId },
       {
         $push: {
-          address_details: saveAddress?._id
+          address_details: saveAddress._id
         }
       }
     );
@@ -62,6 +61,7 @@ export const addAddressController = async (req, res) => {
     });
   }
 };
+
 
 export const getAddressController=async (req,res)=>{
     try{
@@ -96,5 +96,90 @@ export const getAddressController=async (req,res)=>{
         err: true,
         success: false
     });
+    }
+}
+
+
+// export const selectAddressController=async(req,res)=>{
+//   try{
+//     const userId=req.userId;
+//     const address=await AddressModel.find({
+//       _id:req.params.id,
+//       userId:userId
+//     })
+
+//     if(!address){
+//       return res.status(500).json({
+//         message: err.message,
+//         err: true,
+//         success: false
+//     });
+//     }
+//     else{
+//       const updateAddress=await AddressModel.find(
+//         {
+//           userId:userId
+//         }
+//       )
+//       return res.json({
+//         err:false,
+//         success:true,
+//         address:updateAddress
+//       })
+//     }
+//   }catch(err){
+//     return res.status(400).json({
+//         message: err.message,
+//         err: true,
+//         success: false
+//     });
+//   }
+// }
+
+
+export const deleteAddressController=async(req,res)=>{
+    try{
+        const userId=req.userId;
+        const id=req.params.id;
+
+        if(!id){
+            return res.status(500).json({
+            message: "Provide id",
+            err: true,
+            success: false,
+            });
+        }
+
+        const deleteItem=await AddressModel.deleteOne({
+            _id:id,
+            userId:userId
+        })
+
+        if(!deleteItem){
+            return res.status(404).json({
+            message: "The product in the database is not found",
+            err: true,
+            success: false,
+            });
+        }
+
+        // const address=await AddressModel.findOne({
+        //     _id:userId
+        // });
+
+        
+        // await address.save();
+        return res.status(200).json({
+        message: "Address deleted",
+        err: false,
+        success: true,
+        data:deleteItem
+        });
+    }catch(err){
+        return res.status(500).json({
+        message: err.message || err,
+        err: true,
+        success: false,
+        });
     }
 }
