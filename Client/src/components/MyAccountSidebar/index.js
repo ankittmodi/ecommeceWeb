@@ -4,17 +4,19 @@ import Button from '@mui/material/Button';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
 import { IoWalletOutline } from "react-icons/io5";
+import { FiLogOut } from "react-icons/fi";
 import { BsBagCheck } from "react-icons/bs";
 import { IoMdInformationCircleOutline } from "react-icons/io";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import CircularProgress from '@mui/material/CircularProgress';
-import { uploadImage } from '../../utils/Api';
+import { fetchDataFromApi, uploadImage } from '../../utils/Api';
 import { myContext } from "../../App";
 import { CiLocationOn } from "react-icons/ci";
 const MyAccountSidebar = () => {
   const [previews,setPreviews]=useState([]);
   const [uploading,setUploading]=useState(false);
   const context=useContext(myContext);
+  const history=useNavigate();
   // creating onchange for uploading avatar
   useEffect(() => {
     const userAvatar=[];
@@ -61,6 +63,26 @@ const MyAccountSidebar = () => {
       console.log(error);
     }
   }
+  const logout = async () => {
+    try {
+      const res = await fetchDataFromApi("/api/user/logout", { withCredentials: true });
+      if (res.success) {
+        context.openAlertBox("success", res.message); // show success toast
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
+        localStorage.removeItem("userName");
+        localStorage.removeItem("userEmail");
+        context.setIsLogin(false);
+        history("/");
+      } else {
+        context.openAlertBox("error", res.message || "Logout failed");
+      }
+    } catch (error) {
+      console.error("Logout failed", error);
+      const msg = error.response?.data?.message || "Something went wrong";
+      context.openAlertBox("error", msg); // show error toast
+    }
+  };
   return (
     <div>
       <div className="card">
@@ -114,7 +136,7 @@ const MyAccountSidebar = () => {
             <li>
             <NavLink to='/logout' exact={true} activeClassName='isActive' className={({ isActive}) =>
             isActive ? "active navAc" : ""}>
-            <Button><IoMdInformationCircleOutline/> Logout</Button></NavLink></li>
+            <Button onClick={logout}><FiLogOut/> Logout</Button></NavLink></li>
           </ul>
         </div>
     </div>

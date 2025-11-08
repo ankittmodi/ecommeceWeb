@@ -31,6 +31,7 @@ import ChangePassword from './pages/ChangePassword';
 import { fetchDataFromApi } from './utils/Api';
 import Profile from './pages/Profile';
 import Address from './pages/Address';
+import EditCategory from './pages/Category/editCategory';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -44,7 +45,8 @@ function App() {
   const [isLogin, setIsLogin] = useState(false);
   const[isOpenFullScreen,setIsOpenFullScreen]=useState({
     open:false,
-    model:''
+    model:'',
+    id:""
   });
 
   // user info states (persistent)
@@ -57,6 +59,7 @@ function App() {
     });
     // for taking address from backend
     const[address,setAddress]=useState([]);
+    const[catData,setCatData]=useState([]);
 
   // toast alert
   const openAlertBox = (status, msg) => {
@@ -247,6 +250,17 @@ function App() {
       setUserData({ name: "", email: "" });
     }
   }, []);
+
+  // for fetch data for category list
+    useEffect(()=>{
+      getCat();
+    },[]);
+    const getCat=()=>{
+      fetchDataFromApi("/api/category").then((res)=>{
+            // console.log(res);
+            setCatData(res.data);
+        })
+    }
   const values = {
     isSidebarOpen,
     setIsSidebarOpen,
@@ -258,7 +272,10 @@ function App() {
     userData,
     setUserData,
     address,
-    setAddress
+    setAddress,
+    catData,
+    setCatData,
+    getCat
   };
 
   return (
@@ -304,6 +321,9 @@ function App() {
         }
         {
           isOpenFullScreen.model==="Add New Address" && <Address/>
+        }
+        {
+          isOpenFullScreen.model==="Edit Category" && <EditCategory/>
         }
       </Dialog>
 

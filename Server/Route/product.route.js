@@ -5,7 +5,7 @@ import { createProduct, deleteProduct, getAllFeaturedProducts, getAllProductCoun
 
 const productRouter=Router();
 
-productRouter.post('/uploadImages',auth,upload.array('images'),uploadImages);
+productRouter.put('/uploadImages',auth,upload.array('images'),uploadImages);
 productRouter.post('/create',auth,createProduct);
 productRouter.get('/getAllProducts',getAllProducts);
 productRouter.get('/getAllProductsByCatId/:id',getAllProductsByCatId);

@@ -108,3 +108,17 @@
     align-items: center;
     gap: 1rem;
 }
+
+.css-s09cke-MuiTablePagination-selectLabel,.css-11cfq65-MuiTablePagination-displayedRows{
+    margin-top: 0;
+}
+
+.sub-cat-cat{
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 1rem;
+}
+
+.sub-cat-cat .sub-category .col{
+    width: 50%;
+}

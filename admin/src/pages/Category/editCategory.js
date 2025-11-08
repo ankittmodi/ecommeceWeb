@@ -1,13 +1,13 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './style.css'
 import UploadBox from '../../Component/UploadBox';
 import 'react-lazy-load-image-component/src/effects/blur.css';
 import { IoMdClose } from "react-icons/io";
 import {Button} from '@mui/material';
-import {deleteImage, postData } from '../../utils/Api';
+import {deleteImage,  editData,  fetchDataFromApi, postData } from '../../utils/Api';
 import { MyContext } from '../../App';
 import CircularProgress from '@mui/material/CircularProgress';
-const AddCategorySlide = () => {
+const EditCategory = () => {
     const[formFeilds,setFormfeilds]=useState({
         name:"",
         images:[],
@@ -15,6 +15,15 @@ const AddCategorySlide = () => {
     const[previews,setPreviews]=useState([]);
     const[isLoading,setIsLoading]=useState(false);
     const context=useContext(MyContext);
+
+    useEffect(()=>{
+        const id=context.isOpenFullScreen.id;
+        fetchDataFromApi(`/api/category/${id}`,formFeilds).then((res)=>{
+            console.log(res.category);
+            formFeilds.name=res.category.name;
+            setPreviews(res.category.images)
+        })
+    },[context.isOpenFullScreen.id])
     const onChangeInput=(e)=>{
         const{name,value}=e.target;
         setFormfeilds(()=>{
@@ -23,6 +32,7 @@ const AddCategorySlide = () => {
                 [name]:value
             }
         })
+        formFeilds.images=previews
     }
     const setPreviewsFun=(previewsArr)=>{
         // console.log(previewsArr);
@@ -39,7 +49,7 @@ const AddCategorySlide = () => {
             setPreviews([]);
             setTimeout(()=>{
                 setPreviews(imagesArr);
-                formFeilds.images=imagesArr
+                setFormfeilds(prev => ({...prev, images: imagesArr}))
             },1000);
         })
     }
@@ -58,8 +68,8 @@ const AddCategorySlide = () => {
             return false;
         }
 
-        postData("/api/category/create",formFeilds).then((res)=>{
-            // console.log(res);
+        editData(`/api/category/${context.isOpenFullScreen.id}`,formFeilds).then((res)=>{
+            console.log(res);
             // setIsLoading(false);
             setTimeout(()=>{
                 setIsLoading(false);
@@ -106,11 +116,11 @@ const AddCategorySlide = () => {
                 </div>
             </div>
             <br/>
-            <Button type="submit" className='header-btn'>{isLoading ? <CircularProgress color="inherit" size={20} /> : 'Publish and View'}</Button>
+            <Button type="submit" className='header-btn '>{isLoading ? <CircularProgress color="inherit" size={20} /> : 'Publish and View'}</Button>
         </form>
 
     </section>
   )
 }
 
-export default AddCategorySlide
+export default EditCategory

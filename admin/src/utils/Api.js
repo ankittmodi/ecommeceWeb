@@ -49,7 +49,7 @@ export const fetchDataFromApi = async (url) => {
 
 
 // for image upload
-export const uploadImage=async(url,updateData)=>{
+export const uploadImage=async(url,formData)=>{
   const token = localStorage.getItem("accessToken");
   const params={
       headers: {
@@ -58,7 +58,7 @@ export const uploadImage=async(url,updateData)=>{
       },
     }
     var response;
-  await axios.put(apiUrl+url,updateData,params).then((res)=>{
+  await axios.put(apiUrl+url,formData,params).then((res)=>{
     console.log(res);
     response=res;
   })
@@ -80,4 +80,28 @@ export const editData=async(url,updatedData)=>{
     response=res;
   })
   return response;
+}
+
+export const deleteImage=async(url)=>{
+  const token = localStorage.getItem("accessToken");
+  const params={
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  const{res}=await axios.delete(apiUrl+url,params)
+  return res;
+}
+
+export const deleteData=async(url)=>{
+  const token = localStorage.getItem("accessToken");
+  const params={
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    }
+  const{res}=await axios.delete(apiUrl+url,params)
+  return res;
 }

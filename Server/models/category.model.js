@@ -13,7 +13,7 @@ const categorySchema=mongoose.Schema({
     color:{
         type:String
     },
-    productCatname:{
+    parentCatName:{
         type:String
     },
     parentId:{

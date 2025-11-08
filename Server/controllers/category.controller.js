@@ -64,14 +64,14 @@ export async function createCategory(req,res){
     category=await category.save();
 
     imagesArr=[];
-    return res.status(500).json({
+    return res.status(200).json({
         message:"Category created successfully",
         error:false,
         success:true,
         category:category
       })
   }catch(err){
-    return res.status(500).json({
+    return res.status(400).json({
       message: err.message,
       error: true,
       success: false,
@@ -215,7 +215,11 @@ export async function removeCategoryImage(req,res){
     }
   );
   if(result){
-    res.status(200).send(result);
+    return res.status(200).json({
+      err:false,
+      success:true,
+      message:"Image deleted successfully "
+    });
   }
   }
 }
@@ -293,7 +297,12 @@ export async function updateCategory(req,res){
       })
     }
     imagesArr=[];
-    res.send(category);
+    // res.send(category);
+    res.status(200).json({
+      message: "Category updated successfully!",
+      success: true,
+      category:category
+    });
   }catch(err){
     return res.status(500).json({
       message:err.message,

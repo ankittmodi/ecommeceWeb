@@ -10,8 +10,6 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
-import { MdManageAccounts } from "react-icons/md";
-import { FiActivity } from "react-icons/fi";
 import { PiSignOut } from "react-icons/pi";
 import { MyContext } from '../../App';
 import {Link, useNavigate} from 'react-router-dom';
