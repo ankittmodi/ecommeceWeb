@@ -10,9 +10,10 @@ import { IoMdClose } from "react-icons/io";
 import CircularProgress from '@mui/material/CircularProgress';
 import {Button} from '@mui/material';
 import { MyContext } from '../../App';
-import { deleteImage, postData } from '../../utils/Api';
+import { deleteImage, editData, fetchDataFromApi, postData } from '../../utils/Api';
+import { useParams } from 'react-router-dom';
 
-const AddProduct = () => {
+const EditProduct = () => {
 
     const [formFeilds,setFormfeilds]=useState({
             name:"",
@@ -50,7 +51,43 @@ const AddProduct = () => {
     const [productWeight, setproductWeight] =useState([]);
     const [productSize, setproductSize] =useState([]);
 
+    const {id}=useParams();
+    useEffect(()=>{
+        fetchDataFromApi(`/api/product/${context.isOpenFullScreen.id}`).then((res)=>{
+            console.log(context.isOpenFullScreen.id);
+            setFormfeilds({
+            name: res?.product?.name,
+            description: res?.product?.description,
+            images: res?.product?.images,
+            brand: res?.product?.brand,
+            price: res?.product?.price,
+            oldPrice: res?.product?.oldPrice,
+            category: res?.product?.category,
+            catName: res?.product?.catName,
+            catId: res?.product?.catId,
+            subCatId: res?.product?.subCatId,
+            subCat: res?.product?.subCat,
+            thirdsubCat: res?.product?.thirdsubCat,
+            thirdsubCatId: res?.product?.thirdsubCatId,
+            countInStock: res?.product?.countInStock,
+            rating: res?.product?.rating,
+            isFeatured: res?.product?.isFeatured,
+            discount: res?.product?.discount,
+            productRam: res?.product?.productRam,
+            size: res?.product?.size,
+            productWeight: res?.product?.productWeight,
+            });
+            setproductCat(res.product.catId);
+            setproductSubCat(res.product.subCatId);
+            setproductThirdLevelCat(res.product.thirdsubCatId);
+            setproductFeatured(res.product.isFeatured);
+            setproductRam(res.product.productRam);
+            setproductSize(res.product.size);
+            setproductWeight(res.product.productWeight);
 
+            setPreviews(res.product.images);
+        })
+    },[])
     // Handle category select
 const handleChange = (event) => {
     const id = event.target.value;
@@ -205,10 +242,10 @@ const handleProductThirdLevelCat = (event) => {
         }
 
         setIsLoading(true);
-        postData("/api/product/create",formFeilds).then((res)=>{
+        editData(`/api/product/updateProduct/${context.isOpenFullScreen.id}`,formFeilds).then((res)=>{
             console.log(res);
-            if(!res.error){
-                context.openAlertBox("success",res.message);
+            if(!res.data.error){
+                context.openAlertBox("success",res.data.message);
                 setTimeout(()=>{
                     setIsLoading(false);
                     context.setIsOpenFullScreen({
@@ -219,7 +256,7 @@ const handleProductThirdLevelCat = (event) => {
             }
             else{
                 setIsLoading(false);
-                context.openAlertBox("error",res.message);
+                context.openAlertBox("error",res.data.message);
             }
         })
     }
@@ -265,7 +302,7 @@ const handleProductThirdLevelCat = (event) => {
                                 {
                                     context.catData.map((cat,index)=>{
                                         return(
-                                            <MenuItem key={cat._id} value={cat._id} >{cat.name}</MenuItem>
+                                            <MenuItem key={index} value={cat._id} >{cat.name}</MenuItem>
                                         )
                                     })
                                 }
@@ -291,7 +328,7 @@ const handleProductThirdLevelCat = (event) => {
                                         return(
                                                 cat?.children?.length!==0 && cat?.children.map((subCat,index)=>{
                                                     return(
-                                                        <MenuItem key={subCat._id} value={subCat._id} >{subCat.name}</MenuItem>
+                                                        <MenuItem key={index} value={subCat._id} >{subCat.name}</MenuItem>
                                                     )
                                                 })
                                             
@@ -454,9 +491,8 @@ const handleProductThirdLevelCat = (event) => {
                     <div className='col'>
                         <h3>Rating</h3>
                         <Rating 
-                            name="half-rating" 
-                            defaultValue={1} 
-                            precision={0.5}
+                            name="rating" 
+                            value={formFeilds.rating}
                             onChange={onChangeRating}
                         />
                     </div>
@@ -491,4 +527,4 @@ const handleProductThirdLevelCat = (event) => {
   )
 }
 
-export default AddProduct
+export default EditProduct

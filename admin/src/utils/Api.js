@@ -102,6 +102,25 @@ export const deleteData=async(url)=>{
         "Content-Type": "application/json",
       },
     }
-  const{res}=await axios.delete(apiUrl+url,params)
-  return res;
+  const response=await axios.delete(apiUrl+url,params)
+  return response;
 }
+
+export const deleteMultipleData = async (url, body) => {
+  try {
+    const token = localStorage.getItem("accessToken");
+
+    const response = await axios.delete(apiUrl + url, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      data: body, // ✅ send body with delete
+    });
+
+    return response;
+  } catch (err) {
+    console.error("DELETE MULTIPLE error:", err);
+    return { error: true, message: err.message };
+  }
+};

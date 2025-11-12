@@ -54,7 +54,7 @@ const Boxes = () => {
           <div className="box box4">
             <TbBrandProducthunt className='box-icon' />
             <div className="info">
-              <p>Total Products</p>
+              <p>Total Product</p>
               <p><strong>1,390</strong></p>
             </div>
             <RiBarChartGroupedLine className='box-icon1' />

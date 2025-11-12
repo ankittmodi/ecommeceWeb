@@ -19,6 +19,7 @@ body{
   width: 85%;
   padding: 2rem 2rem;
   transition: all 0.1s ease-in-out;
+  background-color: rgb(232, 231, 231);
 }
 .content-left{
   width: 100%;

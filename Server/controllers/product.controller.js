@@ -54,6 +54,7 @@ export async function createProduct(req,res){
             price:req.body.price,
             oldPrice:req.body.oldPrice,
             catName:req.body.catName,
+            category:req.body.category,
             catId:req.body.catId,
             subCatId:req.body.subCatId,
             subCat:req.body.subCat,
@@ -63,6 +64,7 @@ export async function createProduct(req,res){
             rating:req.body.rating,
             isFeatured:req.body.isFeatured,
             discount:req.body.discount,
+            sale:req.body.sale,
             productRam:req.body.productRam,
             size:req.body.size,
             productWeight:req.body.productWeight,
@@ -614,7 +616,7 @@ export async function getProduct(req,res){
   }
 }
 
-// get products
+// delete single products
 export async function deleteProduct(req,res){
   const product=await ProductModel.findById(req.params.id).populate("category");
   if(!product){
@@ -655,6 +657,49 @@ export async function deleteProduct(req,res){
   })
 }
 
+
+// delete multiple product
+export async function deleteMultipleProduct(req,res){
+    const {ids}=req.body;
+    if(!ids || !Array.isArray(ids)){
+      res.status(400).json({
+      message:"Invalid Input",
+      err:true,
+      success:false
+    })
+    }
+    for(let i=0;i<ids.length;i++){
+      const product=await ProductModel.findById(ids[i]);
+      const images=product.images;
+      let img="";
+      for(img of images){
+        const imgUrl=img;
+        const urlArr=imgUrl.split("/");
+        const image=urlArr[urlArr.length-1];
+        const imageName=image.split(".")[0];
+        if(imageName){
+          cloudinary.uploader.destroy(imageName,(err,result)=>{
+
+          })
+        }
+      }
+    }
+    try{
+      await ProductModel.deleteMany({_id:{$in:ids}});
+      return res.status(200).json({
+      message:"Products deleted successfully",
+      err:false,
+      success:true
+    })
+  }catch(err){
+    res.status(500).json({
+      message:err.message,
+      err:true,
+      success:false
+    })
+  }
+}
+
 // delete upload image of product
 export async function productImage(req,res){
   const imgUrl=req.query.img;
@@ -680,7 +725,7 @@ export async function productImage(req,res){
 
 export async function updateProduct(req,res){
   try{
-    const product=new ProductModel.findByIdAndUpdate(
+    const product=await ProductModel.findByIdAndUpdate(
       req.params.id,
       {
             name:req.body.name,
@@ -712,16 +757,17 @@ export async function updateProduct(req,res){
     })
     }
 
-    imagesArr=[];
+    // imagesArr=[];
     return res.status(200).json({
       message:"The product is updated",
       err:false,
-      success:false
+      success:false,
+      data:product
     })
   }catch(err){
-    return res.status(200).json({
-      success:true,
-      err:false,
+    return res.status(500).json({
+      success:false,
+      err:true,
       message:err.message
     })
   }

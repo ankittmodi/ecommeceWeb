@@ -32,6 +32,8 @@ import { fetchDataFromApi } from './utils/Api';
 import Profile from './pages/Profile';
 import Address from './pages/Address';
 import EditCategory from './pages/Category/editCategory';
+import EditProduct from './pages/Products/editProduct';
+import ProductDetails from './pages/Products/ProductDetails';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -217,6 +219,22 @@ function App() {
         </section>
       ),
     },
+    {
+      path: '/product/:id',
+      element: (
+        <section className="main">
+          <Header />
+          <div className="content-main">
+            <div className={isSidebarOpen ? 'sidebar-wrapper' : 'sidebar-width'}>
+              <Sidebar />
+            </div>
+            <div className={isSidebarOpen ? 'content-right' : 'content-left'}>
+              <ProductDetails/>
+            </div>
+          </div>
+        </section>
+      ),
+    },
   ]);
 
 
@@ -324,6 +342,9 @@ function App() {
         }
         {
           isOpenFullScreen.model==="Edit Category" && <EditCategory/>
+        }
+        {
+          isOpenFullScreen.model==="Edit Product" && <EditProduct/>
         }
       </Dialog>
 

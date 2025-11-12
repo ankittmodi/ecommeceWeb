@@ -26,6 +26,7 @@ import MenuItem from '@mui/material/MenuItem';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { MyContext } from '../App';
 import dash from '../assests/dash.jpg'
+import Products from './Products';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }; 
 const columns = [
@@ -296,7 +297,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div className='tables-card'>
-        <div className='table-flex'>
+        {/* <div className='table-flex'>
           <h2>Products (material ui)</h2>
         </div>
         <div className='dropdown'>
@@ -610,8 +611,9 @@ const Dashboard = () => {
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
-      />
-      </div> 
+      /> */}
+      <Products/>
+      </div>
 
       {/* ---------- ORDERS TABLE ---------- */}
       <div className='tables-card'>

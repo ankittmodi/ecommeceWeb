@@ -59,9 +59,10 @@
   flex-direction: column;
   justify-content: flex-start;
 }
-.info p{
+.boxes .box .info p{
   text-align: left;
   color:#fff;
+  margin: 0;
 }
 .box-icon{
   font-size: 30px;

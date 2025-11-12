@@ -43,10 +43,6 @@ const productSchema=mongoose.Schema({
         type:String,
         default:''
     },
-    subCatName:{
-        type:String,
-        // required:true
-    },
     thirdsubCat:{
         type:String,
         default:''
@@ -75,6 +71,11 @@ const productSchema=mongoose.Schema({
     discount:{
         type:Number,
         required:true
+    },
+    sale:{
+        type:Number,
+        // required:true
+        default:0
     },
     productRam:[
         {
