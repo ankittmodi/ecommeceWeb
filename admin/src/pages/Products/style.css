@@ -164,3 +164,19 @@ input::-webkit-inner-spin-button {
     overflow-y: scroll;
     padding-right: 1rem;
 }
+
+.product-loader{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-width: auto;
+    height: 400px;
+}
+
+.upload-icon{
+    display: flex;
+    align-items: center;
+    margin-right: 0.5rem;
+    font-size: 24px;
+}

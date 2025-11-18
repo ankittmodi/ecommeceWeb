@@ -117,7 +117,7 @@ const Dashboard = () => {
       <Boxes />
 
     {/* ---------- ORDERS TABLE ---------- */}
-      <div className='tables-card'>
+      {/* <div className='tables-card'>
         <div className='table-flex'>
           <h2>Products</h2>
         </div>
@@ -295,7 +295,7 @@ const Dashboard = () => {
         <div className='pagination'>
           <Pagination count={10} />
         </div>
-      </div>
+      </div> */}
       <div className='tables-card'>
         {/* <div className='table-flex'>
           <h2>Products (material ui)</h2>

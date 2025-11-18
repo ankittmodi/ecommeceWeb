@@ -53,6 +53,9 @@ const Sidebar = () => {
               open:true,
               model:"Add Product"
             })}><span className='sub-item' ></span>Product Upload</Button></li>
+            <li className='sub-list'><Link to='/products/addRams'><Button className='sub-btn'><span className='sub-item'></span>Product RAMS</Button></Link></li>
+            <li className='sub-list'><Link to='/products/addWeight'><Button className='sub-btn'><span className='sub-item'></span>Product WEIGHT</Button></Link></li>
+            <li className='sub-list'><Link to='/products/addSize'><Button className='sub-btn'><span className='sub-item'></span>Product SIZE</Button></Link></li>
           </ul>
         </Collapse>
         </li>

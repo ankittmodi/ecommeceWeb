@@ -6,6 +6,10 @@ import 'react-lazy-load-image-component/src/effects/blur.css';
 import { IoMdClose } from "react-icons/io";
 import {Button} from '@mui/material';
 const AddHomeSlide = () => {
+    const[formFeilds,setFormfeilds]=useState({
+        name:"",
+        images:[],
+    });
   return (
     <section className='add-product'>
         <form className='form'>

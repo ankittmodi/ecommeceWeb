@@ -34,6 +34,9 @@ import Address from './pages/Address';
 import EditCategory from './pages/Category/editCategory';
 import EditProduct from './pages/Products/editProduct';
 import ProductDetails from './pages/Products/ProductDetails';
+import AddRams from './pages/Products/AddRams';
+import AddWeight from './pages/Products/AddWeight';
+import AddSize from './pages/Products/AddSize';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -230,6 +233,54 @@ function App() {
             </div>
             <div className={isSidebarOpen ? 'content-right' : 'content-left'}>
               <ProductDetails/>
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: '/products/addRams',
+      element: (
+        <section className="main">
+          <Header />
+          <div className="content-main">
+            <div className={isSidebarOpen ? 'sidebar-wrapper' : 'sidebar-width'}>
+              <Sidebar />
+            </div>
+            <div className={isSidebarOpen ? 'content-right' : 'content-left'}>
+              <AddRams/>
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: '/products/addWeight',
+      element: (
+        <section className="main">
+          <Header />
+          <div className="content-main">
+            <div className={isSidebarOpen ? 'sidebar-wrapper' : 'sidebar-width'}>
+              <Sidebar />
+            </div>
+            <div className={isSidebarOpen ? 'content-right' : 'content-left'}>
+              <AddWeight/>
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: '/products/addSize',
+      element: (
+        <section className="main">
+          <Header />
+          <div className="content-main">
+            <div className={isSidebarOpen ? 'sidebar-wrapper' : 'sidebar-width'}>
+              <Sidebar />
+            </div>
+            <div className={isSidebarOpen ? 'content-right' : 'content-left'}>
+              <AddSize/>
             </div>
           </div>
         </section>

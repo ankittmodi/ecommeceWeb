@@ -1,494 +1,533 @@
+// FULL & CORRECT ADD PRODUCT TEMPLATE (RAM, SIZE, WEIGHT FIXED)
 import React,{useContext, useEffect, useState} from 'react'
 import './style.css'
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Rating from '@mui/material/Rating';
 import UploadBox from '../../Component/UploadBox';
-import { LazyLoadImage } from 'react-lazy-load-image-component';
-import 'react-lazy-load-image-component/src/effects/blur.css';
 import { IoMdClose } from "react-icons/io";
 import CircularProgress from '@mui/material/CircularProgress';
-import {Button} from '@mui/material';
+import { Button } from '@mui/material';
 import { MyContext } from '../../App';
-import { deleteImage, postData } from '../../utils/Api';
+import { deleteImage, fetchDataFromApi, postData } from '../../utils/Api';
+import { MdOutlineCloudUpload } from "react-icons/md";
 
 const AddProduct = () => {
 
-    const [formFeilds,setFormfeilds]=useState({
-            name:"",
-            description:"",
-            images:[],
-            brand:"",
-            price:"",
-            oldPrice:"",
-            catName:"",
-            category:"",
-            catId:"",
-            subCatId:"",
-            subCatName:"",
-            thirdsubCat:"",
-            thirdsubCatId:"",
-            countInStock:"",
-            rating:"",
-            isFeatured:false,
-            discount:"",
-            productRam:[],
-            size:[],
-            productWeight:[],
-            dateCreated:"",
+    const [formFeilds, setFormfeilds] = useState({
+        name:"",
+        description:"",
+        images:[],
+        brand:"",
+        price:"",
+        oldPrice:"",
+        catName:"",
+        category:"",
+        catId:"",
+        subCatId:"",
+        subCatName:"",
+        thirdsubCat:"",
+        thirdsubCatId:"",
+        countInStock:"",
+        rating:"",
+        isFeatured:false,
+        discount:"",
+        productRam:[],
+        size:[],
+        productWeight:[],
+        dateCreated:"",
+    });
+
+    const [previews, setPreviews] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
+    const context = useContext(MyContext);
+
+    const [productCat, setproductCat] = useState('');
+    const [productSubCat, setproductSubCat] = useState('');
+    const [productThirdLevelCat, setproductThirdLevelCat] = useState('');
+    const [productFeatured, setproductFeatured] = useState('');
+
+    // -------------------- RAM --------------------
+    const [ramList, setRamList] = useState([]);
+    const [selectedRams, setSelectedRams] = useState([]);
+
+    // -------------------- SIZE --------------------
+    const [sizeList, setSizeList] = useState([]);
+    const [selectedSizes, setSelectedSizes] = useState([]);
+
+    // -------------------- WEIGHT --------------------
+    const [weightList, setWeightList] = useState([]);
+    const [selectedWeights, setSelectedWeights] = useState([]);
+
+    // FETCH LISTS: RAM, SIZE, WEIGHT
+    useEffect(() => {
+        fetchDataFromApi('/api/product/productRams/get').then((res) => {
+            if (res?.success) setRamList(res?.data);
         });
-    const[previews,setPreviews]=useState([]);
-    const[isLoading,setIsLoading]=useState(false);
-    const context=useContext(MyContext);
-    // const history=useNavigate();
 
-    const [productCat, setproductCat] =useState('');
-    const [productSubCat, setproductSubCat] =useState('');
-    const [productThirdLevelCat, setproductThirdLevelCat] =useState('');
-    const [productFeatured, setproductFeatured] =useState('');
-    const [productRam, setproductRam] =useState([]);
-    const [productWeight, setproductWeight] =useState([]);
-    const [productSize, setproductSize] =useState([]);
+        fetchDataFromApi('/api/product/productSize/get').then((res) => {
+            if (res?.success) setSizeList(res?.data);
+        });
 
+        fetchDataFromApi('/api/product/productWeight/get').then((res) => {
+            if (res?.success) setWeightList(res?.data);
+        });
 
-    // Handle category select
-const handleChange = (event) => {
-    const id = event.target.value;
-    const catObj = context.catData.find(cat => cat._id === id);
+    }, []);
 
-    setproductCat(id);
-    setFormfeilds(prev => ({
-        ...prev,
-        catId: id,
-        catName: catObj?.name || "",
-        category: id,
-        subCatId: "",     // reset subcat
-        subCat: "",
-        thirdsubCatId: "",// reset third-level
-        thirdsubCat: ""
-    }));
-};
+    // -------------------- CATEGORY CHANGE --------------------
+    const handleChange = (event) => {
+        const id = event.target.value;
+        const catObj = context.catData.find(cat => cat._id === id);
 
-// Handle subcategory select
-const handleProductSubCat = (event) => {
-    const id = event.target.value;
-    setproductSubCat(id);
+        setproductCat(id);
 
-    let subCat = "";
-    for (let cat of context.catData) {
-        if (cat.children) {
-            const sub = cat.children.find(s => s._id === id);
-            if (sub) {
-                subCat = sub.name;
-                break;
-            }
-        }
-    }
+        setFormfeilds(prev => ({
+            ...prev,
+            catId: id,
+            catName: catObj?.name || "",
+            category: id,
+            subCatId: "",
+            subCat: "",
+            thirdsubCatId: "",
+            thirdsubCat: ""
+        }));
+    };
 
-    setFormfeilds(prev => ({
-        ...prev,
-        subCatId: id,
-        subCat: subCat,
-        thirdsubCatId: "",
-        thirdsubCat: ""
-    }));
-};
+    const handleProductSubCat = (event) => {
+        const id = event.target.value;
+        setproductSubCat(id);
 
-// Handle third-level category select
-const handleProductThirdLevelCat = (event) => {
-    const id = event.target.value;
-    setproductThirdLevelCat(id);
+        let subCat = "";
+        context.catData.forEach(cat => {
+            const sub = cat.children?.find(s => s._id === id);
+            if (sub) subCat = sub.name;
+        });
 
-    let thirdName = "";
-    for (let cat of context.catData) {
-        if (cat.children) {
-            for (let sub of cat.children) {
-                if (sub.children) {
-                    const third = sub.children.find(t => t._id === id);
-                    if (third) {
-                        thirdName = third.name;
-                        break;
-                    }
-                }
-            }
-        }
-    }
+        setFormfeilds(prev => ({
+            ...prev,
+            subCatId: id,
+            subCat
+        }));
+    };
 
-    setFormfeilds(prev => ({
-        ...prev,
-        thirdsubCatId: id,
-        thirdsubCat: thirdName
-    }));
-};
+    const handleProductThirdLevelCat = (event) => {
+        const id = event.target.value;
+        setproductThirdLevelCat(id);
 
+        let thirdName = "";
+        context.catData.forEach(cat => {
+            cat.children?.forEach(sub => {
+                const third = sub.children?.find(t => t._id === id);
+                if (third) thirdName = third.name;
+            });
+        });
 
-    const handleIsFeatured=(event)=>{
+        setFormfeilds(prev => ({
+            ...prev,
+            thirdsubCatId: id,
+            thirdsubCat: thirdName
+        }));
+    };
+
+    // -------------------- FEATURED --------------------
+    const handleIsFeatured = (event) => {
         setproductFeatured(event.target.value);
-        setFormfeilds(prev => ({...prev, isFeatured:event.target.value}));
-    }
+        setFormfeilds(prev => ({ ...prev, isFeatured: event.target.value }));
+    };
 
-    const handleProductRam=(event)=>{
-        const { value } = event.target;
-        const arr = typeof value === 'string' ? value.split(',') : value;
-        setproductRam(arr);
-        setFormfeilds(prev => ({...prev, productRam:arr}));
-    }
+    // -------------------- RAM SELECT --------------------
+    const handleProductRam = (event) => {
+        let value = event.target.value;
 
-    const handleProductWeight=(event)=>{
-        const { value } = event.target;
-        const arr = typeof value === 'string' ? value.split(',') : value;
-        setproductWeight(arr);
-        setFormfeilds(prev => ({...prev, productWeight:arr}));
-    }
+        if (!Array.isArray(value)) value = [value];   // FIX
 
-    const handleProductSize=(event)=>{
-        const { value } = event.target;
-        const arr = typeof value === 'string' ? value.split(',') : value;
-        setproductSize(arr);
-        setFormfeilds(prev => ({...prev, size:arr}));
-    }
+        setSelectedRams(value);
+        setFormfeilds(prev => ({
+            ...prev,
+            productRam: value
+        }));
+    };
 
-    const onChangeRating=(e, newValue)=>{
-        setFormfeilds(prev=>({...prev, rating:newValue}));
-    }
 
-    const onChangeInput=(e)=>{
-        const{name,value}=e.target;
-        setFormfeilds(prev=>({...prev,[name]:value}));
-    }
+    // -------------------- SIZE SELECT --------------------
+    const handleProductSize = (event) => {
+        let value = event.target.value;
 
+        if (!Array.isArray(value)) value = [value];   // FIX
+
+        setSelectedSizes(value);
+        setFormfeilds(prev => ({
+            ...prev,
+            size: value
+        }));
+    };
+
+
+    // -------------------- WEIGHT SELECT --------------------
+    const handleProductWeight = (event) => {
+        let value = event.target.value;
+
+        if (!Array.isArray(value)) value = [value];   // FIX
+
+        setSelectedWeights(value);
+        setFormfeilds(prev => ({
+            ...prev,
+            productWeight: value
+        }));
+    };
+
+
+    // -------------------- RATING --------------------
+    const onChangeRating = (e, newValue) => {
+        setFormfeilds(prev => ({
+            ...prev,
+            rating: newValue
+        }));
+    };
+
+    // -------------------- INPUT HANDLER --------------------
+    const onChangeInput = (e) => {
+        const { name, value } = e.target;
+        setFormfeilds(prev => ({ ...prev, [name]: value }));
+    };
+
+    // -------------------- IMAGE UPLOAD --------------------
     const setPreviewsFun = (previewsArr) => {
         setPreviews([...previewsArr]);
         setFormfeilds(prev => ({ ...prev, images: previewsArr }));
-    }
+    };
 
     const removeCategoryImage = (image, index) => {
-        deleteImage(`/api/product/deleteImage?img=${image}`).then((res) => {
-            
-            const imagesArr = [...previews]; // copy, NOT reference
-            imagesArr.splice(index, 1);
+        deleteImage(`/api/product/deleteImage?img=${image}`).then(() => {
+            const arr = [...previews];
+            arr.splice(index, 1);
+            setPreviews(arr);
 
-            setPreviews(imagesArr);
-            setFormfeilds(prev => ({ ...prev, images: imagesArr }));
-        })
+            setFormfeilds(prev => ({
+                ...prev,
+                images: arr
+            }));
+        });
+    };
+
+    // -------------------- SUBMIT --------------------
+    const handleSubmit = (e) => {
+    e.preventDefault();
+
+    console.log(formFeilds);
+
+    const requiredFields = [
+        "name",
+        "description",
+        "brand",
+        "price",
+        "catId",
+        "subCat",
+        "countInStock",
+        "rating",
+        "discount",
+    ];
+
+    // 🛑 Check empty required fields
+    for (let field of requiredFields) {
+        if (
+        formFeilds[field] === "" ||
+        formFeilds[field] === null ||
+        formFeilds[field] === undefined
+        ) {
+        context.openAlertBox("error", `Please enter product ${field}`);
+        setIsLoading(false);
+        return;
+        }
     }
 
+    // 🛑 Validate images
+    if (!formFeilds.images || formFeilds.images.length === 0) {
+        context.openAlertBox("error", "Please upload product images");
+        setIsLoading(false);
+        return;
+    }
 
-    const handleSubmit=(e)=>{
-        e.preventDefault();
-        console.log(formFeilds);
-        const requiredFields = [
-            "name",
-            "description",
-            "brand",
-            "price",
-            "catId",
-            "subCat",
-            "countInStock",
-            "rating",
-            "discount",
-        ];
+    setIsLoading(true);
 
+    postData("/api/product/create", formFeilds).then((res) => {
+        console.log(res);
 
-        for (let field of requiredFields) {
-            if (!formFeilds[field]) {
-                context.openAlertBox("error", `Please enter product ${field}`);
-                setIsLoading(false);
-                return false;
-            }
-        }
+        if (!res.error) {
+        context.openAlertBox("success", res.message);
 
-        if (!formFeilds.images || formFeilds.images.length === 0) {
-            context.openAlertBox("error","Please upload product images");
+        setTimeout(() => {
             setIsLoading(false);
-            return;
+            context.setIsOpenFullScreen({ open: false });
+        }, 1000);
+        } else {
+        setIsLoading(false);
+        context.openAlertBox("error", res.message);
         }
+    });
+    };
 
-        setIsLoading(true);
-        postData("/api/product/create",formFeilds).then((res)=>{
-            console.log(res);
-            if(!res.error){
-                context.openAlertBox("success",res.message);
-                setTimeout(()=>{
-                    setIsLoading(false);
-                    context.setIsOpenFullScreen({
-                        open:false
-                    })
-                    // history("/products")
-                },1000)
-            }
-            else{
-                setIsLoading(false);
-                context.openAlertBox("error",res.message);
-            }
-        })
-    }
 
-  return (
-    <section className='add-product'>
-        <form className='form' onSubmit={handleSubmit}>
-            <div className='scroll-form'>
-                <div className='products'>
-                    <div className='col'>
-                        <h3>Product Name</h3>
-                        <input type='text' className='search' 
-                        name='name' 
-                        value={formFeilds.name} 
-                        onChange={onChangeInput}/>
+    return (
+        <section className='add-product'>
+            <form className='form' onSubmit={handleSubmit}>
+                <div className='scroll-form'>
+
+                    {/* ---------------- PRODUCT BASIC ---------------- */}
+                    <div className='products'>
+                        <div className='col'>
+                            <h3>Product Name</h3>
+                            <input type='text' className='search'
+                                name='name'
+                                value={formFeilds.name}
+                                onChange={onChangeInput}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className='products'>
-                    <div className='col'>
-                        <h3>Product Description</h3>
-                        <textarea type='text' className='textarea'
-                        name='description' 
-                        value={formFeilds.description} 
-                        onChange={onChangeInput}
-                        />
+
+                    <div className='products'>
+                        <div className='col'>
+                            <h3>Product Description</h3>
+                            <textarea className='textarea'
+                                name='description'
+                                value={formFeilds.description}
+                                onChange={onChangeInput}
+                            />
+                        </div>
                     </div>
-                </div>
-                <div className='products product-grid'>
-                    <div className='col'>
-                        <h3>Product Category</h3>
-                        {
-                            context.catData.length!==0 &&
-                                <Select
-                                labelId="demo-simple-select-label"
-                                id="productCatDrop"
-                                value={productCat}
-                                label="Category"
+
+                    {/* ---------------- CATEGORY GRID ---------------- */}
+                    <div className='products product-grid'>
+
+                        {/* CATEGORY */}
+                        <div className='col'>
+                            <h3>Product Category</h3>
+                            {context.catData.length !== 0 && (
+                                <Select size='small'
+                                    value={productCat}
+                                    onChange={handleChange}
+                                    sx={{ width: '100%' }}
+                                >
+                                    {context.catData.map(cat => (
+                                        <MenuItem key={cat._id} value={cat._id}>
+                                            {cat.name}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            )}
+                        </div>
+
+                        {/* SUB CAT */}
+                        <div className='col'>
+                            <h3>Product Sub Category</h3>
+                            <Select size='small'
+                                value={productSubCat}
+                                onChange={handleProductSubCat}
+                                sx={{ width: '100%' }}
+                            >
+                                {context.catData.map(cat =>
+                                    cat.children?.map(sub => (
+                                        <MenuItem key={sub._id} value={sub._id}>
+                                            {sub.name}
+                                        </MenuItem>
+                                    ))
+                                )}
+                            </Select>
+                        </div>
+
+                        {/* THIRD CATEGORY */}
+                        <div className='col'>
+                            <h3>Third Level Category</h3>
+                            <Select size='small'
+                                value={productThirdLevelCat}
+                                onChange={handleProductThirdLevelCat}
+                                sx={{ width: '100%' }}
+                            >
+                                {context.catData.map(cat =>
+                                    cat.children?.map(sub =>
+                                        sub.children?.map(third => (
+                                            <MenuItem key={third._id} value={third._id}>
+                                                {third.name}
+                                            </MenuItem>
+                                        ))
+                                    )
+                                )}
+                            </Select>
+                        </div>
+
+                        {/* PRICE */}
+                        <div className='col'>
+                            <h3>Price</h3>
+                            <input type='number'
+                                className='search'
+                                name='price'
+                                value={formFeilds.price}
+                                onChange={onChangeInput}
+                            />
+                        </div>
+
+                        {/* OLD PRICE */}
+                        <div className='col'>
+                            <h3>Old Price</h3>
+                            <input type='number'
+                                className='search'
+                                name='oldPrice'
+                                value={formFeilds.oldPrice}
+                                onChange={onChangeInput}
+                            />
+                        </div>
+
+                        {/* FEATURED */}
+                        <div className='col'>
+                            <h3>Featured</h3>
+                            <Select size='small'
+                                value={productFeatured}
+                                onChange={handleIsFeatured}
+                                sx={{ width: '100%' }}
+                            >
+                                <MenuItem value={true}>True</MenuItem>
+                                <MenuItem value={false}>False</MenuItem>
+                            </Select>
+                        </div>
+
+                        {/* STOCK */}
+                        <div className='col'>
+                            <h3>Stock</h3>
+                            <input type='number'
+                                className='search'
+                                name='countInStock'
+                                value={formFeilds.countInStock}
+                                onChange={onChangeInput}
+                            />
+                        </div>
+
+                        {/* BRAND */}
+                        <div className='col'>
+                            <h3>Brand</h3>
+                            <input type='text'
+                                className='search'
+                                name='brand'
+                                value={formFeilds.brand}
+                                onChange={onChangeInput}
+                            />
+                        </div>
+
+                        {/* DISCOUNT */}
+                        <div className='col'>
+                            <h3>Discount</h3>
+                            <input type='number'
+                                className='search'
+                                name='discount'
+                                value={formFeilds.discount}
+                                onChange={onChangeInput}
+                            />
+                        </div>
+
+                        {/* RAM */}
+                        <div className='col'>
+                            <h3>Product RAM</h3>
+                            <Select
+                                multiple
                                 size='small'
-                                onChange={handleChange}
-                                className='productCat'
+                                value={selectedRams}
+                                onChange={handleProductRam}
                                 sx={{ width: '100%' }}
-                                >
-                                {
-                                    context.catData.map((cat,index)=>{
-                                        return(
-                                            <MenuItem key={cat._id} value={cat._id} >{cat.name}</MenuItem>
-                                        )
-                                    })
-                                }
-                                </Select>
-                        }
-                    </div>
-                    <div className='col'>
-                        <h3>Product Sub Category</h3>
-                        {
-                            context.catData.length!==0 &&
-                                <Select
-                                labelId="demo-simple-select-label"
-                                    id="productCatDrop"
-                                    value={productSubCat}
-                                    label="Category"
-                                    size='small'
-                                    onChange={handleProductSubCat}
-                                    className='productCat'
-                                sx={{ width: '100%' }}
-                                >
-                                {
-                                    context.catData.map((cat,index)=>{
-                                        return(
-                                                cat?.children?.length!==0 && cat?.children.map((subCat,index)=>{
-                                                    return(
-                                                        <MenuItem key={subCat._id} value={subCat._id} >{subCat.name}</MenuItem>
-                                                    )
-                                                })
-                                            
-                                        )
-                                    })
-                                }
-                                </Select>
-                        }
-                    </div>
-                    <div className='col'>
-                        <h3>Product third Level Category</h3>
-                        {
-                            context.catData.length!==0 &&
-                                <Select
-                                labelId="demo-simple-select-label"
-                                    id="productCatDrop"
-                                    value={productThirdLevelCat}
-                                    label="Category"
-                                    size='small'
-                                    onChange={handleProductThirdLevelCat}
-                                    className='productCat'
-                                sx={{ width: '100%' }}
-                                >
-                                {
-                                    context.catData.map((cat,index)=>{
-                                        return(
-                                                cat?.children?.length!==0 && cat?.children.map((subCat,index)=>{
-                                                    return(
-                                                        subCat?.children?.length!==0 && subCat?.children.map((thirdCat,index)=>{
-                                                            return(
-                                                                <MenuItem value={thirdCat._id} key={index} >{thirdCat.name}</MenuItem>
-                                                            )
-                                                        })
-                                                        
-                                                    )
-                                                })
-                                            
-                                        )
-                                    })
-                                }
-                                </Select>
-                        }
-                    </div>
-                    <div className='col'>
-                        <h3>Product Price</h3>
-                        <input type='number' className='search'
-                        name='price' 
-                        value={formFeilds.price} 
-                        onChange={onChangeInput}
-                        />
-                    </div>
-                    <div className='col'>
-                        <h3>Product Old Price</h3>
-                        <input type='number' className='search'
-                         name='oldPrice' 
-                        value={formFeilds.oldPrice} 
-                        onChange={onChangeInput}
-                        />
-                    </div>
-                    <div className='col'>
-                        <h3>Product IsFeatured</h3>
-                        <Select
-                        labelId="demo-simple-select-label"
-                        id="productCatDrop"
-                        value={productFeatured}
-                        label="Category"
-                        size='small'
-                        onChange={handleIsFeatured}
-                        className='productCat'
-                        sx={{ width: '100%' }}
-                        >
-                        <MenuItem value={true}>True</MenuItem>
-                        <MenuItem value={false}>False</MenuItem>
-                        </Select>
-                    </div>
-                    <div className='col'>
-                        <h3>Product Stock</h3>
-                        <input type='number' className='search'
-                         name='countInStock' 
-                        value={formFeilds.countInStock} 
-                        onChange={onChangeInput}
-                        />
-                    </div>
-                    <div className='col'>
-                        <h3>Product Brand</h3>
-                        <input type='text' className='search'
-                        name='brand' 
-                        value={formFeilds.brand} 
-                        onChange={onChangeInput}
-                        />
-                    </div>
-                    <div className='col'>
-                        <h3>Product Discount</h3>
-                        <input type='number' className='search'
-                        name='discount' 
-                        value={formFeilds.discount} 
-                        onChange={onChangeInput}
-                        />
-                    </div>
-                    <div className='col'>
-                        <h3>Product Rams</h3>
-                        <Select
-                        multiple
-                        labelId="demo-simple-select-label"
-                        id="productCatDrop"
-                        value={productRam}
-                        label="Category"
-                        size='small'
-                        onChange={handleProductRam}
-                        className='productCat'
-                        sx={{ width: '100%' }}
-                        >
-                        <MenuItem value={"4GB"}>4 GB</MenuItem>
-                        <MenuItem value={"6GB"}>6 GB</MenuItem>
-                        <MenuItem value={"8GB"}>8 GB</MenuItem>
-                        </Select>
-                    </div>
-                    <div className='col'>
-                        <h3>Product Weight</h3>
-                        <Select
-                        multiple
-                        labelId="demo-simple-select-label"
-                        id="productCatDrop"
-                        value={productWeight}
-                        label="Category"
-                        size='small'
-                        onChange={handleProductWeight}
-                        className='productCat'
-                        sx={{ width: '100%' }}
-                        >
-                        <MenuItem value={10}>2KG</MenuItem>
-                        <MenuItem value={20}>4kg</MenuItem>
-                        <MenuItem value={30}>5KG</MenuItem>
-                        <MenuItem value={40}>10kg</MenuItem>
-                        </Select>
-                    </div>
-                    <div className='col'>
-                        <h3>Product Size</h3>
-                        <Select
-                        multiple
-                        labelId="demo-simple-select-label"
-                        id="productCatDrop"
-                        value={productSize}
-                        label="Category"
-                        size='small'
-                        onChange={handleProductSize}
-                        className='productCat'
-                        sx={{ width: '100%' }}
-                        >
-                        <MenuItem value={'S'}>S</MenuItem>
-                        <MenuItem value={'M'}>M</MenuItem>
-                        <MenuItem value={'L'}>L</MenuItem>
-                        <MenuItem value={'XL'}>XL</MenuItem>
-                        <MenuItem value={'XXL'}>XXL</MenuItem>
-                        </Select>
-                    </div>
-                </div>
+                            >
+                                {ramList.map(ram => (
+                                    <MenuItem key={ram._id} value={ram._id}>
+                                        {ram.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </div>
 
-                <div className='products product-grid'>
-                    <div className='col'>
-                        <h3>Rating</h3>
-                        <Rating 
-                            name="half-rating" 
-                            defaultValue={1} 
-                            precision={0.5}
-                            onChange={onChangeRating}
-                        />
-                    </div>
-                </div>
+                        {/* SIZE */}
+                        <div className='col'>
+                            <h3>Product Size</h3>
+                            <Select
+                                multiple
+                                size='small'
+                                value={selectedSizes}
+                                onChange={handleProductSize}
+                                sx={{ width: '100%' }}
+                            >
+                                {sizeList.map(s => (
+                                    <MenuItem key={s._id} value={s._id}>
+                                        {s.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </div>
 
-                <div className='upload col'>
-                    <h3>Media & Images</h3>
-                    <div className='upload-file'>
-                        {
-                            previews.length!==0 && previews.map((image,index)=>{
-                                return (
-                                    <div className='upload-file-wrapper'>
-                                        <span className='close-icon' onClick={()=>removeCategoryImage(image,index)}><IoMdClose/></span>
-                                        <div className='file' key={index}>
-                                            <img 
-                                            src={image} // use normal <img> attributes as props
-                                            />
-                                        </div>
+                        {/* WEIGHT */}
+                        <div className='col'>
+                            <h3>Product Weight</h3>
+                            <Select
+                                multiple
+                                size='small'
+                                value={selectedWeights}
+                                onChange={handleProductWeight}
+                                sx={{ width: '100%' }}
+                            >
+                                {weightList.map(w => (
+                                    <MenuItem key={w._id} value={w._id}>
+                                        {w.name}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </div>
+
+                    </div>
+
+                    {/* RATING */}
+                    <div className='products product-grid'>
+                        <div className='col'>
+                            <h3>Rating</h3>
+                            <Rating
+                                defaultValue={1}
+                                precision={0.5}
+                                onChange={onChangeRating}
+                            />
+                        </div>
+                    </div>
+
+                    {/* IMAGES */}
+                    <div className='upload col'>
+                        <h3>Media & Images</h3>
+
+                        <div className='upload-file'>
+                            {previews.map((img, index) => (
+                                <div className='upload-file-wrapper' key={index}>
+                                    <span className='close-icon'
+                                        onClick={() => removeCategoryImage(img, index)}>
+                                        <IoMdClose />
+                                    </span>
+                                    <div className='file'>
+                                        <img src={img} alt="" />
                                     </div>
-                                )
-                            })
-                        }
-                        <UploadBox multiple={true} name="images" url="/api/product/uploadImages" setPreviewsFun={setPreviewsFun}/>
+                                </div>
+                            ))}
+
+                            <UploadBox
+                                multiple={true}
+                                name="images"
+                                url="/api/product/uploadImages"
+                                setPreviewsFun={setPreviewsFun}
+                            />
+                        </div>
                     </div>
                 </div>
-            </div>
-            <br/>
-            <Button type="submit" className='header-btn'>{isLoading ? <CircularProgress color="inherit" size={20} /> : 'Publish and View'}</Button>
-        </form>
 
-    </section>
-  )
-}
+                <br />
+                <Button type="submit" className='header-btn'>
+                    <MdOutlineCloudUpload className='upload-icon' />
+                    {isLoading ? <CircularProgress size={20} /> : "Publish & View"}
+                </Button>
 
-export default AddProduct
+            </form>
+        </section>
+    );
+};
+
+export default AddProduct;

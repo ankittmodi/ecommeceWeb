@@ -1,0 +1,50 @@
+.ram-section{
+    padding:2rem 1.5rem;
+}
+.ram{
+    margin-bottom: 1.5rem;
+    width: 65%;
+    background-color: #fff;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    border-radius: 10px;
+    padding: 1rem;
+    overflow: hidden;
+}
+.ram-heading{
+    margin-bottom: 1rem;
+}
+.ram-btn{
+    background-color: rgb(33, 33, 246) !important;
+    color:#fff !important;
+    text-transform: capitalize !important;
+    padding: 0.5rem 2rem !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    width: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+}
+.upload-icon{
+    display: flex;
+    align-items: center;
+    margin-right: 0.5rem;
+    font-size: 24px;
+}
+
+.ram-table{
+    min-width: 100%;
+    border-radius: 5px !important;
+}
+.ram-title{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.table-container .table-header{
+    background-color: rgb(33, 33, 246) !important;
+    color:#fff !important;
+    padding: 1rem 0rem;
+
+}

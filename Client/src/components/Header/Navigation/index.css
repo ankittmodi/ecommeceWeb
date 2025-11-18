@@ -92,6 +92,28 @@
   visibility: visible;
 }
 
+/* Hide submenu initially */
+.navbar .container .col2 .submenu1 {
+  position: absolute;
+  /* top: 38px; */
+  top: 12px;
+  left:11rem;
+  min-width: 180px;
+  background: #fff;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1),
+              0 2px 4px rgba(0,0,0,0.08);
+  border-radius: 4px;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease-in-out;
+  z-index: 999;
+}
+
+/* Show submenu on hover */
+.navbar .container .col2 .submenu li:hover .submenu1 {
+  opacity: 1;
+  visibility: visible;
+}
 /* Submenu list */
 .navbar .container .col2 .submenu .sub-list {
   display: block;

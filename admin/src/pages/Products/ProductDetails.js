@@ -30,14 +30,32 @@ const ProductDetails = () => {
         zoomSliderSmall.current.swiper.slideTo(index);
         zoomSliderBig.current.swiper.slideTo(index);
     }
-    useEffect(()=>{
-        fetchDataFromApi(`/api/product/${id}`).then((res)=>{
-            console.log(res);
-            if(!res.error){
-                setProduct(res.product);
-            }
-        })
-    },[])
+    useEffect(() => {
+    fetchDataFromApi(`/api/product/${id}`).then(res => {
+        setProduct(res.product);
+
+        // fetch names for RAM IDs
+        fetchDataFromApi(`/api/product/productRams/get`).then(ramList => {
+            const ramNames = res.product.productRam.map(id =>
+                ramList.data.find(r => r._id === id)?.name
+            );
+            setProduct(prev => ({ ...prev, ramNames }));
+        });
+        fetchDataFromApi(`/api/product/productSize/get`).then(sizeList => {
+            const sizeNames = res.product.size.map(id =>
+                sizeList.data.find(r => r._id === id)?.name
+            );
+            setProduct(prev => ({ ...prev, sizeNames }));
+        });
+        fetchDataFromApi(`/api/product/productWeight/get`).then(weightList => {
+            const weightNames = res.product.productWeight.map(id =>
+                weightList.data.find(r => r._id === id)?.name
+            );
+            setProduct(prev => ({ ...prev, weightNames }));
+        });
+    });
+}, []);
+
   return (
     <>
         <div className='product-table'>
@@ -140,11 +158,7 @@ const ProductDetails = () => {
                         <span className='product-brand'><MdOutlineSettings className='product-icon'/>RAM : </span>
                         <div className='box'>
                             {
-                                product?.productRam?.map((ram,index)=>{
-                                return(
-                                    <span key={index} className='item-name'>{ram}</span>
-                                )
-                            })
+                                product?.ramNames?.map(name => <span>{name}</span>)
                             }
                         </div>
                     </div>
@@ -157,7 +171,7 @@ const ProductDetails = () => {
                             {
                                 product?.size?.map((size,index)=>{
                                 return(
-                                    <span key={index} className='item-name'>{size}</span>
+                                    product?.sizeNames?.map(name => <span>{name}</span>)
                                 )
                             })
                             }
@@ -172,7 +186,7 @@ const ProductDetails = () => {
                             {
                                 product?.productWeight?.map((weight,index)=>{
                                 return(
-                                    <span key={index} className='item-name'>{weight}</span>
+                                    product?.weightNames?.map(name => <span>{name}</span>)
                                 )
                             })
                             }

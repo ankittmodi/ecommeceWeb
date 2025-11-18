@@ -21,6 +21,9 @@ import SearchBox from '../../Component/SearchBox';
 import { MyContext } from '../../App';
 import { deleteData, deleteMultipleData, fetchDataFromApi } from '../../utils/Api';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import CircularProgress from '@mui/material/CircularProgress';
+import { MdOutlineCloudUpload } from "react-icons/md";
+import Rating from '@mui/material/Rating';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }; 
 const columns = [
@@ -39,6 +42,11 @@ const columns = [
   {
     id: 'sales',
     label: 'SALES',
+    minWidth: 130,
+  },
+  {
+    id: 'rating',
+    label: 'Rating',
     minWidth: 130,
   },
   {
@@ -78,6 +86,7 @@ const Products = () => {
     const [productThirdLevelCat, setproductThirdLevelCat] =useState('');
     const[productData,setProductData]=useState([]);
     const[sortedIds,setSortedIds]=useState([]);
+    const[isLoading,setIsLoading]=useState(false);
     const context=useContext(MyContext);
 
     // taking data from backend
@@ -136,6 +145,7 @@ const Products = () => {
     }
 
     const getProducts=()=>{
+      setIsLoading(true);
         fetchDataFromApi("/api/product/getAllProducts").then((res)=>{
             console.log(res);
             let productArr=[];
@@ -145,7 +155,10 @@ const Products = () => {
                   productArr[i]=res?.products[i];
                   productArr[i].checked=false;
                 }
-                setProductData(productArr);
+                setTimeout(()=>{
+                  setProductData(productArr);
+                  setIsLoading(false);
+                },500);
                 // console.log(productArr)
             }
         });
@@ -162,6 +175,8 @@ const Products = () => {
             context.openAlertBox("error", "Failed to delete product due to connection error."); 
         });
     }
+
+
     const handleDeleteMultipleProducts = async () => {
       if (sortedIds?.length === 0) {
         context.openAlertBox("error", "Please select items to delete");
@@ -185,8 +200,10 @@ const Products = () => {
     const handleChange = (event) => {
         const id = event.target.value;
         const catObj = context.catData.find(cat => cat._id === id);
-
+        setIsLoading(true);
         setproductCat(id);
+        setproductSubCat('');
+        setproductThirdLevelCat('');
         setFormfeilds(prev => ({
             ...prev,
             catId: id,
@@ -200,15 +217,20 @@ const Products = () => {
         fetchDataFromApi(`/api/product/getAllProductsByCatId/${id}`).then((res)=>{
           // console.log(res);
           if(!res.error){
-            setProductData(res.products);
+            setProductData(res?.products);
+            setTimeout(()=>{
+              setIsLoading(false);
+            },500);
           }
         })
     };
 
     const handleProductSubCat = (event) => {
     const id = event.target.value;
+    setIsLoading(true);
     setproductSubCat(id);
-
+    setproductCat('');
+    setproductThirdLevelCat('');
     let subCat = "";
     for (let cat of context.catData) {
         if (cat.children) {
@@ -231,6 +253,9 @@ const Products = () => {
           // console.log(res);
           if(!res.error){
             setProductData(res.products);
+            setTimeout(()=>{
+              setIsLoading(false);
+            },500);
           }
     })
 };
@@ -238,8 +263,10 @@ const Products = () => {
 // Handle third-level category select
 const handleProductThirdLevelCat = (event) => {
     const id = event.target.value;
+    setIsLoading(true);
     setproductThirdLevelCat(id);
-
+    setproductCat('');
+    setproductSubCat('');
     let thirdName = "";
     for (let cat of context.catData) {
         if (cat.children) {
@@ -264,6 +291,9 @@ const handleProductThirdLevelCat = (event) => {
           // console.log(res);
           if(!res.error){
             setProductData(res.products);
+            setTimeout(()=>{
+              setIsLoading(false);
+            },500);
           }
     })
     
@@ -411,7 +441,10 @@ const handleProductThirdLevelCat = (event) => {
           </TableHead>
           <TableBody>
           {
-            productData.length!==0 && productData.slice(page*rowsPerPage,
+            productData.length!==0 ?
+            <>
+              {
+                isLoading===false && productData.length!==0 && productData.slice(page*rowsPerPage,
             page*rowsPerPage+rowsPerPage).map((product,index)=>{
               return(<>
                 <TableRow>
@@ -444,7 +477,16 @@ const handleProductThirdLevelCat = (event) => {
                 <p className='pro-para pro-para1'>&#x20b9; {product.oldPrice}</p>
               </TableCell>
               <TableCell style={{minWidth:columns.minWidth}}>
-                <p className="progress-bar pro-para">{product.sale}</p>
+                <p className="progress-bar pro-para">{product.sale} Sale</p>
+                  {/* <ProgressBar value={60} type="error" /> */}
+              </TableCell>
+              <TableCell style={{minWidth:columns.minWidth}}>
+                <p className="progress-bar pro-para">
+                  <Rating
+                  defaultValue={product?.rating}
+                  size='small'
+                  />
+                </p>
                   {/* <ProgressBar value={60} type="error" /> */}
               </TableCell>
               <TableCell style={{minWidth:columns.minWidth}}>
@@ -462,6 +504,18 @@ const handleProductThirdLevelCat = (event) => {
             </>
               )
             })
+              }
+            </>
+            :
+            <>
+              <TableRow>
+                <TableCell colSpan={8}>
+                  <div className='product-loader'>
+                    <CircularProgress color="inherit"/>
+                  </div>
+                </TableCell>
+              </TableRow>
+            </>
           }
             
           </TableBody>

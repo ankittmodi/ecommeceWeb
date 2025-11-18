@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 import './index.css';
 import Button from '@mui/material/Button';
@@ -9,12 +9,23 @@ import CategoryPanel from './CategoryPanel';
 import MobileNav from './MobileNav';
 import { myContext } from '../../../App';
 import { useContext } from 'react';
+import { fetchDataFromApi } from '../../../utils/Api';
 const Navigation = () => {
   const [isopen,setisopen]=useState(false);
+  const[catData,setCatData]=useState([]);
   const openCategoryPanel=()=>{
     setisopen(true);
   }
   const { windoWidth } = useContext(myContext); // ✅ consume context
+
+  useEffect(()=>{
+    fetchDataFromApi('/api/category').then((res)=>{
+      console.log(res);
+      if(res?.error===false){
+        setCatData(res?.data);
+      }
+    })
+  },[])
   return (
     <>
       <nav className="navbar">
@@ -27,29 +38,66 @@ const Navigation = () => {
             <li className="link-color">
               <Link to='/'>Home</Link>
             </li>
-            <li className="link-color">
-              <Link to='/productlisting'>Fashion</Link>
-              <div className="submenu">
-                <ul className='sub-list'>
-                  <li className='list-none'>
-                    <Link to='/productlisting'><Button>Men</Button></Link>
-                  </li>
-                  <li className='list-none'>
-                    <Link to='/productlisting'><Button>Women</Button></Link>
-                  </li>
-                  <li className='list-none'>
-                  <Link to='/productlisting'><Button>Kids</Button></Link>
-                  </li>
-                  <li className='list-none'>
-                  <Link to='/productlisting'><Button>Girls</Button></Link>
-                  </li>
-                  <li className='list-none'>
-                  <Link to='/productlisting'><Button>Boys</Button></Link>
-                  </li>
-                </ul>
-              </div>
-            </li>
-            <li className="link-color">
+            {
+              catData?.length!==0 && catData?.map((catItem,index)=>{
+                return(
+                  <>
+                    <li className="link-color" key={index}>
+                      <Link to='/productlisting'>{catItem?.name}</Link>
+                      {
+                        catItem?.children.length!==0 && 
+                        <div className="submenu">
+                        <ul className='sub-list'>
+                        {
+                          catItem?.children?.map((subCat,index)=>{
+                            return(
+                              <li className='list-none' key={index}>
+                                <Link to='/productlisting'><Button>{subCat?.name}</Button></Link>
+                                {
+                                  subCat?.children?.length!==0 && 
+                                  <div className='submenu1'>
+                                    <ul className='sub-list'>
+                                      {
+                                        subCat?.children?.map((thirdCat,index)=>{
+                                          return(
+                                            <li className='list-none' key={index}>
+                                              <Link><Button>{thirdCat?.name}</Button></Link>
+                                            </li>
+                                          )
+                                        })
+                                      }
+                                    </ul>
+                                  </div>
+                                }
+                              </li>
+                            )
+                          })
+                        }
+                          {/* <li className='list-none'>
+                            <Link to='/productlisting'><Button>Men</Button></Link>
+                          </li>
+                          <li className='list-none'>
+                            <Link to='/productlisting'><Button>Women</Button></Link>
+                          </li>
+                          <li className='list-none'>
+                          <Link to='/productlisting'><Button>Kids</Button></Link>
+                          </li>
+                          <li className='list-none'>
+                          <Link to='/productlisting'><Button>Girls</Button></Link>
+                          </li>
+                          <li className='list-none'>
+                          <Link to='/productlisting'><Button>Boys</Button></Link>
+                          </li> */}
+                        </ul>
+                      </div>
+                      }
+                    </li>
+                  </>
+                )
+              })
+            }
+            
+            {/* <li className="link-color">
               <Link to='/home'>Electronics</Link>
             </li>
             <li className="link-color">
@@ -104,7 +152,7 @@ const Navigation = () => {
             </li>
             <li className="link-color">
               <Link to='/home'>Welness</Link>
-            </li>
+            </li> */}
           </ul>
         </div>
         <div className="col3">
@@ -112,8 +160,15 @@ const Navigation = () => {
         </div>
       </div>
     </nav>
-    <CategoryPanel isopen={isopen} setisopen={setisopen}/>
 
+    {/* category panel */}
+    {
+      catData?.length!==0 && 
+      <CategoryPanel isopen={isopen} setisopen={setisopen}
+        data={catData}
+      />
+    }
+    
     {windoWidth<992 &&<MobileNav/>}
     
     </>

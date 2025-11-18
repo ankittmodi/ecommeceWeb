@@ -1,7 +1,7 @@
-.box{
+.box {
   padding: 20px 15px;
 }
-.heading{
+.heading {
   font-size: 16px;
   font-weight: 600;
   display: flex;
@@ -9,32 +9,30 @@
   justify-content: space-between;
   margin-bottom: 20px;
 }
-.cross{
+.cross {
   font-weight: 800;
   font-size: 28px;
+  cursor: pointer;
 }
-.scroll .list-style li{
+
+.scroll .list-style li {
   position: relative;
   margin-bottom: 15px;
 }
 
-.scroll .list-style li .icon{
+.scroll .list-style li .icon {
   position: absolute;
-  right:5px;
+  right: 5px;
+  cursor: pointer;
 }
 
-.scroll .submenu li{
+.scroll .submenu li {
   position: relative;
   padding-left: 12px;
   padding-top: 15px;
 }
 
-
-.scroll .submenu li .icon{
-  position: absolute;
+.scroll .submenu1 li {
+  padding-left: 12px;
+  padding-top: 12px;
 }
-
-
-
-
-

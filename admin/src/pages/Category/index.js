@@ -1,6 +1,6 @@
 import React, { useState,useContext, useEffect } from 'react';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
+// import Checkbox from '@mui/material/Checkbox';
 import { FiEdit3 } from "react-icons/fi";
 import { IoEye } from "react-icons/io5";
 import { MdOutlineDelete } from "react-icons/md";
@@ -70,9 +70,9 @@ const CategoryList = () => {
             <Table stickyHeader aria-label="sticky table">
             <TableHead>
                 <TableRow >
-                <TableCell width={60}>
+                {/* <TableCell width={60}>
                     <Checkbox {...label} size="small"/>
-                </TableCell>
+                </TableCell> */}
                 {columns.map((column) => (
                     <TableCell
                         width={column.minWidth}
@@ -88,9 +88,9 @@ const CategoryList = () => {
                 {context.catData.length!==0 && context.catData.map((item,index)=>{
                     return(
                         <TableRow key={index}>
-                        <TableCell style={{minWidth:columns.minWidth}}>
+                        {/* <TableCell style={{minWidth:columns.minWidth}}>
                             <Checkbox {...label} size="small"/>
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell width={100}>
                             <div className='category-banner'>
                                 <div className='body-img'>

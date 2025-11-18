@@ -1,0 +1,143 @@
+
+.scroll2 {
+    padding: 0;
+    background-color: #ffffff;
+    overflow-y: auto;
+    height: 100%;
+}
+
+.css-4t3x6l-MuiPaper-root-MuiDrawer-paper {
+    width: 280px !important;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.list-style {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* --- Level 1 Category Item Styling --- */
+.cat-item {
+    position: relative;
+    padding: 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.cat-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.cat-row:hover {
+    background-color: #f7f9fc;
+}
+
+.cat-link {
+    text-decoration: none;
+    color: #333333;
+    font-size: 16px;
+    font-weight: 500;
+    flex-grow: 1;
+}
+
+.cat-item.active > .cat-row .cat-link {
+    color: #ff5252;
+}
+
+.icon3 {
+    font-size: 20px;
+    cursor: pointer;
+    color: #777777;
+    margin-left: 10px;
+    transition: color 0.2s ease;
+}
+
+.cat-row:hover .icon3,
+.cat-item.active .icon3 {
+    color: #ff5252;
+}
+
+/* --- Level 2 Submenu Styling --- */
+.submenu2 {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #fafafa;
+}
+
+.submenu-item {
+    padding: 0;
+    border-bottom: 1px dashed #eeeeee;
+    transition: background-color 0.2s ease;
+}
+
+.submenu-item:hover {
+    background-color: #f0f0f0;
+}
+
+.submenu-item:last-child {
+    border-bottom: none;
+}
+
+/* Level 2 Row and Link */
+.subcat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 20px 8px 40px; /* Indentation for Level 2 */
+}
+
+.subcat-link {
+    text-decoration: none;
+    color: #555555;
+    font-size: 14px;
+    font-weight: 400;
+    flex-grow: 1;
+}
+
+.subcat-link:hover {
+    color: #ff5252;
+}
+
+/* Icon for Level 3 Toggle */
+.icon4 {
+    font-size: 16px;
+    cursor: pointer;
+    color: #555555;
+    margin-left: 10px;
+    transition: color 0.2s ease;
+}
+
+.subcat-row:hover .icon4 {
+    color: #ff5252;
+}
+
+/* --- Level 3 Submenu Styling --- */
+.third-level-submenu {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    background-color: #f2f2f2;
+    border-top: 1px solid #e0e0e0;
+}
+
+.third-level-item {
+    padding: 6px 20px 6px 60px; /* Increased indentation for Level 3 */
+}
+
+.third-level-item a {
+    text-decoration: none;
+    color: #777777;
+    font-size: 13px;
+    font-weight: 400;
+    display: block;
+}
+
+.third-level-item a:hover {
+    color: #ff5252;
+}
