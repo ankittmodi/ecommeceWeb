@@ -8,23 +8,25 @@ import { FaCodeCompare } from "react-icons/fa6";
 import { MdOutlineZoomOutMap } from "react-icons/md";
 import Tooltip from '@mui/material/Tooltip';
 import { myContext } from '../../App';
-const ProductItem = () => {
+const ProductItem = (props) => {
   const context=useContext(myContext);
   return (
     // <div className='container'>
       <div className="image-wrap group">
         <div className="prod-detail ">
-          <Link to='/product/_id'>
+          <Link to={`/product/${props?.item?._id}`}>
           <div className="img-part">
-            <img src="https://serviceapi.spicezgold.com/download/1742462383491_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-2-202308161432.webp" alt="" />
-            <img src="https://serviceapi.spicezgold.com/download/1742462383493_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-1-202308161431.jpg" alt="" className='top-img' />
+            <img src={props?.item?.images?.[0]} alt="" />
+            {props?.item?.images?.[1] && (
+              <img src={props?.item?.images?.[1]} alt="" />
+            )}
           </div>
           </Link>
-          <span className='discount'>15%</span>
+          <span className='discount'>{props.item.discount}%</span>
 
           <div className="actions">
             <Tooltip title="Zoom" placement="left-start">
-            <Button className='btn-icon' onClick={()=>context.setOpenProductDetailsModel(true)}><MdOutlineZoomOutMap/></Button></Tooltip>
+            <Button className='btn-icon' onClick={()=>context.handleOpenProductDetailsModel(true, props?.item)}><MdOutlineZoomOutMap/></Button></Tooltip>
             <Tooltip title="Wishlist" placement="left-start">
             <Button className='btn-icon'><FaRegHeart/></Button></Tooltip>
             <Tooltip title="Compare" placement="left-start">
@@ -33,12 +35,12 @@ const ProductItem = () => {
             <Button className='btn-icon'><FaRegHeart/></Button></Tooltip>
           </div>
           <div className="infor">
-          <h6><Link to='/product/_id' className='link-color'>Koskii</Link></h6>
-          <h3><Link to='/product/_id'>Floral Beads and Stones Pure Chiffon Saree</Link></h3>
-            <Rating name="half-rating-read" defaultValue={4.5} precision={0.5} readOnly />
+          <h6><Link to={`/product/${props?.item?._id}`} className='link-color'>{props.item.name}</Link></h6>
+          <h3><Link to={`/product/${props?.item?._id}`}>{props.item.description}</Link></h3>
+            <Rating name="half-rating-read" defaultValue={props.item.rating} readOnly />
           <div className="price">
-            <span className="old-price">Rs. 999</span>
-            <span className="new-price"><strong>Rs. 599</strong></span>
+            <span className="new-price"> &#x20b9; {props.item.price}</span>
+            <span className="old-price"><strong>&#x20b9; {props.item.oldPrice}</strong></span>
           </div>
           </div>
         </div>

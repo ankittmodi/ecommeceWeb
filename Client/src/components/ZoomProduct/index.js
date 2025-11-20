@@ -8,18 +8,18 @@ import 'swiper/css';
 import 'swiper/css/pagination';
 import { Pagination, Navigation } from 'swiper/modules';
 
-const images = [
-  "https://serviceapi.spicezgold.com/download/1742462383488_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-3-202308161432.webp",
-  "https://serviceapi.spicezgold.com/download/1742462383491_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-2-202308161432.webp",
-  "https://serviceapi.spicezgold.com/download/1742462383493_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-1-202308161431.jpg",
-  "https://serviceapi.spicezgold.com/download/1742462383495_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-0-202308161431.webp",
-  "https://serviceapi.spicezgold.com/download/1742462383488_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-3-202308161432.webp",
-  "https://serviceapi.spicezgold.com/download/1742462383495_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-0-202308161431.webp",
-  "https://serviceapi.spicezgold.com/download/1742462383495_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-0-202308161431.webp",
-  "https://serviceapi.spicezgold.com/download/1742462383495_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-0-202308161431.webp"
-];
+// const images = [
+//   "https://serviceapi.spicezgold.com/download/1742462383488_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-3-202308161432.webp",
+//   "https://serviceapi.spicezgold.com/download/1742462383491_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-2-202308161432.webp",
+//   "https://serviceapi.spicezgold.com/download/1742462383493_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-1-202308161431.jpg",
+//   "https://serviceapi.spicezgold.com/download/1742462383495_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-0-202308161431.webp",
+//   "https://serviceapi.spicezgold.com/download/1742462383488_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-3-202308161432.webp",
+//   "https://serviceapi.spicezgold.com/download/1742462383495_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-0-202308161431.webp",
+//   "https://serviceapi.spicezgold.com/download/1742462383495_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-0-202308161431.webp",
+//   "https://serviceapi.spicezgold.com/download/1742462383495_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-0-202308161431.webp"
+// ];
 
-const ZoomProduct = () => {
+const ZoomProduct = (props) => {
   const [slideIndex, setSlideIndex] = useState(0);
   const zoomSliderBig = useRef();
   const zoomSliderSmall = useRef();
@@ -48,7 +48,8 @@ const ZoomProduct = () => {
             zoomSliderBig.current.swiper.slideTo(index);
           }}
         >
-          {images.map((img, index) => (
+          {props?.images?.length > 0 &&
+          props.images.map((img, index) => (
             <SwiperSlide key={index}>
               <div className={`item ${slideIndex===index?'active':'notActive'}`} onClick={() => goto(index)}>
                 <img src={img} alt={`thumb-${index}`} />
@@ -67,10 +68,19 @@ const ZoomProduct = () => {
           navigation={false}
           modules={[Navigation]}
         >
-          {images.map((img, index) => (
+          {props?.images?.length > 0 &&
+          props.images.map((img,index) => (
             <SwiperSlide key={index}>
-              <InnerImageZoom src={img} zoomSrc={img} />
-              {/* <img src={img} alt="" /> */}
+              <div className="zoom-big-wrapper">
+                <InnerImageZoom
+                  src={img}
+                  zoomSrc={img}
+                  zoomType="hover"
+                  moveType="pan"
+                  zoomPreload={true}
+                  zoomScale={1.8}
+                />
+              </div>
             </SwiperSlide>
           ))}
         </Swiper>

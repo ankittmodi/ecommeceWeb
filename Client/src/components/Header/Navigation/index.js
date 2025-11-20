@@ -12,20 +12,11 @@ import { useContext } from 'react';
 import { fetchDataFromApi } from '../../../utils/Api';
 const Navigation = () => {
   const [isopen,setisopen]=useState(false);
-  const[catData,setCatData]=useState([]);
   const openCategoryPanel=()=>{
     setisopen(true);
   }
   const { windoWidth } = useContext(myContext); // ✅ consume context
-
-  useEffect(()=>{
-    fetchDataFromApi('/api/category').then((res)=>{
-      console.log(res);
-      if(res?.error===false){
-        setCatData(res?.data);
-      }
-    })
-  },[])
+  const context=useContext(myContext);
   return (
     <>
       <nav className="navbar">
@@ -39,7 +30,7 @@ const Navigation = () => {
               <Link to='/'>Home</Link>
             </li>
             {
-              catData?.length!==0 && catData?.map((catItem,index)=>{
+              context.catData?.length!==0 && context.catData?.map((catItem,index)=>{
                 return(
                   <>
                     <li className="link-color" key={index}>
@@ -163,9 +154,9 @@ const Navigation = () => {
 
     {/* category panel */}
     {
-      catData?.length!==0 && 
+      context?.catData?.length!==0 && 
       <CategoryPanel isopen={isopen} setisopen={setisopen}
-        data={catData}
+        data={context.catData}
       />
     }
     

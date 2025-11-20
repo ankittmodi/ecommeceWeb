@@ -19,9 +19,9 @@ productRouter.get('/getAllProductsByRating',getAllProductsByRating);
 productRouter.get('/getAllProductsCount',getAllProductCount);
 productRouter.get('/getAllFeaturedProducts',getAllFeaturedProducts);
 productRouter.delete('/deleteMultiple',auth, deleteMultipleProduct);
+productRouter.delete('/deleteImage',auth,productImage);
 productRouter.delete('/:id',auth, deleteProduct);
 productRouter.get('/:id',getProduct);
-productRouter.delete('/deleteImage',auth,productImage);
 productRouter.put('/updateProduct/:id',auth,updateProduct);
 
 productRouter.post('/productRams/create',auth,createProductRams);

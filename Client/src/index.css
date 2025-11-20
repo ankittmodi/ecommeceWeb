@@ -51,3 +51,32 @@ body{
   color: #000;
   font-weight: 500;
 }
+
+.productDetailModel .MuiDialog-paper{
+  width: 1200px !important;
+  max-width: 1200px !important;
+}
+
+.productDetailModel {
+  position: relative;
+}
+.productDetailModel .model-box{
+  display: flex;
+  /* align-items: center; */
+}
+.productDetailModel .col1,.col2{
+  width: 50%;
+}
+.productDetailModel .model-btn{
+  position: absolute;
+  right: 20px;
+  background-color: rgb(223, 221, 221);
+  height: 40px;
+  width: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+}
+.productDetailModel .model-btn svg{
+  font-size: 20px;
+  color:#ff5252;
+}

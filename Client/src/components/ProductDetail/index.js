@@ -7,34 +7,51 @@ import { CiHeart } from "react-icons/ci";
 import { IoIosGitCompare } from "react-icons/io";
 import QuantityBox from '../../components/QuantityBox';
 import Rating from '@mui/material/Rating';
-const ProductDetail = () => {
+const ProductDetail = (props) => {
   const [activeSize, setActiveSize] = useState(0);
     const[activeTab,setActiveTab]=useState(0);
     const isActive=(index)=>{
       setActiveSize(index);
     }
+    console.log(props?.data);
   return (
-    
       <div className="details-container">
       <div className='details'>
-              <h1 className='title'>Cropped satin saree</h1>
+              <h1 className='title'>{props?.data?.name}</h1>
               <div className="brands">
-                <p>Brands: <strong>House of satin</strong></p>
+                <p>Brands: <strong>{props?.data?.brand}</strong></p>
                 <div className="review">
-                  <Rating name="half-rating-read" defaultValue={4.5} precision={0.5} readOnly />
+                  <Rating name="half-rating-read" defaultValue={props?.data?.rating} readOnly />
                   <p>Review(10)</p>
                 </div>
               </div>
               <div className="price">
-                <span className="old-price">Rs. 999</span>
-                <span className="new-price"><strong>Rs. 599</strong></span>
-                <p>Available in Stock <span>120 items</span></p>
+                <span className="new-price"><strong>&#x20b9; {props?.data?.price}</strong></span>
+                <span className="old-price">&#x20b9; {props?.data?.oldPrice}</span>
+                <p>Available in Stock <span>{props?.data?.countInStock} items</span></p>
               </div>
               <br />
-              <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla, delectus animi eum laborum tenetur sunt natus necessitatibus quos rerum. Accusamus accusantium ipsum molestiae enim architecto? Atque placeat libero eos non.Lorem ipsum dolor sit amet consectetur adipisicing elit. Nulla, delectus animi eum laborum tenetur sunt natus necessitatibus quos rerum. Accusamus accusantium ipsum molestiae enim architecto? Atque placeat libero eos non.</p>
+              <p>{props?.data?.description}</p>
               
               {/* product size */}
+              {Array.isArray(props?.data?.size) && props.data.size.length > 0 && (
                 <div className="productSize">
+                  <span>Size :</span>
+                  <ul className="list list-style mb-0">
+                    {props.data.size.map((size, index) => (
+                      <li className="list-inline-item" key={index}>
+                        <Link
+                          className={`tag ${activeSize === index ? 'active' : ''}`}
+                          onClick={() => isActive(index)}
+                        >
+                          {size}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+                {/* <div className="productSize">
                   <span>Size/ Weight:</span>
                   <ul className="list list-style mb-0">
                     <li className="list-inline-item">
@@ -50,7 +67,43 @@ const ProductDetail = () => {
                       <Link className={`tag ${activeSize===3?'active':""}`} onClick={()=>isActive(3)}>XXL</Link>
                     </li>
                   </ul>
+                </div> */}
+              {/* product size */}
+              {Array.isArray(props?.data?.ram) && props.data.ram.length > 0 && (
+                <div className="productSize">
+                  <span>RAM :</span>
+                  <ul className="list list-style mb-0">
+                    {props.data.ram.map((ram, index) => (
+                      <li className="list-inline-item" key={index}>
+                        <Link
+                          className={`tag ${activeSize === index ? 'active' : ''}`}
+                          onClick={() => isActive(index)}
+                        >
+                          {ram}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
+              )}
+              {/* product weight */}
+              {Array.isArray(props?.data?.weight) && props.data.weight.length > 0 && (
+                <div className="productSize">
+                  <span>Weight :</span>
+                  <ul className="list list-style mb-0">
+                    {props.data.weight.map((weight, index) => (
+                      <li className="list-inline-item" key={index}>
+                        <Link
+                          className={`tag ${activeSize === index ? 'active' : ''}`}
+                          onClick={() => isActive(index)}
+                        >
+                          {weight}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
                 <p>Free Shipping (Est. Selivery Time 2-3 Days)</p>
               {/* Quantity box */}
               <div className="quantity-wrapper">

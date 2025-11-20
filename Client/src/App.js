@@ -36,7 +36,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export const myContext = createContext();
 
 function App() {
-  const [openProductDetailsModel, setOpenProductDetailsModel] = useState(false);
+  const [openProductDetailsModel, setOpenProductDetailsModel] = useState({
+    open:false,
+    item:{}
+  });
   const [fullWidth] = useState(true);
   const [maxWidth] = useState('lg');
   const [openCart, setOpenCart] = useState(false);
@@ -55,11 +58,31 @@ function App() {
       open:false,
       model:''
     });
+  const[catData,setCatData]=useState([]);
 
+    useEffect(()=>{
+        fetchDataFromApi('/api/category').then((res)=>{
+          console.log(res);
+          if(res?.error===false){
+            setCatData(res?.data);
+          }
+        })
+    },[])
+
+  const handleOpenProductDetailsModel=(status,item)=>{
+    setOpenProductDetailsModel({
+      open:status,
+      item:item
+    })
+  }
   // close model
   const handleCloseProductDetailsModel = () => {
-    setOpenProductDetailsModel(false);
+    setOpenProductDetailsModel({
+      open:false,
+      item:{}
+    });
   };
+
 
   // toggle cart panel
   const toggleCartPanel = (newOpen) => () => {
@@ -134,6 +157,9 @@ function App() {
     setAddress,
     isOpenFullScreen,
     setIsOpenFullScreen,
+    catData,
+    setCatData,
+    handleOpenProductDetailsModel
   };
 
   return (
@@ -162,23 +188,35 @@ function App() {
       </BrowserRouter>
 
       {/* Product details dialog */}
-      {/* <Dialog
+      <Dialog
         fullWidth={fullWidth}
         maxWidth={maxWidth}
-        open={openProductDetailsModel}
+        open={openProductDetailsModel.open}
         onClose={handleCloseProductDetailsModel}
         className='productDetailModel'
       >
         <DialogContent>
           <div className="model-box">
             <Button className='model-btn' onClick={handleCloseProductDetailsModel}><RxCross2 /></Button>
-            <div className="col1"><ZoomProduct /></div>
-            <div className="col2">
-              <div className="col2-desc"><ProductDetail /></div>
-            </div>
+            {
+            openProductDetailsModel?.item &&
+            openProductDetailsModel?.item?.images &&
+            openProductDetailsModel?.item?.images.length > 0 && (
+              <>
+                <div className="col1">
+                  <ZoomProduct images={openProductDetailsModel.item.images} />
+                </div>
+                <div className="col2">
+                  <div className="col2-desc">
+                    <ProductDetail data={openProductDetailsModel.item} />
+                  </div>
+                </div>
+              </>
+            )
+          }
           </div>
         </DialogContent>
-      </Dialog> */}
+      </Dialog>
     </>
   );
 }

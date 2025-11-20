@@ -6,6 +6,9 @@
   width: 100%;
   padding: 10px;
 }
+.details p{
+  text-align: left;
+}
 .details-container h1{
   font-size: 30px !important;
   font-weight: 600;
@@ -17,6 +20,7 @@
 }
 .details-container .brands p{
   opacity: 0.8;
+  text-align: left;
 }
 .review{
   display: flex;
@@ -54,6 +58,7 @@
 .details .details-container p{
   font-size: 16px;
   line-height: 25px;
+  text-align: left;
 
 }
 

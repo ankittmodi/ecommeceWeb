@@ -44,16 +44,20 @@
   padding: 25px 0px;
 }
 .product-section{
-  display: flex;align-items: center; justify-content: space-between;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
 }
  .product-section .heading{
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 0px;
 }
- .product-section p{
+ .product-section .left p{
   font-size: 14px;
+  text-align: left;
   font-weight: 400;
+  margin-top: 0px;
  }
 
 .MuiTabs-indicator{

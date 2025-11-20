@@ -20,7 +20,7 @@ app.use(cors({
 }));
 app.options('*',cors());
 app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser()); 
 app.use(morgan('dev'));
 /* Temporarily comment out helmet middleware to test for error source*/
 app.use(helmet({

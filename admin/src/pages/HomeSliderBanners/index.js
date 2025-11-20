@@ -1,4 +1,4 @@
-import React, { useState,PureComponent, useContext } from 'react';
+import React, { useState,PureComponent, useContext, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import { Link } from 'react-router-dom';
@@ -14,12 +14,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-
 import './style.css';
 import { MyContext } from '../../App';
 import ProgressBar from '../../Component/progressBar';
+import { deleteData, deleteMultipleData, fetchDataFromApi } from '../../utils/Api';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } }; 
 const columns = [
@@ -29,9 +27,84 @@ const columns = [
 const HomeSliderBanners = () => {
     const [page, setPage] =useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
-    const [categoryFilter, setCategoryFilter] = useState('');
+    const[slideData,setSlideData]=useState([]);
+    const[sortedIds,setSortedIds]=useState([]);
     const context=useContext(MyContext);
     
+    useEffect(()=>{
+       getData();
+    },[context?.isOpenFullScreen]);
+
+    const handleSelectAll=(e)=>{
+      const isChecked=e.target.checked;
+      // update all items checked status
+      const updateItems=slideData.map((item)=>({
+        ...item,
+        checked:isChecked
+      }));
+      setSlideData(updateItems);
+      console.log(updateItems);
+      // update ths sorted ids state
+      if(isChecked){
+        const ids=updateItems.map((item)=>item._id).sort((a,b)=>a-b);
+        console.log(ids);
+        setSortedIds(ids);
+      }
+      else{
+        setSortedIds([]);
+      }
+    }
+
+    const handleCheckBoxChange=(e,id,index)=>{
+      const updatedItems=slideData.map((item)=>
+      item._id===id?{...item,checked:!item.checked}:item);
+      setSlideData(updatedItems);
+      // update the sorted ids state
+      const selectIds=updatedItems
+      .filter((item)=>item.checked)
+      .map((item)=>item._id)
+      .sort((a,b)=>a-b);
+      setSortedIds(selectIds);
+      console.log(selectIds)
+    }
+
+    // const getData=()=>{
+    //      fetchDataFromApi('/api/homeSlide').then((res)=>{
+    //         // console.log(res);
+    //         let arr=[];
+    //         if(!res.error){
+    //             for(let i=0;i<res?.data?.length;i++){
+    //               arr[i]=res?.data[i];
+    //               arr[i].checked=false;
+    //               console.log(arr[i]);
+    //             }
+    //             setTimeout(()=>{
+    //               setSlideData(arr);
+    //             },300);
+    //             // console.log(productArr)
+    //         }
+    //         setTimeout(()=>{
+    //             console.log(slideData);
+
+    //         },1000)
+    //     })
+    // }
+    const getData = () => {
+    fetchDataFromApi('/api/homeSlide').then((res) => {
+        if (!res.error) {
+        let arr = res.data
+            .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)) // newest first
+            .map(item => ({
+            ...item,
+            checked: false
+            }));
+
+        setSlideData(arr);
+        }
+    });
+    };
+
+
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -41,9 +114,41 @@ const HomeSliderBanners = () => {
         setPage(0);
     };
 
-    const handleChangeFilter = (event) => {
-        setCategoryFilter(event.target.value);
-    };
+    const deleteSlide = (id) => {
+    deleteData(`/api/homeSlide/delete/${id}`)
+        .then((res) => {
+        console.log(res);
+
+        // Refresh home slide list
+        getData();
+
+        context.openAlertBox("success", "Banner deleted!");
+        })
+        .catch(err => {
+        console.error("Deletion Failed:", err);
+        context.openAlertBox("error", "Failed to delete banner.");
+        });
+    }
+
+    const handleDeleteMultipleSlide = async () => {
+          if (sortedIds?.length === 0) {
+            context.openAlertBox("error", "Please select items to delete");
+            return;
+          }
+    
+          try {
+            const res = await deleteMultipleData(`/api/homeSlide/delete-multiple`, {
+              ids: sortedIds,
+            });
+            console.log(res.data);
+            getData();
+            context.openAlertBox("success", "Selected banneer deleted!");
+          } catch (err) {
+            console.error(err);
+            context.openAlertBox("error", "Error deleting items");
+          }
+        };
+
   return (
     <>
         <div className='homeSlide-header'>
@@ -56,6 +161,9 @@ const HomeSliderBanners = () => {
                     open:true,
                     model:"Add Home Slide"
                 })}>Add Slide</Button>
+                {
+                sortedIds?.length!==0 && <Button className='product-btn' style={{background:"red",color:"#fff"}} onClick={handleDeleteMultipleSlide}>Delete</Button>
+                }
             </div>
         </div>
         <div className='tables-card home-slide'>
@@ -64,7 +172,10 @@ const HomeSliderBanners = () => {
             <TableHead>
                 <TableRow>
                 <TableCell width={60}>
-                    <Checkbox {...label} size="small"/>
+                    <Checkbox {...label} size="small" 
+                    onClick={handleSelectAll}
+                    checked={slideData?.length>0 ? slideData.every((item)=>item.checked):false}
+                    />
                 </TableCell>
                 {columns.map((column) => (
                     <TableCell
@@ -78,7 +189,37 @@ const HomeSliderBanners = () => {
                 </TableRow>
             </TableHead>
             <TableBody>
-                <TableRow>
+            {
+                slideData?.length!==0 && slideData?.map((slide,index)=>{
+                        return(
+                        <TableRow>
+                            <TableCell style={{minWidth:columns.minWidth}}>
+                                <Checkbox {...label} size="small" 
+                                checked={slide.checked===true?true:false}
+                                onChange={(e)=>handleCheckBoxChange(e,slide._id,index)}
+                                />
+                            </TableCell>
+                            <TableCell style={{minWidth:columns.minWidth}}>
+                                <div className='body-banner'>
+                                    <div className='body-img'>
+                                    <img src={slide.images[0]} alt="img"/>
+                                    </div>
+                                </div>
+                            </TableCell>
+                            
+                            <TableCell style={{minWidth:columns.minWidth}}>
+                                <div className='dash-btns'>
+                                    {/* <TooltipMUI title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></TooltipMUI> */}
+                                    <TooltipMUI title="Delete"><Button className='dash-btn' onClick={()=>deleteSlide(slide?._id)}><MdOutlineDelete /></Button></TooltipMUI>
+                                </div>
+                            </TableCell>
+                        </TableRow>
+                        )
+                    })
+                
+            }
+                
+                {/* <TableRow>
                 <TableCell style={{minWidth:columns.minWidth}}>
                     <Checkbox {...label} size="small"/>
                 </TableCell>
@@ -137,40 +278,20 @@ const HomeSliderBanners = () => {
                         <TooltipMUI title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></TooltipMUI>
                     </div>
                 </TableCell>
-                </TableRow>
-                <TableRow>
-                <TableCell style={{minWidth:columns.minWidth}}>
-                    <Checkbox {...label} size="small"/>
-                </TableCell>
-                <TableCell style={{minWidth:columns.minWidth}}>
-                    <div className='body-banner'>
-                        <div className='body-img'>
-                        <img src='https://www.houseofmasaba.com/cdn/shop/files/Masaba100410copy.jpg?v=1720173528' alt="img"/>
-                        </div>
-                    </div>
-                </TableCell>
-                
-                <TableCell style={{minWidth:columns.minWidth}}>
-                    <div className='dash-btns'>
-                        <TooltipMUI title="Edit"><Button className='dash-btn'><FiEdit3 /></Button></TooltipMUI>
-                        <TooltipMUI title="View"><Button className='dash-btn'><IoEye /></Button></TooltipMUI>
-                        <TooltipMUI title="Delete"><Button className='dash-btn'><MdOutlineDelete /></Button></TooltipMUI>
-                    </div>
-                </TableCell>
-                </TableRow>
+                </TableRow> */}
             </TableBody>
             </Table>
         </TableContainer>
         <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count=""
+            count={slideData?.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
         />
-        </div> 
+        </div>
     </>
   )
 }

@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import ProductSlider from '../../components/ProductSlider';
 import ProductDetail from '../../components/ProductDetail';
-const ProductDetails = () => {
+const ProductDetails = (props) => {
   const [activeSize, setActiveSize] = useState(0);
   const[activeTab,setActiveTab]=useState(0);
   const isActive=(index)=>{
@@ -35,9 +35,9 @@ const ProductDetails = () => {
       <section className='details'>
         <div className="container">
           <div className="zoom-container">
-            <ZoomProduct/>
+            <ZoomProduct />
           </div>
-          <ProductDetail/>
+          <ProductDetail item={props?.data}/>
         </div>
         <div className="review-section">
           <div className="container">

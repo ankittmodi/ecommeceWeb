@@ -1,18 +1,22 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import './index.css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import img1 from '../../assets/slickimg1.jpg';
-import img3 from '../../assets/slickimg3.jpg';
-import img4 from '../../assets/slickimg4.jpg';
-import img5 from '../../assets/slickimg5.jpg';
-import img6 from '../../assets/slickimg6.jpg';
+import { fetchDataFromApi } from '../../utils/Api.js'
 const HomeSlider = () => {
+  const[banner,setBanner]=useState();
+  useEffect(()=>{
+    fetchDataFromApi('/api/homeSlide').then((res)=>{
+      console.log(res);
+      setBanner(res?.data);
+    })
+  },[])
   return (
     <>
-      <div className="homeslider">
+    {banner?.length>0 && 
+    <div className="homeslider">
         <Swiper 
         centeredSlides={true}
         autoplay={{
@@ -25,13 +29,21 @@ const HomeSlider = () => {
         navigation={true}
         modules={[Autoplay, Pagination, Navigation]}
         className="mySwiper">
-          <SwiperSlide><img src={img3} alt="" /></SwiperSlide>
+        {
+          banner?.map((slide,index)=>{
+            return(
+              <SwiperSlide key={index}><img src={slide.images[0]} alt="" /></SwiperSlide>
+            )
+          })
+        }
+          {/* <SwiperSlide><img src={img3} alt="" /></SwiperSlide>
           <SwiperSlide><img src={img4} alt="" /></SwiperSlide>
           <SwiperSlide><img src={img5} alt="" /></SwiperSlide>
           <SwiperSlide><img src={img6} alt="" /></SwiperSlide>
-          <SwiperSlide><img src={img1} alt="" /></SwiperSlide>
+          <SwiperSlide><img src={img1} alt="" /></SwiperSlide> */}
         </Swiper>
-      </div>
+      </div>}
+      
     </>
   )
 }

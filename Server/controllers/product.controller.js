@@ -160,7 +160,7 @@ export async function getAllProductsByCatId(req,res){
 
 
     const products=await ProductModel.find({
-      catId:req.params.id
+      category:req.params.id
     }).populate("category")
     .skip((page-1)*perPage)
     .limit(perPage)

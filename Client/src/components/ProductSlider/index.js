@@ -38,6 +38,14 @@ const ProductSlider = (props) => {
             },
           }}
         >
+        {
+          props?.data?.map((product,index)=>{
+            return(
+              <SwiperSlide key={index}><ProductItem item={product}/></SwiperSlide>
+            )
+          })
+        }
+        {/* <SwiperSlide><ProductItem/></SwiperSlide>
         <SwiperSlide><ProductItem/></SwiperSlide>
         <SwiperSlide><ProductItem/></SwiperSlide>
         <SwiperSlide><ProductItem/></SwiperSlide>
@@ -45,8 +53,7 @@ const ProductSlider = (props) => {
         <SwiperSlide><ProductItem/></SwiperSlide>
         <SwiperSlide><ProductItem/></SwiperSlide>
         <SwiperSlide><ProductItem/></SwiperSlide>
-        <SwiperSlide><ProductItem/></SwiperSlide>
-        <SwiperSlide><ProductItem/></SwiperSlide>
+        <SwiperSlide><ProductItem/></SwiperSlide> */}
       </Swiper>
       
       </div>

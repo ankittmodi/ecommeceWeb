@@ -1,140 +1,55 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './index.css';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-const CatSlider = () => {
-  return (
-    <div className='catSlider'>
-      <div className="container">
-        <Swiper 
-        slidesPerView={7}
-        spaceBetween={30}
-        centeredSlides={false}
-        autoplay={{
-        delay: 2500,
-        disableOnInteraction: false,
-        }}
-        navigation={true}
-        modules={[Autoplay, Pagination, Navigation]}
-        className="mySwiper"
-        // ✅ Responsive breakpoints
-          breakpoints={{
-            320: {        // Mobile
-              slidesPerView: 1,
-              spaceBetween: 10,
-            },
-            350: {        // Mobile
-              slidesPerView: 2,
-              spaceBetween: 10,
-            },
-            375: {        // Mobile
-              slidesPerView: 3,
-              spaceBetween: 10,
-            },
-            640: {        // Small tablets
-              slidesPerView: 4,
-              spaceBetween: 15,
-            },
-            768: {        // Tablets
-              slidesPerView: 5,
-              spaceBetween: 20,
-            },
-            992: {        // Tablets
-              slidesPerView: 8,
-              spaceBetween: 20,
-            },
-            1024: {       // Laptops
-              slidesPerView: 8,
-              spaceBetween: 20,
-            },
-            1280: {       // Large desktops
-              slidesPerView: 10,
-              spaceBetween: 25,
-            },
-          }}
-        >
-          <SwiperSlide><div className="item">
-            <img src="https://serviceapi.spicezgold.com/download/1750853024086_1000006454.png" alt="" />
-            <h3>Fashion</h3>
-          </div></SwiperSlide>
-          <SwiperSlide>
-          <div className="item">
-            <img src="https://serviceapi.spicezgold.com/download/1741660988059_ele.png" alt="" />
-            <h3>Electronics</h3>
-          </div>
-          </SwiperSlide>
-          <SwiperSlide>
-          <div className="item">
-            <img src="https://serviceapi.spicezgold.com/download/1741661045887_bag.png" alt="" />
-            <h3>Bags</h3>
-          </div>
-          </SwiperSlide>
-          <SwiperSlide>
-          <div className="item">
-            <img src="https://serviceapi.spicezgold.com/download/1741661061379_foot.png" alt="" />
-            <h3>Footwear</h3>
-          </div>
-          </SwiperSlide>
-          <SwiperSlide>
-          <div className="item">
-            <img src="https://serviceapi.spicezgold.com/download/1741661077633_gro.png" alt="" />
-            <h3>Groceries</h3>
-          </div>
-          </SwiperSlide>
-          <SwiperSlide>
-          <div className="item">
-            <img src="https://serviceapi.spicezgold.com/download/1741661092792_beauty.png" alt="" />
-            <h3>Beauty</h3>
-          </div>
-          </SwiperSlide>
-          <SwiperSlide>
-          <div className="item">
-            <img src="https://serviceapi.spicezgold.com/download/1741661105893_well.png" alt="" />
-            <h3>Welness</h3>
-          </div>
-          </SwiperSlide>
-          <SwiperSlide>
-          <div className="item">
-            <img src="https://serviceapi.spicezgold.com/download/1749273446706_jw.png" alt="" />
-            <h3>Jewellery</h3>
-          </div>
-          </SwiperSlide>
-          <SwiperSlide>
-          <div className="item">
-            <img src="https://serviceapi.spicezgold.com/download/1741661061379_foot.png" alt="" />
-            <h3>Footwear</h3>
-          </div>
-          </SwiperSlide>
-          <SwiperSlide>
-          <div className="item">
-            <img src="https://serviceapi.spicezgold.com/download/1741661077633_gro.png" alt="" />
-            <h3>Groceries</h3>
-          </div>
-          </SwiperSlide>
-          <SwiperSlide>
-          <div className="item">
-            <img src="https://serviceapi.spicezgold.com/download/1741661092792_beauty.png" alt="" />
-            <h3>Groceries</h3>
-          </div>
-          </SwiperSlide>
-          <SwiperSlide>
-          <div className="item">
-            <img src="https://serviceapi.spicezgold.com/download/1741661105893_well.png" alt="" />
-            <h3>Groceries</h3>
-          </div>
-          </SwiperSlide>
-          <SwiperSlide>
-          <div className="item">
-            <img src="https://serviceapi.spicezgold.com/download/1749273446706_jw.png" alt="" />
-            <h3>Groceries</h3>
-          </div>
-          </SwiperSlide>
-        </Swiper>
-      </div>
-    </div>
-  )
-}
+import { myContext } from '../../App';
 
-export default CatSlider
+const CatSlider = () => {
+  const context = useContext(myContext);
+
+  return (
+    <>
+      {context.catData?.length > 0 && (
+        <div className='catSlider'>
+          <div className="container">
+            <Swiper
+              slidesPerView={7}
+              spaceBetween={30}
+              centeredSlides={false}
+              autoplay={{
+                delay: 2500,
+                disableOnInteraction: false,
+              }}
+              navigation={true}
+              modules={[Autoplay, Pagination, Navigation]}
+              className="mySwiper"
+              breakpoints={{
+                320: { slidesPerView: 1, spaceBetween: 10 },
+                350: { slidesPerView: 2, spaceBetween: 10 },
+                375: { slidesPerView: 3, spaceBetween: 10 },
+                640: { slidesPerView: 4, spaceBetween: 15 },
+                768: { slidesPerView: 5, spaceBetween: 20 },
+                992: { slidesPerView: 8, spaceBetween: 20 },
+                1024: { slidesPerView: 8, spaceBetween: 20 },
+                1280: { slidesPerView: 10, spaceBetween: 25 },
+              }}
+            >
+              {context.catData?.map((cat, index) => (
+                <SwiperSlide key={index}>
+                  <div className="item">
+                    <img src={cat?.images?.[0]} alt="" />
+                    <h3>{cat?.name}</h3>
+                  </div>
+                </SwiperSlide>
+              ))}
+            </Swiper>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+export default CatSlider;

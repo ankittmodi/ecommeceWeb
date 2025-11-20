@@ -1,4 +1,3 @@
-
 import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 import HomeSliderModel from "../models/homeSlider.model.js";
@@ -10,248 +9,252 @@ cloudinary.config({
   secure: true,
 });
 
-var imagesArr = [];
+let imagesArr = [];
+
+// **************************
+// UPLOAD IMAGES
+// **************************
 export async function uploadImages(req, res) {
   try {
     imagesArr = [];
-    const image = req.files;
+    const images = req.files;
 
     const options = {
       use_filename: true,
       unique_filename: false,
-      overwrite: false,
+      overwrite: false
     };
 
-    for (let i = 0; i < image?.length; i++) {
-      const result = await cloudinary.uploader.upload(image[i].path, options);
-
+    for (let i = 0; i < images.length; i++) {
+      const result = await cloudinary.uploader.upload(images[i].path, options);
       imagesArr.push(result.secure_url);
 
-      // Delete local file immediately after upload
-      fs.unlinkSync(`uploads/${req.files[i].filename}`);
+      fs.unlinkSync(`uploads/${images[i].filename}`);
     }
 
     return res.status(200).json({
-      images: imagesArr,
+      success: true,
+      images: imagesArr
     });
+
   } catch (err) {
     return res.status(500).json({
-      message: err.message,
-      error: true,
       success: false,
+      error: true,
+      message: err.message
     });
   }
 }
 
-export default uploadImages;
 
-export async function addHomeSlider(req,res){
-  try{
-    let slide=new HomeSliderModel({
-      images:imagesArr,
+// **************************
+// ADD SLIDE
+// **************************
+export async function addHomeSlider(req, res) {
+  try {
+    const slide = new HomeSliderModel({
+      images: imagesArr,
     });
-    if(!slide){
-      res.status(500).json({
-        message:"slide not added",
-        error:true,
-        success:false
-      })
-    }
-    slide=await slide.save();
 
-    imagesArr=[];
+    await slide.save();
+    imagesArr = [];
+
     return res.status(200).json({
-        message:"Slide created successfully",
-        error:false,
-        success:true,
-        slide:slide
-      })
-  }catch(err){
-    return res.status(400).json({
-      message: err.message,
-      error: true,
-      success: false,
-    });
-  }
-}
-
-export async function getHomeSlide(req,res){
-  try{
-    const slides=await HomeSliderModel.findd();
-
-    if(!slides){
-        return res.status(404).json({
-      message:"Slides not found",
-      error: true,
-      success: false,
-    });
-    }
-    return res.status(200).json({
-      error: false,
       success: true,
-      data:slides
+      message: "Slide created successfully",
+      slide
     });
-  }catch(err){
+
+  } catch (err) {
     return res.status(500).json({
-      message: err.message,
-      error: true,
       success: false,
+      error: true,
+      message: err.message
     });
   }
 }
 
-export async function getSlide(req,res){
-  try{
-    const slide=await HomeSliderModel.findById(req.params.id);
-    if(!slide){
-      res.status(404).json({
-        message:"The Slide with the given Id was not found.",
-        error:true,
-        success:false
+
+// **************************
+// GET ALL SLIDES
+// **************************
+export async function getHomeSlide(req, res) {
+  try {
+    const slides = await HomeSliderModel.find();
+
+    return res.status(200).json({
+      success: true,
+      error: false,
+      data: slides
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      error: true,
+      message: err.message
+    });
+  }
+}
+
+
+// **************************
+// GET SINGLE SLIDE
+// **************************
+export async function getSlide(req, res) {
+  try {
+    const slide = await HomeSliderModel.findById(req.params.id);
+
+    if (!slide) {
+      return res.status(404).json({
+        success: false,
+        error: true,
+        message: "Slide not found"
       });
     }
 
     return res.status(200).json({
-      error:false,
-      success:true,
-      slide:slide
-    })
-  }catch(err){
+      success: true,
+      slide
+    });
+
+  } catch (err) {
     return res.status(500).json({
-      message:err.message,
-      err:true,
-      success:false
-    })
-  }
-}
-
-export async function removeSlideImage(req,res){
-  const imgUrl=req.query.img;
-  // "https://res.cloudinary.com/dtlhmmcer/image/upload/v1758021182/1758021178101_ankitphoto.jpg"  ye is tarah se lega urlArr
-  const urlArr=imgUrl.split("/");
-  // ["https:","res.cloudinary.com","dtlhmmcer","image","upload","v1758021182","1758021178101_ankitphoto.jpg"] ye neeche wala array is tarah se lega
-  const image=urlArr[urlArr.length-1];
-  const imageName=image.split(".")[0];
-  if(imageName){
-    const result=await cloudinary.uploader.destroy(
-    imageName,
-    (error,result)=>{
-
-    }
-  );
-  if(result){
-    return res.status(200).json({
-      err:false,
-      success:true,
-      message:"Image deleted successfully "
+      success: false,
+      error: true,
+      message: err.message
     });
   }
+}
+
+
+// **************************
+// REMOVE IMAGE FROM CLOUDINARY
+// **************************
+export async function removeSlideImage(req, res) {
+  try {
+    const imgUrl = req.query.img;
+    const fileName = imgUrl.split("/").pop().split(".")[0];
+
+    await cloudinary.uploader.destroy(fileName);
+
+    return res.status(200).json({
+      success: true,
+      message: "Image deleted successfully"
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      error: true,
+      message: err.message
+    });
   }
 }
 
+
+// **************************
+// DELETE ONE SLIDE
+// **************************
 export async function deleteSlide(req, res) {
   try {
     const slide = await HomeSliderModel.findById(req.params.id);
+
     if (!slide) {
       return res.status(404).json({
-        message: "slide not found!",
+        success: false,
         error: true,
-        success: false
+        message: "Slide not found"
       });
     }
 
-    // 🖼️ Delete images from Cloudinary
-      const imageName = img.split("/").pop().split(".")[0];
-      await cloudinary.uploader.destroy(imageName);
+    for (let img of slide.images) {
+      const fileName = img.split("/").pop().split(".")[0];
+      await cloudinary.uploader.destroy(fileName);
+    }
 
-    // Delete main slide
-    await slideModel.findByIdAndDelete(req.params.id);
+    await HomeSliderModel.findByIdAndDelete(req.params.id);
 
     return res.status(200).json({
       success: true,
-      error: false,
-      message: "slide deleted successfully!"
+      message: "Slide deleted successfully"
     });
+
   } catch (err) {
-    // console.error("Delete slide error:", err);
     return res.status(500).json({
       success: false,
       error: true,
-      message: "Internal server error",
-      details: err.message
+      message: err.message
     });
   }
 }
 
 
-export async function updateslide(req,res){
-  try{
-    // console.log(imagesArr);
-    let slide=await HomeSliderModel.findByIdAndUpdate(
+// **************************
+// UPDATE SLIDE
+// **************************
+export async function updateslide(req, res) {
+  try {
+    const updatedSlide = await HomeSliderModel.findByIdAndUpdate(
       req.params.id,
-      {
-      images:imagesArr.length>0?imagesArr:req.body.images,
-    },{new:true});
-    if(!slide){
-      return res.status(200).json({
-        message:"slide can not be updated !",
-        error:true,
-        success:false
-      })
-    }
-    imagesArr=[];
-    // res.send(slide);
-    res.status(200).json({
-      message: "slide updated successfully!",
+      { images: imagesArr.length > 0 ? imagesArr : req.body.images },
+      { new: true }
+    );
+
+    imagesArr = [];
+
+    return res.status(200).json({
       success: true,
-      slide:slide
+      message: "Slide updated successfully",
+      slide: updatedSlide
     });
-  }catch(err){
+
+  } catch (err) {
     return res.status(500).json({
-      message:err.message,
-      err:true,
-      success:false
-    })
+      success: false,
+      error: true,
+      message: err.message
+    });
   }
 }
 
-export async function deleteMultipleSlide(req,res){
-    const {ids}=req.body;
-    if(!ids || !Array.isArray(ids)){
-      res.status(400).json({
-      message:"Invalid Input",
-      err:true,
-      success:false
-    })
-    }
-    for(let i=0;i<ids.length;i++){
-      const slide=await HomeSliderModel.findById(ids[i]);
-      const images=slide.images;
-      let img="";
-      for(img of images){
-        const imgUrl=img;
-        const urlArr=imgUrl.split("/");
-        const image=urlArr[urlArr.length-1];
-        const imageName=image.split(".")[0];
-        if(imageName){
-          cloudinary.uploader.destroy(imageName,(err,result)=>{
 
-          })
-        }
+// **************************
+// DELETE MULTIPLE SLIDES
+// **************************
+export async function deleteMultipleSlide(req, res) {
+  try {
+    const { ids } = req.body;
+
+    if (!ids || !Array.isArray(ids)) {
+      return res.status(400).json({
+        success: false,
+        error: true,
+        message: "Invalid Input"
+      });
+    }
+
+    for (let id of ids) {
+      const slide = await HomeSliderModel.findById(id);
+
+      for (let img of slide.images) {
+        const fileName = img.split("/").pop().split(".")[0];
+        await cloudinary.uploader.destroy(fileName);
       }
     }
-    try{
-      await HomeSliderModel.deleteMany({_id:{$in:ids}});
-      return res.status(200).json({
-      message:"slides deleted successfully",
-      err:false,
-      success:true
-    })
-  }catch(err){
-    res.status(500).json({
-      message:err.message,
-      err:true,
-      success:false
-    })
+
+    await HomeSliderModel.deleteMany({ _id: { $in: ids } });
+
+    return res.status(200).json({
+      success: true,
+      message: "Slides deleted successfully"
+    });
+
+  } catch (err) {
+    return res.status(500).json({
+      success: false,
+      error: true,
+      message: err.message
+    });
   }
 }

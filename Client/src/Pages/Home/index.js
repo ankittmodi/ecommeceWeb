@@ -1,4 +1,4 @@
-import  React, { useState } from 'react';
+import  React, { useContext, useEffect, useState } from 'react';
 import './index.css';
 import HomeSlider from '../../components/HomeSlider'
 import CatSlider from '../../components/CatSlider'
@@ -10,12 +10,47 @@ import Box from '@mui/material/Box';
 import ProductSlider from '../../components/ProductSlider';
 import banner from '../../assets/banner.jpg';
 import BlogItem from '../../components/BlogItem';
+import { fetchDataFromApi } from '../../utils/Api';
+import { myContext } from '../../App';
 const Home = () => {
   const [value, setValue] =useState(0);
+  const[productData,setProductData]=useState([]);
+  const[allProductData,setAllProductData]=useState([]);
+  const[featureProductData,setFeatureProductData]=useState([]);
+  const context=useContext(myContext);
+  useEffect(()=>{
+    fetchDataFromApi('/api/product/getAllProducts').then((res)=>{
+      // console.log(res);
+      setAllProductData(res?.data);
+    })
 
+    fetchDataFromApi('/api/product/getAllFeaturedProducts').then((res)=>{
+      setFeatureProductData(res?.data);
+    })
+  },[])
+
+  useEffect(()=>{
+    fetchDataFromApi(`/api/product/getAllProductsByCatId/${context?.catData[0]?._id}`).then((res)=>{
+      console.log(res?.products);
+      if(!res.error){
+        setProductData(res?.products);
+      }
+    })
+  },[context?.catData]);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  const filterByCatId=(id)=>{
+    fetchDataFromApi(`/api/product/getAllProductsByCatId/${id}`).then((res)=>{
+      // console.log(res?.products);
+      if(!res.error){
+        setProductData(res?.products);
+      }
+    })
+  }
+
+
   return (
     <div className='home'>
       <HomeSlider/>
@@ -40,20 +75,29 @@ const Home = () => {
                 scrollButtons="auto"
                 aria-label="scrollable auto tabs example"
               >
-                <Tab label="Fashion" />
+              {
+                context.catData?.length!==0 && context.catData?.map((cat)=>{
+                  return(
+                    <Tab key={cat._id} label={cat?.name} onClick={()=>filterByCatId(cat?._id)}/>
+                  )
+                })
+              }
+                {/* <Tab label="Fashion" />
                 <Tab label="Electronics" />
                 <Tab label="Bags" />
                 <Tab label="Footwear" />
                 <Tab label="Groceries" />
                 <Tab label="Beauty" />
                 <Tab label="Welness" />
-                <Tab label="Jewellery" />
+                <Tab label="Jewellery" /> */}
               </Tabs>
             </Box>
           </div>
         </div>
       </div>
-      <ProductSlider items={5}/>
+      {
+        productData?.length!==0 && <ProductSlider items={5} data={productData}/>
+      }
       </div>
 
       {/* add section */}
@@ -78,7 +122,11 @@ const Home = () => {
         <div className="container">
           <h1>Latest Products</h1>
         </div>
-        <ProductSlider items={5}/>
+        {
+          allProductData?.length!==0 && <>
+            <ProductSlider items={5} data={productData}/>
+          </>
+        }
         <AdsBanner item={3} className='latest-banner'/>
       </div>
 
@@ -87,7 +135,11 @@ const Home = () => {
         <div className="container">
           <h1>Featured Products</h1>
         </div>
-        <ProductSlider items={6}/>
+        {
+          featureProductData?.length!==0 && <>
+            <ProductSlider items={5} data={featureProductData}/>
+          </>
+        }
       </div>
 
       {/* banner section */}

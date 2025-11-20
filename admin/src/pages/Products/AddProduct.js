@@ -434,8 +434,8 @@ const AddProduct = () => {
                                 onChange={handleProductRam}
                                 sx={{ width: '100%' }}
                             >
-                                {ramList.map(ram => (
-                                    <MenuItem key={ram._id} value={ram._id}>
+                                {ramList?.map(ram => (
+                                    <MenuItem key={ram._id} value={ram.name}>
                                         {ram.name}
                                     </MenuItem>
                                 ))}
@@ -452,8 +452,8 @@ const AddProduct = () => {
                                 onChange={handleProductSize}
                                 sx={{ width: '100%' }}
                             >
-                                {sizeList.map(s => (
-                                    <MenuItem key={s._id} value={s._id}>
+                                {sizeList?.map(s => (
+                                    <MenuItem key={s._id} value={s.name}>
                                         {s.name}
                                     </MenuItem>
                                 ))}
@@ -470,8 +470,8 @@ const AddProduct = () => {
                                 onChange={handleProductWeight}
                                 sx={{ width: '100%' }}
                             >
-                                {weightList.map(w => (
-                                    <MenuItem key={w._id} value={w._id}>
+                                {weightList?.map(w => (
+                                    <MenuItem key={w._id} value={w.name}>
                                         {w.name}
                                     </MenuItem>
                                 ))}
@@ -497,7 +497,7 @@ const AddProduct = () => {
                         <h3>Media & Images</h3>
 
                         <div className='upload-file'>
-                            {previews.map((img, index) => (
+                            {previews?.map((img, index) => (
                                 <div className='upload-file-wrapper' key={index}>
                                     <span className='close-icon'
                                         onClick={() => removeCategoryImage(img, index)}>

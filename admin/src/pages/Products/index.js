@@ -89,8 +89,6 @@ const Products = () => {
     const[isLoading,setIsLoading]=useState(false);
     const context=useContext(MyContext);
 
-    // taking data from backend
-    
     useEffect(()=>{
         getProducts();
     },[context.isOpenFullScreen])
@@ -100,30 +98,25 @@ const Products = () => {
         console.log(res);
         let productArr=[];
             if(!res.error){
-                // setProductData(res.products)
                 for(let i=0;i<res?.products?.length;i++){
                   productArr[i]=res?.products[i];
                   productArr[i].checked=false;
                 }
                 setProductData(productArr);
-                // console.log(productArr)
             }
       })
     },[]);
 
     const handleSelectAll=(e)=>{
       const isChecked=e.target.checked;
-      // update all items checked status
       const updateItems=productData.map((item)=>({
         ...item,
         checked:isChecked
       }));
       setProductData(updateItems);
-      console.log(updateItems);
-      // update ths sorted ids state
+
       if(isChecked){
         const ids=updateItems.map((item)=>item._id).sort((a,b)=>a-b);
-        console.log(ids);
         setSortedIds(ids);
       }
       else{
@@ -135,22 +128,19 @@ const Products = () => {
       const updatedItems=productData.map((item)=>
       item._id===id?{...item,checked:!item.checked}:item);
       setProductData(updatedItems);
-      // update the sorted ids state
+
       const selectIds=updatedItems
       .filter((item)=>item.checked)
       .map((item)=>item._id)
       .sort((a,b)=>a-b);
       setSortedIds(selectIds);
-      console.log(selectIds)
     }
 
     const getProducts=()=>{
       setIsLoading(true);
         fetchDataFromApi("/api/product/getAllProducts").then((res)=>{
-            console.log(res);
             let productArr=[];
             if(!res.error){
-                // setProductData(res.products)
                 for(let i=0;i<res?.products?.length;i++){
                   productArr[i]=res?.products[i];
                   productArr[i].checked=false;
@@ -159,14 +149,12 @@ const Products = () => {
                   setProductData(productArr);
                   setIsLoading(false);
                 },500);
-                // console.log(productArr)
             }
         });
     }
 
     const deleteProduct=(id)=>{
         deleteData(`/api/product/${id}`).then((res)=>{
-          console.log(res); 
             getProducts();
             context.openAlertBox("success","Product deleted !")
         })
@@ -175,7 +163,6 @@ const Products = () => {
             context.openAlertBox("error", "Failed to delete product due to connection error."); 
         });
     }
-
 
     const handleDeleteMultipleProducts = async () => {
       if (sortedIds?.length === 0) {
@@ -196,10 +183,9 @@ const Products = () => {
       }
     };
 
-
     const handleChange = (event) => {
         const id = event.target.value;
-        const catObj = context.catData.find(cat => cat._id === id);
+        const catObj = context.catData?.find(cat => cat._id === id);
         setIsLoading(true);
         setproductCat(id);
         setproductSubCat('');
@@ -209,13 +195,12 @@ const Products = () => {
             catId: id,
             catName: catObj?.name || "",
             category: id,
-            subCatId: "",     // reset subcat
+            subCatId: "",
             subCat: "",
-            thirdsubCatId: "",// reset third-level
+            thirdsubCatId: "",
             thirdsubCat: ""
         }));
         fetchDataFromApi(`/api/product/getAllProductsByCatId/${id}`).then((res)=>{
-          // console.log(res);
           if(!res.error){
             setProductData(res?.products);
             setTimeout(()=>{
@@ -232,8 +217,9 @@ const Products = () => {
     setproductCat('');
     setproductThirdLevelCat('');
     let subCat = "";
-    for (let cat of context.catData) {
-        if (cat.children) {
+
+    for (let cat of context.catData || []) {
+        if (cat?.children) {
             const sub = cat.children.find(s => s._id === id);
             if (sub) {
                 subCat = sub.name;
@@ -249,8 +235,8 @@ const Products = () => {
         thirdsubCatId: "",
         thirdsubCat: ""
     }));
+
     fetchDataFromApi(`/api/product/getAllProductsBySubCatId/${id}`).then((res)=>{
-          // console.log(res);
           if(!res.error){
             setProductData(res.products);
             setTimeout(()=>{
@@ -260,7 +246,6 @@ const Products = () => {
     })
 };
 
-// Handle third-level category select
 const handleProductThirdLevelCat = (event) => {
     const id = event.target.value;
     setIsLoading(true);
@@ -268,10 +253,11 @@ const handleProductThirdLevelCat = (event) => {
     setproductCat('');
     setproductSubCat('');
     let thirdName = "";
-    for (let cat of context.catData) {
-        if (cat.children) {
+
+    for (let cat of context.catData || []) {
+        if (cat?.children) {
             for (let sub of cat.children) {
-                if (sub.children) {
+                if (sub?.children) {
                     const third = sub.children.find(t => t._id === id);
                     if (third) {
                         thirdName = third.name;
@@ -287,8 +273,8 @@ const handleProductThirdLevelCat = (event) => {
         thirdsubCatId: id,
         thirdsubCat: thirdName
     }));
+
     fetchDataFromApi(`/api/product/getAllProductsBythirdSubCatId/${id}`).then((res)=>{
-          // console.log(res);
           if(!res.error){
             setProductData(res.products);
             setTimeout(()=>{
@@ -296,9 +282,7 @@ const handleProductThirdLevelCat = (event) => {
             },500);
           }
     })
-    
 };
-
 
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
@@ -329,89 +313,68 @@ const handleProductThirdLevelCat = (event) => {
             <div className='column'>
               <h4>Category By</h4>
                 {
-                  context.catData.length!==0 &&
-                                                <Select
-                                                labelId="demo-simple-select-label"
-                                                id="productCatDrop"
-                                                value={productCat}
-                                                label="Category"
-                                                size='small'
-                                                onChange={handleChange}
-                                                className='productCat'
-                                                sx={{ width: '86%' }}
-                  >
+                  context.catData?.length>0 &&
+                    <Select
+                      value={productCat}
+                      size='small'
+                      onChange={handleChange}
+                      className='productCat'
+                      sx={{ width: '86%' }}
+                    >
                   {
-                    context.catData.map((cat,index)=>{
-                      return(
-                        <MenuItem key={cat._id} value={cat._id} >{cat.name}</MenuItem>
-                        )
-                        })
-                        }
+                    context.catData?.map((cat)=>(
+                        <MenuItem key={cat._id} value={cat._id}>{cat.name}</MenuItem>
+                    ))
+                  }
                   </Select>
                 }
             </div>
             <div className='column'>
               <h4>Sub Category By</h4>
                 {
-                            context.catData.length!==0 &&
-                                <Select
-                                labelId="demo-simple-select-label"
-                                    id="productCatDrop"
-                                    value={productSubCat}
-                                    label="Category"
-                                    size='small'
-                                    onChange={handleProductSubCat}
-                                    className='productCat'
-                                sx={{ width: '86%' }}
-                                >
-                                {
-                                    context.catData.map((cat,index)=>{
-                                        return(
-                                                cat?.children?.length!==0 && cat?.children.map((subCat,index)=>{
-                                                    return(
-                                                        <MenuItem key={subCat._id} value={subCat._id} >{subCat.name}</MenuItem>
-                                                    )
-                                                })
-                                            
-                                        )
-                                    })
-                                }
-                                </Select>
+                    context.catData?.length>0 &&
+                        <Select
+                            value={productSubCat}
+                            size='small'
+                            onChange={handleProductSubCat}
+                            className='productCat'
+                            sx={{ width: '86%' }}
+                        >
+                        {
+                            context.catData?.map(cat =>
+                                cat?.children?.length>0 &&
+                                cat.children.map(subCat => (
+                                    <MenuItem key={subCat._id} value={subCat._id}>{subCat.name}</MenuItem>
+                                ))
+                            )
                         }
+                        </Select>
+                }
             </div>
             <div className='column'>
               <h4>Third Level Category By</h4>
                 {
-                            context.catData.length!==0 &&
-                                <Select
-                                labelId="demo-simple-select-label"
-                                    id="productCatDrop"
-                                    value={productThirdLevelCat}
-                                    label="Category"
-                                    size='small'
-                                    onChange={handleProductThirdLevelCat}
-                                    className='productCat'
-                                sx={{ width: '86%' }}
-                                >
-                                {
-                                    context.catData.map((cat,index)=>{
-                                        return(
-                                                cat?.children?.length!==0 && cat?.children.map((subCat,index)=>{
-                                                    return(
-                                                        subCat?.children?.length!==0 && subCat?.children.map((thirdCat,index)=>{
-                                                            return(
-                                                                <MenuItem value={thirdCat._id} key={index} >{thirdCat.name}</MenuItem>
-                                                            )
-                                                        })
-                                                        
-                                                    )
-                                                })
-                                            
-                                        )
-                                    })
-                                }
-                                </Select>
+                    context.catData?.length>0 &&
+                        <Select
+                            value={productThirdLevelCat}
+                            size='small'
+                            onChange={handleProductThirdLevelCat}
+                            className='productCat'
+                            sx={{ width: '86%' }}
+                        >
+                        {
+                            context.catData?.map(cat =>
+                                cat?.children?.length>0 &&
+                                    cat.children.map(subCat =>
+                                        subCat?.children?.length>0 &&
+                                            subCat.children.map(thirdCat => (
+                                                <MenuItem key={thirdCat._id} value={thirdCat._id}>{thirdCat.name}</MenuItem>
+                                            ))
+                                    )
+                            )
                         }
+                        </Select>
+                }
             </div>
             <div className='column2'>
               <SearchBox/>
@@ -441,55 +404,46 @@ const handleProductThirdLevelCat = (event) => {
           </TableHead>
           <TableBody>
           {
-            productData.length!==0 ?
+            productData?.length!==0 ?
             <>
               {
-                isLoading===false && productData.length!==0 && productData.slice(page*rowsPerPage,
-            page*rowsPerPage+rowsPerPage).map((product,index)=>{
-              return(<>
-                <TableRow>
-              <TableCell style={{minWidth:columns.minWidth}}>
+                isLoading===false && productData?.length!==0 && productData?.slice(page*rowsPerPage,
+            page*rowsPerPage+rowsPerPage).map((product)=>(
+                <TableRow key={product._id}>
+              <TableCell>
                 <Checkbox {...label} size="small" 
                 checked={product.checked===true?true:false}
-                  onChange={(e)=>handleCheckBoxChange(e,product._id,index)}
+                  onChange={(e)=>handleCheckBoxChange(e,product._id)}
                 />
               </TableCell>
-              <TableCell style={{minWidth:columns.minWidth}}>
+              <TableCell>
                 <div className='body-flex'>
                     <div className='body-img'>
-                      <Link to={`/product/${product._id}`}><LazyLoadImage alt='image' effect='blur' src={product.images[0]}/></Link>
-                      {/* <img src={product.images} alt="img"/> */}
+                      <Link to={`/product/${product?._id}`}><LazyLoadImage alt='image' effect='blur' src={product?.images?.[0]}/></Link>
                     </div>
                     <div className='body-info'>
-                      <h3><Link to={`/product/${product._id}`}>{product.name}</Link></h3>
-                      <p className='pro-para'>{product.description}</p>
+                      <h3><Link to={`/product/${product?._id}`}>{product?.name}</Link></h3>
+                      <p className='pro-para'>{product?.description}</p>
                     </div>
                   </div>
               </TableCell>
-              <TableCell style={{minWidth:columns.minWidth}}>
-                {product.catName}
+              <TableCell>
+                {product?.catName}
               </TableCell>
-              <TableCell style={{minWidth:columns.minWidth}}>
-                {product.subCat}
+              <TableCell>
+                {product?.subCat}
               </TableCell>
-              <TableCell style={{minWidth:columns.minWidth}}>
-                <p className='pro-para'>&#x20b9; {product.price}</p>
-                <p className='pro-para pro-para1'>&#x20b9; {product.oldPrice}</p>
+              <TableCell>
+                <p className='pro-para'>₹ {product?.price}</p>
+                <p className='pro-para pro-para1'>₹ {product?.oldPrice}</p>
               </TableCell>
-              <TableCell style={{minWidth:columns.minWidth}}>
-                <p className="progress-bar pro-para">{product.sale} Sale</p>
-                  {/* <ProgressBar value={60} type="error" /> */}
+              <TableCell>
+                <p className="progress-bar pro-para">{product?.sale} Sale</p>
               </TableCell>
-              <TableCell style={{minWidth:columns.minWidth}}>
-                <p className="progress-bar pro-para">
-                  <Rating
-                  defaultValue={product?.rating}
-                  size='small'
-                  />
-                </p>
-                  {/* <ProgressBar value={60} type="error" /> */}
+              <TableCell>
+                <Rating defaultValue={product?.rating} size='small' />
               </TableCell>
-              <TableCell style={{minWidth:columns.minWidth}}>
+              <TableCell>
                 <div className='dash-btns'>
                     <TooltipMUI title="Edit" onClick={()=>context.setIsOpenFullScreen({
                     open:true,
@@ -501,9 +455,7 @@ const handleProductThirdLevelCat = (event) => {
                   </div>
               </TableCell>
             </TableRow>
-            </>
-              )
-            })
+              ))
               }
             </>
             :
@@ -524,7 +476,7 @@ const handleProductThirdLevelCat = (event) => {
       <TablePagination
         rowsPerPageOptions={[10, 25, 100]}
         component="div"
-        count={productData.length}
+        count={productData?.length || 0}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handleChangePage}
@@ -535,4 +487,4 @@ const handleProductThirdLevelCat = (event) => {
   )
 }
 
-export default Products
+export default Products;

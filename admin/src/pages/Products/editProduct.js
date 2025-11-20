@@ -172,7 +172,7 @@ const EditProduct = () => {
   // CATEGORY HANDLERS
   const handleChange = (event) => {
     const id = event.target.value;
-    const catObj = context.catData.find(cat => cat._id === id);
+    const catObj = context?.catData?.find(cat => cat._id === id);
 
     setproductCat(id);
     setFormfeilds(prev => ({
@@ -373,7 +373,7 @@ const EditProduct = () => {
             <div className='col'>
               <h3>Product Category</h3>
               {
-                context.catData.length!==0 &&
+                context?.catData?.length!==0 &&
                 <Select
                   labelId="demo-simple-select-label"
                   id="productCatDrop"
@@ -385,7 +385,7 @@ const EditProduct = () => {
                   sx={{ width: '100%' }}
                 >
                   {
-                    context.catData.map((cat,index)=>{
+                    context?.catData?.map((cat,index)=>{
                       return(
                         <MenuItem key={index} value={cat._id} >{cat.name}</MenuItem>
                       )
@@ -398,7 +398,7 @@ const EditProduct = () => {
             <div className='col'>
               <h3>Product Sub Category</h3>
               {
-                context.catData.length!==0 &&
+                context?.catData?.length!==0 &&
                 <Select
                   labelId="demo-simple-select-label"
                   id="productCatDrop"
@@ -410,7 +410,7 @@ const EditProduct = () => {
                   sx={{ width: '100%' }}
                 >
                   {
-                    context.catData.map((cat,index)=>{
+                    context?.catData?.map((cat,index)=>{
                       return(
                         cat?.children?.length!==0 && cat?.children.map((subCat,index)=>{
                           return(
@@ -427,7 +427,7 @@ const EditProduct = () => {
             <div className='col'>
               <h3>Product third Level Category</h3>
               {
-                context.catData.length!==0 &&
+                context?.catData?.length!==0 &&
                 <Select
                   labelId="demo-simple-select-label"
                   id="productCatDrop"
@@ -439,7 +439,7 @@ const EditProduct = () => {
                   sx={{ width: '100%' }}
                 >
                   {
-                    context.catData.map((cat,index)=>{
+                    context?.catData?.map((cat,index)=>{
                       return(
                         cat?.children?.length!==0 && cat?.children.map((subCat,index)=>{
                           return(
@@ -525,7 +525,7 @@ const EditProduct = () => {
                 value={selectedRams}
                 onChange={handleProductRam}
                 sx={{ width: "100%" }}>
-                {ramList.map(ram => (
+                {ramList?.map(ram => (
                   <MenuItem key={ram._id} value={ram._id}>{ram.name}</MenuItem>
                 ))}
               </Select>
@@ -572,7 +572,7 @@ const EditProduct = () => {
             <h3>Media & Images</h3>
             <div className='upload-file'>
               {
-                previews.length!==0 && previews.map((image,index)=>{
+                previews?.length!==0 && previews?.map((image,index)=>{
                   return (
                     <div className='upload-file-wrapper' key={index}>
                       <span className='close-icon' onClick={()=>removeCategoryImage(image,index)}><IoMdClose/></span>
