@@ -10,7 +10,9 @@ import {Button} from '@mui/material';
 import { MyContext } from '../../App';
 import { deleteImage, editData, fetchDataFromApi } from '../../utils/Api';
 import { useParams } from 'react-router-dom';
+import Switch from '@mui/material/Switch';
 
+const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
 const EditProduct = () => {
 
@@ -36,9 +38,13 @@ const EditProduct = () => {
     size:[],
     productWeight:[],
     dateCreated:"",
+    bannerTitleName:'',
+    bannerImages:[],
+    isDisplayHomeBanner:false
   });
 
   const[previews,setPreviews]=useState([]);
+  const [bannerpreviews, setbannerPreviews] = useState([]);
   const[isLoading,setIsLoading]=useState(false);
   const context=useContext(MyContext);
   const { id } = useParams();
@@ -59,6 +65,8 @@ const EditProduct = () => {
   // -------------------- WEIGHT --------------------
   const [weightList, setWeightList] = useState([]);
   const [selectedWeights, setSelectedWeights] = useState([]);
+
+  const[checkedSwitch,setCheckedSwitch]=useState(false);
 
   // helper: convert incoming item (id | {_id,name} | name) => id if possible
   const resolveToId = (item, list) => {
@@ -103,12 +111,6 @@ const EditProduct = () => {
     fetchDataFromApi(`/api/product/${productId}`).then((res)=>{
       if(!res?.product) return;
       const productData = res.product;
-
-      // --- map incoming arrays to IDs using helper and available lists ---
-      // incoming productData.productRam could be:
-      //  - array of ids -> keep
-      //  - array of objects {_id,name} -> map to _id
-      //  - array of names -> find corresponding id from ramList by name
       const ramIds = Array.isArray(productData.productRam)
         ? productData.productRam.map(item => resolveToId(item, ramList)).filter(Boolean)
         : [];
@@ -134,10 +136,11 @@ const EditProduct = () => {
       setproductSubCat(productData.subCatId || "");
       setproductThirdLevelCat(productData.thirdsubCatId || "");
       setproductFeatured(productData.isFeatured || false);
-
+      setbannerPreviews(productData?.bannerImages);
+      setCheckedSwitch(res?.productData?.isDisplayHomeBanner);
       // set whole form: for submission, store arrays as ids (not objects)
       setFormfeilds({
-        name: productData.name || "",
+        name: productData.name,
         description: productData.description || "",
         images: productData.images || [],
         brand: productData.brand || "",
@@ -158,7 +161,10 @@ const EditProduct = () => {
         productRam: ramIds,
         size: sizeIds,
         productWeight: weightIds,
-        dateCreated: productData.dateCreated || ""
+        dateCreated: productData.dateCreated || "",
+        bannerTitleName:res?.productData.bannerTitleName,
+        bannerImages:res?.productData.bannerImages,
+        isDisplayHomeBanner:res?.productData.isDisplayHomeBanner
       });
 
     }).catch(err => {
@@ -287,6 +293,11 @@ const EditProduct = () => {
     setFormfeilds(prev => ({ ...prev, images: previewsArr }));
   }
 
+  const setBannerImagesFun = (previewsArr) => {
+        setbannerPreviews([...previewsArr]);
+        setFormfeilds(prev => ({ ...prev, images: previewsArr }));
+    };
+
   const removeCategoryImage = (image, index) => {
     deleteImage(`/api/product/deleteImage?img=${image}`).then(() => {
       const imagesArr = [...previews];
@@ -295,6 +306,24 @@ const EditProduct = () => {
       setFormfeilds(prev => ({ ...prev, images: imagesArr }));
     })
   }
+
+  const removeBannerImage = (image, index) => {
+          deleteImage(`/api/product/deleteImage?img=${image}`).then(() => {
+              const arr = [...previews];
+              arr.splice(index, 1);
+              setbannerPreviews(arr);
+  
+              setFormfeilds(prev => ({
+                  ...prev,
+                  images: arr
+              }));
+          });
+      };
+
+  const handleChangeSwitch=(e)=>{
+        setCheckedSwitch(e.target.checked);
+        formFeilds.isDisplayHomeBanner=e.target.checked;
+    }
 
   const handleSubmit=(e)=>{
     e.preventDefault();
@@ -586,6 +615,48 @@ const EditProduct = () => {
               <UploadBox multiple={true} name="images" url="/api/product/uploadImages" setPreviewsFun={setPreviewsFun}/>
             </div>
           </div>
+
+          {/*Banner IMAGES */}
+                    <div className='upload col'>
+                        <div className='switch'>
+                          <h3>Banner Images</h3>
+                          <Switch {...label} 
+                          onChange={handleChangeSwitch}
+                          checked={checkedSwitch}
+                          />
+                      </div>
+
+                        <div className='upload-file'>
+                            {bannerpreviews?.map((img, index) => (
+                                <div className='upload-file-wrapper' key={index}>
+                                    <span className='close-icon'
+                                        onClick={() => removeBannerImage(img, index)}>
+                                        <IoMdClose />
+                                    </span>
+                                    <div className='file'>
+                                        <img src={img} alt="" />
+                                    </div>
+                                </div>
+                            ))}
+
+                            <UploadBox
+                                multiple={true}
+                                name="bannerImages"
+                                url="/api/product/uploadBannerImages"
+                                setPreviewsFun={setBannerImagesFun}
+                            />
+                        </div>
+                    </div>
+                    <br/>
+                    <div className='col'>
+                            <h3>Banner Title</h3>
+                            <input type='text'
+                                className='search'
+                                name='bannerTitleName'
+                                value={formFeilds.bannerTitleName}
+                                onChange={onChangeInput}
+                            />
+                    </div>
         </div>
         <br/>
         <Button type="submit" className='header-btn'>{isLoading ? <CircularProgress color="inherit" size={20} /> : 'Publish and View'}</Button>

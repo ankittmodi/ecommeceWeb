@@ -18,11 +18,14 @@ const ProductItem = (props) => {
           <div className="img-part">
             <img src={props?.item?.images?.[0]} alt="" />
             {props?.item?.images?.[1] && (
-              <img src={props?.item?.images?.[1]} alt="" />
+              <img src={props?.item?.images?.[1]} alt="" className='top-img'/>
             )}
           </div>
           </Link>
-          <span className='discount'>{props.item.discount}%</span>
+          <span className='discount'>
+            {props?.item?.discount ? `${props.item.discount}% OFF` : ""}
+          </span>
+
 
           <div className="actions">
             <Tooltip title="Zoom" placement="left-start">
@@ -35,12 +38,12 @@ const ProductItem = (props) => {
             <Button className='btn-icon'><FaRegHeart/></Button></Tooltip>
           </div>
           <div className="infor">
-          <h6><Link to={`/product/${props?.item?._id}`} className='link-color'>{props.item.name}</Link></h6>
-          <h3><Link to={`/product/${props?.item?._id}`}>{props.item.description}</Link></h3>
-            <Rating name="half-rating-read" defaultValue={props.item.rating} readOnly />
+          <h6><Link to={`/product/${props?.item?._id}`} className='link-color'>{props?.item?.name.substr(0,60)+ "..."}</Link></h6>
+          <h3 className="two-line-text"><Link to={`/product/${props?.item?._id}`}>{props?.item?.description.substr(0,50)+ "..."}</Link></h3>
+            <Rating name="half-rating-read" defaultValue={props?.item?.rating} readOnly />
           <div className="price">
-            <span className="new-price"> &#x20b9; {props.item.price}</span>
-            <span className="old-price"><strong>&#x20b9; {props.item.oldPrice}</strong></span>
+            <span className="new-price"> &#x20b9; {props?.item?.price}</span>
+            <span className="old-price"><strong>&#x20b9; {props?.item?.oldPrice}</strong></span>
           </div>
           </div>
         </div>

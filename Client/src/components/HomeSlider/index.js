@@ -18,11 +18,10 @@ const HomeSlider = () => {
     {banner?.length>0 && 
     <div className="homeslider">
         <Swiper 
-        centeredSlides={true}
-        autoplay={{
-          delay: 2500,
-          disableOnInteraction: false,
-        }}
+        // centeredSlides={true}
+        autoplay={false}
+        spaceBetween={25}
+
         pagination={{
           clickable: true,
         }}

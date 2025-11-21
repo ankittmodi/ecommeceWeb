@@ -180,3 +180,11 @@ input::-webkit-inner-spin-button {
     margin-right: 0.5rem;
     font-size: 24px;
 }
+
+.switch{
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}

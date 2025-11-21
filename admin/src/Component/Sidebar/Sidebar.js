@@ -32,7 +32,7 @@ const Sidebar = () => {
       <ul className='sidebar-list'>
         <li><Link to='/'><Button className='side-btn'  ><RiDashboardHorizontalLine/>Dashboard </Button></Link></li>
         <li><Link to='/users'><Button className='side-btn'><FiUsers/>Users </Button></Link></li>
-        <li><Link to=''><Button className='side-btn'  onClick={()=>isOpenSubMenu(1)}><FaImages/>Home Slides <span className='angle'><FaAngleDown className={`angle-down ${submenu===1?'active':''}`}/></span></Button></Link>
+        <li><Link to='/'><Button className='side-btn'  onClick={()=>isOpenSubMenu(1)}><FaImages/>Home Slides <span className='angle'><FaAngleDown className={`angle-down ${submenu===1?'active':''}`}/></span></Button></Link>
         {/* submenu */}
         <Collapse isOpened={submenu===1?true:false}>
           <ul className='submenu'>
@@ -41,6 +41,18 @@ const Sidebar = () => {
                     open:true,
                     model:"Add Home Slide"
                 })}><span className='sub-item'></span>Add Home Banner Slide</Button></li>
+          </ul>
+        </Collapse>
+        </li>
+        <li><Link to='/banner/list'><Button className='side-btn'  onClick={()=>isOpenSubMenu(4)}><FaImages/>Home Banners <span className='angle'><FaAngleDown className={`angle-down ${submenu===4?'active':''}`}/></span></Button></Link>
+        {/* submenu */}
+        <Collapse isOpened={submenu===4?true:false}>
+          <ul className='submenu'>
+            <li className='sub-list'><Link to='/banner/list'><Button className='sub-btn'><span className='sub-item'></span>Home Banner List</Button></Link></li>
+            <li className='sub-list'><Button className='sub-btn' onClick={()=>context.setIsOpenFullScreen({
+                    open:true,
+                    model:"Add BannerV1"
+                })}><span className='sub-item'></span>Add Home Banner </Button></li>
           </ul>
         </Collapse>
         </li>

@@ -156,7 +156,9 @@
 .infor .MuiRating-root {
   color: gold !important;
 }
-
+.swiper{
+  padding: 0.5rem;
+}
 .swiper-button-prev,
 .swiper-button-next {
   background: #ff5252;
@@ -169,13 +171,12 @@
 }
 
 .swiper-button-prev {
-  left: 5px;
+  left: 10px;
 }
 
 .swiper-button-next {
-  right: 5px;
+  right: 10px;
 }
-
 @media(max-width:992px) {
   /* You can add responsive CSS here if needed */
 }

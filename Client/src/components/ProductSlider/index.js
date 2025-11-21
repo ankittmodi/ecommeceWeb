@@ -13,7 +13,8 @@ const ProductSlider = (props) => {
         spaceBetween={25}
         pagination={{
           clickable: true,
-        }} modules={[Navigation,Pagination]} className="mySwiper"
+        }} modules={[Navigation,Pagination]}
+        className="mySwiper"
         // ✅ Responsive breakpoints
           breakpoints={{
             320: {        // Mobile
@@ -26,15 +27,15 @@ const ProductSlider = (props) => {
             },
             768: {        // Tablets
               slidesPerView: 3,
-              spaceBetween: 20,
+              spaceBetween: 10,
             },
             1024: {       // Laptops
               slidesPerView: 4,
-              spaceBetween: 20,
+              spaceBetween: 10,
             },
             1280: {       // Large desktops
               slidesPerView: 5,
-              spaceBetween: 25,
+              spaceBetween: 15,
             },
           }}
         >

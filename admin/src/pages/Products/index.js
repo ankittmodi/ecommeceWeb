@@ -327,7 +327,7 @@ const handleProductThirdLevelCat = (event) => {
                     ))
                   }
                   </Select>
-                }
+                }Rating
             </div>
             <div className='column'>
               <h4>Sub Category By</h4>
@@ -441,7 +441,7 @@ const handleProductThirdLevelCat = (event) => {
                 <p className="progress-bar pro-para">{product?.sale} Sale</p>
               </TableCell>
               <TableCell>
-                <Rating defaultValue={product?.rating} size='small' />
+                <Rating defaultValue={product?.rating} size='small' readOnly/>
               </TableCell>
               <TableCell>
                 <div className='dash-btns'>

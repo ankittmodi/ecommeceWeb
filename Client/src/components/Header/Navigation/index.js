@@ -30,13 +30,13 @@ const Navigation = () => {
               <Link to='/'>Home</Link>
             </li>
             {
-              context.catData?.length!==0 && context.catData?.map((catItem,index)=>{
+              context?.catData?.length!==0 && context?.catData?.map((catItem,index)=>{
                 return(
                   <>
                     <li className="link-color" key={index}>
                       <Link to='/productlisting'>{catItem?.name}</Link>
                       {
-                        catItem?.children.length!==0 && 
+                        catItem?.children?.length!==0 && 
                         <div className="submenu">
                         <ul className='sub-list'>
                         {

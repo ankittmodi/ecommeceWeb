@@ -12,20 +12,28 @@ import banner from '../../assets/banner.jpg';
 import BlogItem from '../../components/BlogItem';
 import { fetchDataFromApi } from '../../utils/Api';
 import { myContext } from '../../App';
+import ProductLoading from '../../components/ProductLoading';
+import AdsBanner1 from '../../components/AdsBanner 1';
 const Home = () => {
   const [value, setValue] =useState(0);
   const[productData,setProductData]=useState([]);
   const[allProductData,setAllProductData]=useState([]);
   const[featureProductData,setFeatureProductData]=useState([]);
+  const[bannerV1Data,setBannerV1Data]=useState([]);
   const context=useContext(myContext);
   useEffect(()=>{
     fetchDataFromApi('/api/product/getAllProducts').then((res)=>{
       // console.log(res);
-      setAllProductData(res?.data);
+      setAllProductData(res?.products);
     })
 
     fetchDataFromApi('/api/product/getAllFeaturedProducts').then((res)=>{
-      setFeatureProductData(res?.data);
+      setFeatureProductData(res?.products);
+    })
+
+    fetchDataFromApi('/api/bannerV1').then((res)=>{
+      console.log(res?.data);
+      setBannerV1Data(res?.data);
     })
   },[])
 
@@ -42,6 +50,7 @@ const Home = () => {
   };
 
   const filterByCatId=(id)=>{
+    setProductData([]);
     fetchDataFromApi(`/api/product/getAllProductsByCatId/${id}`).then((res)=>{
       // console.log(res?.products);
       if(!res.error){
@@ -96,6 +105,10 @@ const Home = () => {
         </div>
       </div>
       {
+        productData?.length===0 && <ProductLoading/>
+      }
+        
+      {
         productData?.length!==0 && <ProductSlider items={5} data={productData}/>
       }
       </div>
@@ -114,7 +127,9 @@ const Home = () => {
             <span className='price'>- Only Rs. 3000*</span>
           </div>
         </div>
-        <AdsBanner/>
+        {
+          bannerV1Data?.length!==0 && <AdsBanner item={4} data={bannerV1Data}/>
+        }
       </section>
 
       {/* latest product section */}
@@ -123,11 +138,14 @@ const Home = () => {
           <h1>Latest Products</h1>
         </div>
         {
+          allProductData?.length===0 && <ProductLoading/>
+        }
+        {
           allProductData?.length!==0 && <>
-            <ProductSlider items={5} data={productData}/>
+            <ProductSlider items={5} data={allProductData}/>
           </>
         }
-        <AdsBanner item={3} className='latest-banner'/>
+        <AdsBanner1 item={4} className='latest-banner'/>
       </div>
 
       {/* Featured product section */}
@@ -135,6 +153,9 @@ const Home = () => {
         <div className="container">
           <h1>Featured Products</h1>
         </div>
+        {
+          featureProductData?.length===0 && <ProductLoading/>
+        }
         {
           featureProductData?.length!==0 && <>
             <ProductSlider items={5} data={featureProductData}/>

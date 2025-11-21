@@ -8,46 +8,69 @@ import { FaCodeCompare } from "react-icons/fa6";
 import { MdOutlineZoomOutMap } from "react-icons/md";
 import Tooltip from '@mui/material/Tooltip';
 import { myContext } from '../../App';
-const ProductListItem = () => {
-  const context=useContext(myContext);
-  return (
-    // <div className='container'>
-      <div className="image-wrap group">
-      {/* <h1>Product List Item</h1> */}
-        <div className="prod-detail1 ">
-          <Link to=''>
-          <div className="img-part1">
-            <img src="https://serviceapi.spicezgold.com/download/1742462383491_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-2-202308161432.webp" alt="" />
-            <img src="https://serviceapi.spicezgold.com/download/1742462383493_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-1-202308161431.jpg" alt="" className='top-img' />
-          </div>
-          </Link>
-          <span className='discount'>15%</span>
 
-          <div className="actions">
-            <Tooltip title="Zoom" placement="left-start">
-            <Button className='btn-icon' onClick={()=>context.setOpenProductDetailsModel(true)}><MdOutlineZoomOutMap/></Button></Tooltip>
-            <Tooltip title="Wishlist" placement="left-start">
-            <Button className='btn-icon'><FaRegHeart/></Button></Tooltip>
-            <Tooltip title="Compare" placement="left-start">
-            <Button className='btn-icon'><FaCodeCompare/></Button></Tooltip>
-            <Tooltip title="Zoom" placement="left-start">
-            <Button className='btn-icon'><FaRegHeart/></Button></Tooltip>
+const ProductListItem = (props) => {
+  const context = useContext(myContext);
+
+  return (
+    <div className="image-wrap group">
+      <div className="prod-detail1 ">
+        <Link to={`/product/${props?.item?._id}`}>
+          <div className="img-part1">
+            <img src={props?.item?.images?.[0]} alt="" />
+            {props?.item?.images?.[1] && (
+              <img src={props?.item?.images?.[1]} alt="" className='top-img' />
+            )}
           </div>
-          <div className="infor">
-          <h6><Link to='/' className='link-color'>Koskii</Link></h6>
-          <h3><Link to='/'>Floral Beads and Stones Pure Chiffon Saree</Link></h3>
-          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus ipsa soluta, reiciendis ullam velit nisi quidem fuga blanditiis laudantium totam?</p>
-            <Rating name="half-rating-read" defaultValue={4.5} precision={0.5} readOnly />
-          <div className="price">
-            <span className="old-price">Rs. 999</span>
-            <span className="new-price"><strong>Rs. 599</strong></span>
-          </div>
-          <Button className='btn-icon'>Add to Cart</Button>
-          </div>
-          
+        </Link>
+
+        {/* DISCOUNT SAFE RENDER */}
+        {props?.item?.discount && (
+          <span className='discount'>{props.item.discount}% OFF</span>
+        )}
+
+        <div className="actions">
+          <Tooltip title="Zoom" placement="left-start">
+            <Button className='btn-icon'
+              onClick={() => context.handleOpenProductDetailsModel(true, props?.item)}>
+              <MdOutlineZoomOutMap />
+            </Button>
+          </Tooltip>
+
+          <Tooltip title="Wishlist" placement="left-start">
+            <Button className='btn-icon'><FaRegHeart /></Button>
+          </Tooltip>
+
+          <Tooltip title="Compare" placement="left-start">
+            <Button className='btn-icon'><FaCodeCompare /></Button>
+          </Tooltip>
         </div>
+
+        <div className="infor">
+          <h6>
+            <Link to={`/product/${props?.item?._id}`} className='link-color'>
+              {props?.item?.name?.substr(0, 60) + "..."}
+            </Link>
+          </h6>
+
+          <h3>
+            <Link to={`/product/${props?.item?._id}`}>
+              {props?.item?.description?.substr(0, 80) + "..."}
+            </Link>
+          </h3>
+
+          <Rating name="half-rating-read" defaultValue={props?.item?.rating} readOnly />
+
+          <div className="price">
+            <span className="old-price">₹ {props?.item?.oldPrice}</span>
+            <span className="new-price"><strong>₹ {props?.item?.price}</strong></span>
+          </div>
+
+          <Button className='btn-icon'>Add to Cart</Button>
+        </div>
+
       </div>
-    // </div>
+    </div>
   )
 }
 

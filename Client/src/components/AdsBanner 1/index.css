@@ -3,8 +3,8 @@
   grid-template-columns: repeat(4,1fr);
   gap: 15px;
 }
-/* 
-.adsection .adsimg{
+
+/* .adsection .adsimg{
   width: 24%;
   overflow: hidden;
   border-radius: 10px;

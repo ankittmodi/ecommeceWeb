@@ -1,5 +1,5 @@
 import { Router } from "express";
-import auth from "../middlewares/Auth.js";
+import auth from "../middlewares/auth.js";
 import upload from '../middlewares/multer.js';
 import {createCategory, deleteCategory, getCategory, getCategoryById, getCategoryCount, getSubCategoryCount, removeCategoryImage, updateCategory, uploadImages } from "../controllers/category.controller.js";
 

@@ -11,39 +11,41 @@ const UploadBox = (props) => {
   const context=useContext(MyContext);
   let selectedImages=[];
     const formdata = new FormData();
-    const onChangeFile=async(e,apiEndPoint)=>{
-      try{
-        setPreviews([]);
-        const files=e.target.files;
-        setUploading(true);
-        console.log(files);
-        
-        for(var i=0;i<files.length;i++){
-          if(files[i] && (files[i].type==="image/jpeg" 
-            ||files[i].type==="image/jpg" 
-            ||files[i].type==="image/png" 
-            ||files[i].type==="image/webp")){
-              const file=files[i];
-              selectedImages.push(file);
-              formdata.append(props?.name,file);
-  
-              // callin api data
-              uploadImage(apiEndPoint,formdata).then((res)=>{
-                setUploading(false);
-                props.setPreviewsFun(res?.data?.images);
-                // console.log(res);
-              })
-          }
-          else{
-            context.openAlertBox("error","Please select a valid JPG,JPEG, or PNG image file. ");
-            setUploading(false);
-            return false;
-          }
-        }
-      }catch(error){
-        console.log(error);
+    const onChangeFile = async (e, apiEndPoint) => {
+  try {
+    setUploading(true);
+    const files = e.target.files;
+
+    const formdata = new FormData();       // <-- move inside function
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i];
+
+      if (
+        file.type === "image/jpeg" ||
+        file.type === "image/jpg" ||
+        file.type === "image/png" ||
+        file.type === "image/webp"
+      ) {
+        formdata.append(props?.name, file);
+      } else {
+        context.openAlertBox("error", "Please select a valid image format");
+        setUploading(false);
+        return;
       }
     }
+
+    // 🚀 Upload once
+    const res = await uploadImage(apiEndPoint, formdata);
+    props.setPreviewsFun(res?.data?.images);
+    setUploading(false);
+
+  } catch (error) {
+    console.log(error);
+    setUploading(false);
+  }
+};
+
   return (
     <div className='file'>
       {

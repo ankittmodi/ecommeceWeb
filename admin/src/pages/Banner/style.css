@@ -1,0 +1,13 @@
+.banners{
+    padding: 1.2rem;
+    /* background-color: rgb(232, 230, 230); */
+}
+.banner-form{
+    padding: 2rem 1.2rem;
+}
+.banner-cat{
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 1rem;
+}

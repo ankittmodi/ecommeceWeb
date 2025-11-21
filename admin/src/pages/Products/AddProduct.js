@@ -11,7 +11,9 @@ import { Button } from '@mui/material';
 import { MyContext } from '../../App';
 import { deleteImage, fetchDataFromApi, postData } from '../../utils/Api';
 import { MdOutlineCloudUpload } from "react-icons/md";
+import Switch from '@mui/material/Switch';
 
+const label = { inputProps: { 'aria-label': 'Switch demo' } };
 const AddProduct = () => {
 
     const [formFeilds, setFormfeilds] = useState({
@@ -36,9 +38,13 @@ const AddProduct = () => {
         size:[],
         productWeight:[],
         dateCreated:"",
+        bannerTitleName:'',
+        bannerImages:[],
+        isDisplayHomeBanner:false
     });
 
     const [previews, setPreviews] = useState([]);
+    const [bannerpreviews, setbannerPreviews] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const context = useContext(MyContext);
 
@@ -58,6 +64,8 @@ const AddProduct = () => {
     // -------------------- WEIGHT --------------------
     const [weightList, setWeightList] = useState([]);
     const [selectedWeights, setSelectedWeights] = useState([]);
+
+    const[checkedSwitch,setCheckedSwitch]=useState(false);
 
     // FETCH LISTS: RAM, SIZE, WEIGHT
     useEffect(() => {
@@ -198,6 +206,12 @@ const AddProduct = () => {
         setFormfeilds(prev => ({ ...prev, images: previewsArr }));
     };
 
+    // -------------------- IMAGE UPLOAD --------------------
+    const setBannerImagesFun = (previewsArr) => {
+        setbannerPreviews([...previewsArr]);
+        setFormfeilds(prev => ({ ...prev, bannerImages: previewsArr }));
+    };
+
     const removeCategoryImage = (image, index) => {
         deleteImage(`/api/product/deleteImage?img=${image}`).then(() => {
             const arr = [...previews];
@@ -211,6 +225,27 @@ const AddProduct = () => {
         });
     };
 
+    const removeBannerImage = (image, index) => {
+        deleteImage(`/api/product/deleteImage?img=${image}`).then(() => {
+            const arr = [...bannerpreviews];
+            arr.splice(index, 1);
+            setbannerPreviews(arr);
+
+            setFormfeilds(prev => ({
+                ...prev,
+                bannerImages: arr
+            }));
+        });
+    };
+
+    const handleChangeSwitch=(e)=>{
+        setCheckedSwitch(e.target.checked);
+        setFormfeilds(prev => ({
+            ...prev,
+            isDisplayHomeBanner: e.target.checked
+        }));
+
+    }
     // -------------------- SUBMIT --------------------
     const handleSubmit = (e) => {
     e.preventDefault();
@@ -247,6 +282,10 @@ const AddProduct = () => {
         context.openAlertBox("error", "Please upload product images");
         setIsLoading(false);
         return;
+    }
+    if (!checkedSwitch) {
+        formFeilds.bannerImages = [];
+        formFeilds.bannerTitleName = "";
     }
 
     setIsLoading(true);
@@ -517,6 +556,55 @@ const AddProduct = () => {
                             />
                         </div>
                     </div>
+
+                    {/* Banner Switch */}
+<div className='upload col'>
+    <div className='switch'>
+        <h3>Banner Images</h3>
+        <Switch {...label} 
+            onChange={handleChangeSwitch}
+            checked={checkedSwitch}
+        />
+    </div>
+
+    {/* Banner upload UI only if switch ON */}
+    {checkedSwitch && (
+      <>
+        <div className='upload-file'>
+            {bannerpreviews?.map((img, index) => (
+                <div className='upload-file-wrapper' key={index}>
+                    <span className='close-icon'
+                        onClick={() => removeBannerImage(img, index)}>
+                        <IoMdClose />
+                    </span>
+                    <div className='file'>
+                        <img src={img} alt="" />
+                    </div>
+                </div>
+            ))}
+
+            <UploadBox
+                    multiple={true}
+                    name="bannerImages"
+                    url="/api/product/uploadBannerImages"
+                    setPreviewsFun={setBannerImagesFun}
+                />
+            </div>
+
+            <br/>
+            <div className='col'>
+                <h3>Banner Title</h3>
+                <input type='text'
+                    className='search'
+                    name='bannerTitleName'
+                    value={formFeilds.bannerTitleName}
+                    onChange={onChangeInput}
+                />
+            </div>
+      </>
+    )}
+</div>
+
                 </div>
 
                 <br />

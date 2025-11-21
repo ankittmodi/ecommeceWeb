@@ -37,7 +37,9 @@ import ProductDetails from './pages/Products/ProductDetails';
 import AddRams from './pages/Products/AddRams';
 import AddWeight from './pages/Products/AddWeight';
 import AddSize from './pages/Products/AddSize';
-
+import HomeBanner from './pages/Banner/HomeBanner';
+import AddBannerV1 from './pages/Banner/addBannerV1';
+import EditBannerV1 from './pages/Banner/editBannerV1';
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -137,6 +139,22 @@ function App() {
             </div>
             <div className={isSidebarOpen ? 'content-right' : 'content-left'}>
               <HomeSliderBanners/>
+            </div>
+          </div>
+        </section>
+      ),
+    },
+    {
+      path: '/banner/list',
+      element: (
+        <section className="main">
+          <Header />
+          <div className="content-main">
+            <div className={isSidebarOpen ? 'sidebar-wrapper' : 'sidebar-width'}>
+              <Sidebar />
+            </div>
+            <div className={isSidebarOpen ? 'content-right' : 'content-left'}>
+              <HomeBanner/>
             </div>
           </div>
         </section>
@@ -396,6 +414,12 @@ function App() {
         }
         {
           isOpenFullScreen.model==="Edit Product" && <EditProduct/>
+        }
+        {
+          isOpenFullScreen.model==="Add BannerV1" && <AddBannerV1/>
+        }
+        {
+          isOpenFullScreen.model==="Edit BannerV1" && <EditBannerV1/>
         }
       </Dialog>
 

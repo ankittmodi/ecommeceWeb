@@ -10,19 +10,21 @@
 .homeslider .swiper-slide {
   text-align: center;
   font-size: 18px;
-  background: #444;
+  /* background: #444; */
   display: flex;
   justify-content: center;
   align-items: center;
   border-radius: 20px;
+  width: 100% !important;
 }
 
 .homeslider .swiper-slide img {
   display: block;
-  width: 100%;
+  width: 100% ;
   height: 100%;
   /* object-fit: cover; */
   border-radius: 20px;
+  margin-right: 1rem;
 }
 .swiper-button-prev,.swiper-button-next{
   display: flex;
@@ -40,6 +42,7 @@
   color: #fff;
   font-weight: 800;
 }
+
 
 @media(max-width:992px){
   .homeslider{

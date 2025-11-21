@@ -15,6 +15,7 @@ const productSchema=mongoose.Schema({
             required:true
         }
     ],
+    
     brand:{
         type:String,
         required:true
@@ -98,6 +99,20 @@ const productSchema=mongoose.Schema({
     dateCreated:{
         type:Date,
         default:Date.now,
+    },
+    bannerImages:[
+        {
+            type:String,
+            // required:true
+        }
+    ],
+    bannerTitleName:{
+        type:String,
+        // required:true
+    },
+    isDisplayHomeBanner:{
+        type:Boolean,
+        default:false
     }
 },{timestamps:true});
 const ProductModel=mongoose.model('Product',productSchema);
