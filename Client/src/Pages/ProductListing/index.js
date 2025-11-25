@@ -11,17 +11,39 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ProductListItem from '../../components/ProductListItem';
 import Pagination from '@mui/material/Pagination';
+import ProductLoading from '../../components/ProductLoading';
+import { postData } from '../../utils/Api';
 
 const ProductListing = () => {
   const[itemView,setItemView]=useState('grid');
   const [anchorEl, setAnchorEl] =useState(null);
   const open = Boolean(anchorEl);
+  // for backend
+  const[productData,setProductData]=useState([]);
+  const[isLoading,setIsLoading]=useState(false);
+  const[page,setPage]=useState(1);
+  const[totalPages,setTotalPages]=useState(1);
+
+  // for sortBy
+  const[selectedSortBy,setSelectedSortBy]=useState("Name, A to Z");
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleSortBy=(name,order,products,value)=>{
+    setSelectedSortBy(value);
+    postData('/api/product/sortBy',{
+      products:products,
+      sortBy:name,
+      order:order,
+    }).then((res)=>{
+      setProductData(res);
+      setAnchorEl(null);
+    })
+  }
   return (
     <section className='product-list'>
       <div className="container">
@@ -40,7 +62,14 @@ const ProductListing = () => {
       <div className="product-group1">
         <div className="container product-group">
           <div className="sidebar-wrapper">
-            <Sidebar/>
+            <Sidebar 
+            productData={productData} 
+            setProductData={setProductData} 
+            isLoading={isLoading}
+            setIsLoading={setIsLoading}
+            page={page}
+            setTotalPages={setTotalPages}
+            />
           </div>
 
           <div className="right-content">
@@ -48,7 +77,10 @@ const ProductListing = () => {
               <div className="right-col1 itemViewAction">
                 <Button className={`${itemView==='list' &&'active'}`} onClick={()=>setItemView('list')}><IoIosMenu/></Button>
                 <Button className={`${itemView==='grid' &&'active'}`} onClick={()=>setItemView('grid')}><IoGridSharp/></Button>
-                <span className='text-size'>There are 19 Products</span>
+                <span className='text-size'>
+                There are {productData?.products?.length || 0} Products
+              </span>
+
               </div>
               <div className="right-col2">
                 <span className='text-size'>Sort By: </span>
@@ -61,7 +93,7 @@ const ProductListing = () => {
                     onClick={handleClick}
                     className='btn-icon'
                   >
-                    Sales, highest to lowest
+                    {selectedSortBy}
                   </Button>
                   <Menu
                     id="basic-menu"
@@ -74,12 +106,43 @@ const ProductListing = () => {
                       },
                     }}
                   >
-                    <MenuItem onClick={handleClose}>Sales, highest to lowest</MenuItem>
-                    <MenuItem onClick={handleClose}>Relevance</MenuItem>
+                    <MenuItem
+                      onClick={()=>{
+                        handleSortBy('name','asc',productData,'Name, A to Z');
+                        handleClose();
+                      }}
+                    >
+                      Name, A to Z
+                    </MenuItem>
+                    <MenuItem
+                      onClick={()=>{
+                        handleSortBy('name','desc',productData,'Name, Z to A');
+                        handleClose();
+                      }}
+                    >
+                      Name, Z to A
+                    </MenuItem>
+                    <MenuItem
+                      onClick={()=>{
+                        handleSortBy('price','asc',productData,'Price, low to high');
+                        handleClose();
+                      }}
+                    >
+                      Price, low to high
+                    </MenuItem>
+                    <MenuItem
+                      onClick={()=>{
+                        handleSortBy('price','desc',productData,'Price, high to low');
+                        handleClose();
+                      }}
+                    >
+                      Price, high to low
+                    </MenuItem>
+                    {/* <MenuItem onClick={handleClose}>Relevance</MenuItem>
                     <MenuItem onClick={handleClose}>Name: A to Z</MenuItem>
                     <MenuItem onClick={handleClose}>Name: Z to A</MenuItem>
                     <MenuItem onClick={handleClose}>Name: low to high</MenuItem>
-                    <MenuItem onClick={handleClose}>Name: high to low</MenuItem>
+                    <MenuItem onClick={handleClose}>Name: high to low</MenuItem> */}
                   </Menu>
                 </div>
               </div>
@@ -87,20 +150,46 @@ const ProductListing = () => {
             <div className={`${itemView==='grid'?'right-prod':'list-prod'}`}>
             {
               itemView==='grid'?<>
-                {[...Array(8)].map((_, i) => (
+              {
+                isLoading===true?<ProductLoading view={itemView}/>:productData?.products?.length!==0 && productData?.products?.map((item,index)=>{
+                  return(
+                    <ProductItem key={index} item={item}/>
+                  )
+                })
+              }
+                {/* {[...Array(8)].map((_, i) => (
                 <ProductItem key={i} />
-              ))}
-              </>:<>{[...Array(8)].map((_, i) => (
+              ))} */}
+              </>:<>
+              {/* {[...Array(8)].map((_, i) => (
                 <ProductListItem key={i} />
-              ))}</>
+              ))} */}
+              {
+                isLoading===true?<ProductLoading view={itemView}/>:productData?.products?.length!==0 && productData?.products?.map((item,index)=>{
+                  return(
+                    <ProductListItem key={index} item={item}/>
+                  )
+                })
+              }
+              </>
             }
               
             </div>
 
             {/* pagination */}
-            <div className="pagination">
+            {
+              totalPages>1 &&
+              <div className="pagination">
+                <Pagination count={totalPages} 
+                color="secondary"
+                page={page}
+                onChange={(e,value)=>setPage(value)}
+                 />
+              </div>
+            }
+            {/* <div className="pagination">
               <Pagination count={10} color="secondary" />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

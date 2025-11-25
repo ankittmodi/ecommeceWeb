@@ -1269,3 +1269,70 @@ export async function getProductSizeById(req, res) {
     });
   }
 }
+
+
+export async function filters(req,res){
+  const{catId,subCatId,thirdsubCatId,minPrice
+    ,maxPrice,rating,page,limit}=req.body;
+    const filters={};
+    if(catId?.length){
+      filters.catId={$in:catId};
+    }
+    if(subCatId?.length){
+      filters.subCatId={$in:subCatId};
+    }
+    if(thirdsubCatId?.length){
+      filters.thirdsubCatId={$in:thirdsubCatId};
+    }
+    if(minPrice || maxPrice){
+      filters.price={$gte:+minPrice || 0, $lte:maxPrice||Infinity};
+    }
+    if(rating?.length){
+      filters.rating={$in:rating};
+    }
+
+    try{
+      const products=await ProductModel.find(filters).populate("category").skip((page-1)*limit).limit(parseInt(limit));
+      const total=await ProductModel.countDocuments(filters);
+      return res.status(200).json({
+        err:false,
+        success:true,
+        products:products,
+        total:total,
+        page:parseInt(page),
+        totalPages:Math.ceil(total/limit)
+      })
+    }catch(err){
+      return res.status(500).json({
+        message:err.message,
+        err:true,
+        success:false
+      })
+    }
+}
+
+const sortedItems=(products,sortBy,order)=>{
+  return products.sort((a,b)=>{
+    if(sortBy==='name'){
+      return order==='asc' ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+    }
+    if(sortBy==="price"){
+      return order==='asc' ? a.price-b.price : b.price-a.price;
+    }
+
+    return 0;
+  });
+};
+
+export async function sortBy(req,res){
+  const {products,sortBy,order} = req.body;  // corrected
+  const sortItems = sortedItems([...products?.products],sortBy,order);
+
+  return res.status(200).json({
+    err:false,
+    success:true,
+    products:sortItems,
+    page:0,
+    totalPages:0
+  });
+}

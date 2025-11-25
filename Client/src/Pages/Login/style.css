@@ -10,7 +10,7 @@
 .login .card h3{
   font-size: 20px;
   text-align: center;
-
+  margin-bottom: 1.8rem !important;
 }
 .login-form{
   width: 100%;
@@ -18,7 +18,7 @@
 .login-form .form-group{
   width: 100%;
   margin-bottom: 20px;
-  
+  padding-left: 0.95rem;
 }
 .login-form .form-group .text{
   width: 100% !important;
@@ -28,7 +28,7 @@
 }
 .login-form .form-group Button{
   position: absolute;
-  top: 20px;
+  top: -5px !important;
   right: 15px;
   color: #000;
   z-index: 50;
@@ -38,6 +38,7 @@
   border-radius: 50%;
 
 }
+
 .login-form .form-group Button svg{
   font-size: 20px !important;
   opacity: 75;

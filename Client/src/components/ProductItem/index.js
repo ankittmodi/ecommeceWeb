@@ -42,8 +42,11 @@ const ProductItem = (props) => {
           <h3 className="two-line-text"><Link to={`/product/${props?.item?._id}`}>{props?.item?.description.substr(0,50)+ "..."}</Link></h3>
             <Rating name="half-rating-read" defaultValue={props?.item?.rating} readOnly />
           <div className="price">
-            <span className="new-price"> &#x20b9; {props?.item?.price}</span>
             <span className="old-price"><strong>&#x20b9; {props?.item?.oldPrice}</strong></span>
+            <span className="new-price"> &#x20b9; {props?.item?.price}</span>
+          </div>
+          <div>
+            <Button className='add-to-cart'>Add to cart</Button>
           </div>
           </div>
         </div>

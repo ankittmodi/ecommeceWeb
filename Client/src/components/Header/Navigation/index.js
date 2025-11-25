@@ -34,7 +34,7 @@ const Navigation = () => {
                 return(
                   <>
                     <li className="link-color" key={index}>
-                      <Link to='/productlisting'>{catItem?.name}</Link>
+                      <Link to={`/productlisting?catId=${catItem._id}`}>{catItem?.name}</Link>
                       {
                         catItem?.children?.length!==0 && 
                         <div className="submenu">
@@ -43,7 +43,7 @@ const Navigation = () => {
                           catItem?.children?.map((subCat,index)=>{
                             return(
                               <li className='list-none' key={index}>
-                                <Link to='/productlisting'><Button>{subCat?.name}</Button></Link>
+                                <Link to={`/productlisting?subCatId=${subCat._id}`}><Button>{subCat?.name}</Button></Link>
                                 {
                                   subCat?.children?.length!==0 && 
                                   <div className='submenu1'>
@@ -52,7 +52,7 @@ const Navigation = () => {
                                         subCat?.children?.map((thirdCat,index)=>{
                                           return(
                                             <li className='list-none' key={index}>
-                                              <Link><Button>{thirdCat?.name}</Button></Link>
+                                              <Link to={`/productlisting?thirdsubCatId=${thirdCat._id}`}><Button>{thirdCat?.name}</Button></Link>
                                             </li>
                                           )
                                         })

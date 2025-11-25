@@ -1,3 +1,4 @@
+
 .ReactCollapse--collapse {
   transition: height 400ms;
 }
@@ -74,11 +75,17 @@
 }
 .rating{
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  /* flex-direction: column; */
+  align-items: center;
+  /* gap: 5px; */
 }
-.rating .rate{
-  color:yellow !important;
-  /* background-color: yellow; */
+
+.rating .rate .MuiRating-iconFilled {
+  color: #ffeb3b !important;  /* yellow */
 }
+
+.rating .rate .MuiRating-iconHover {
+  color: #ffeb3b !important; 
+}
+
 

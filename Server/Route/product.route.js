@@ -1,7 +1,7 @@
 import { Router } from "express";
 import auth from "../middlewares/Auth.js";
 import upload from '../middlewares/multer.js';
-import { createProduct, createProductRams, createProductSize, createProductWeight, deleteMultipleProduct, deleteProduct, deleteProductRams, deleteProductSize, deleteProductWeight, getAllFeaturedProducts, getAllProductCount, getAllProducts, getAllProductsByCatId, getAllProductsByCatName, getAllProductsByPrice, getAllProductsByRating, getAllProductsBySubCatId, getAllProductsBySubCatName, getAllProductsByThirdSubCatId, getAllProductsByThirdSubCatName, getProduct, getProductRams, getProductRamsById, getProductSizeById, getProductSizes, getProductWeightById, getProductWeights, productImage, updateProduct, updateProductRams, updateProductSize, updateProductWeight, uploadBannerImages, uploadImages } from "../controllers/product.controller.js";
+import { createProduct, createProductRams, createProductSize, createProductWeight, deleteMultipleProduct, deleteProduct, deleteProductRams, deleteProductSize, deleteProductWeight, filters, getAllFeaturedProducts, getAllProductCount, getAllProducts, getAllProductsByCatId, getAllProductsByCatName, getAllProductsByPrice, getAllProductsByRating, getAllProductsBySubCatId, getAllProductsBySubCatName, getAllProductsByThirdSubCatId, getAllProductsByThirdSubCatName, getProduct, getProductRams, getProductRamsById, getProductSizeById, getProductSizes, getProductWeightById, getProductWeights, productImage, sortBy, updateProduct, updateProductRams, updateProductSize, updateProductWeight, uploadBannerImages, uploadImages } from "../controllers/product.controller.js";
 
 const productRouter=Router();
 
@@ -43,5 +43,6 @@ productRouter.delete('/productWeight/:id', auth, deleteProductWeight);
 productRouter.put('/productWeight/:id', auth, updateProductWeight);
 productRouter.get('/productWeight/get', getProductWeights);
 productRouter.get('/productWeight/:id', getProductWeightById);
-
+productRouter.post('/filters', filters);
+productRouter.post('/sortBy', sortBy);
 export default productRouter;

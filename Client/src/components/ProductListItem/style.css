@@ -66,15 +66,16 @@
   border-radius: 10px;
 }
 .img-part1 {
-  width: 100%;
+  width: 260px;
   height: 260px; 
   overflow: hidden;
+  position: relative;
 }
 
 .img-part1 img {
-  width: 500px;
-  height: 260px;
-  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  /* object-fit: cover; */
   border-radius: 10px;
 }
 .prod-detail1 .infor{
@@ -134,18 +135,20 @@
 .img-part{
   position: relative;
 }
-.top-img{
+.top-img {
   position: absolute;
-  top:0px;
-  left:0px;
-  opacity: 0 ;
+  top: 0;
+  left: 0;
+  width: 100%;           /* full width */
+  height: 100%;          /* full height */
+  object-fit: cover;     /* same crop style */
+  opacity: 0;
   transition: all 0.3s ease-in-out;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  border-radius: 10px;   /* add this also */
 }
 .group:hover .top-img{
   opacity: 1;
+  /* width: 260px; */
 }
 .infor .MuiRating-root{
   color:gold !important;
@@ -157,6 +160,10 @@
   font-size: 18px;
   margin-top: 10px;
   text-transform: capitalize;
+}
+.infor .btn-icon:hover{
+  background-color: #201f1f;
+  color:#fff;
 }
 .swiper-wrapper{
   padding: 15px 0px;
