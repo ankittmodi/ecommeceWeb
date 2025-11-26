@@ -1,4 +1,4 @@
-import React,{useState} from 'react';
+import React,{useRef, useState} from 'react';
 import './style.css';
 import Link from '@mui/material/Link';
 import Button from '@mui/material/Button';
@@ -10,6 +10,7 @@ import Rating from '@mui/material/Rating';
 const ProductDetail = (props) => {
   const [activeSize, setActiveSize] = useState(0);
     const[activeTab,setActiveTab]=useState(0);
+    const reviewSection=useRef();
     const isActive=(index)=>{
       setActiveSize(index);
     }
@@ -21,8 +22,14 @@ const ProductDetail = (props) => {
               <div className="brands">
                 <p>Brands: <strong>{props?.data?.brand}</strong></p>
                 <div className="review">
-                  <Rating name="half-rating-read" defaultValue={props?.data?.rating} readOnly />
-                  <p>Review(10)</p>
+                  <Rating 
+                    name="rating" 
+                    value={props?.data?.rating || 0} 
+                    readOnly
+                  />
+                  <p onClick={props.goToReviews}
+                  ref={reviewSection}
+                  >Review({props.reviewsCount})</p>
                 </div>
               </div>
               <div className="price">

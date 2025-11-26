@@ -72,14 +72,15 @@ const ZoomProduct = (props) => {
           props.images.map((img,index) => (
             <SwiperSlide key={index}>
               <div className="zoom-big-wrapper">
-                <InnerImageZoom
+                {/* <InnerImageZoom
                   src={img}
                   zoomSrc={img}
                   zoomType="hover"
                   moveType="pan"
                   zoomPreload={true}
                   zoomScale={1.8}
-                />
+                /> */}
+                <img src={img}/>
               </div>
             </SwiperSlide>
           ))}

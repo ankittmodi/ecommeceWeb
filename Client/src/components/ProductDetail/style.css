@@ -67,6 +67,9 @@
   margin-top: 10px;
   height: auto;
   margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
 .details-container .productSize span{
   color:#ff5252;

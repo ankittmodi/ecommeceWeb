@@ -7,6 +7,7 @@ import generateAccessToken from "../utils/generateAccessToken.js";
 import generateRefreshToken from "../utils/generateRefreshToken.js";
 import {v2 as cloudinary} from 'cloudinary';
 import fs from 'fs';
+import ReviewModel from "../models/reviews.model.js";
 cloudinary.config({
   cloud_name:process.env.cloudinary_Config_cloud_name,
   api_key:process.env.cloudinary_Config_cloud_api_key,
@@ -68,6 +69,7 @@ export async function registerUserController(req, res) {
     await sendEmailFun({
       sendTo: email,
       subject: "Verify your email",
+        text: `Your OTP is ${otp}`,
       html: VerificationEmail(name, otp),
     });
 
@@ -605,6 +607,61 @@ export async function userDetails(req,res) {
     return res.status(200).json({
       message:"User details",
       data:user,
+      error:false,
+      success:true
+    })
+  }catch(err){
+    return res.status(500).json({
+      message: "Something is wrong!",
+      error: true,
+      success: false,
+    });
+  }
+}
+
+
+// review section
+export async function addReview(req,res){
+  try{
+    const{image,userName,review,rating,userId,productId}=req.body;
+    const reviews=new ReviewModel({
+      image:image,
+      userName:userName,
+      review:review,
+      rating:rating,
+      userId:userId,
+      productId:productId
+    })
+    await reviews.save();
+    return res.status(200).json({
+      message:"Review added successfully!",
+      error:false,
+      success:true
+    })
+  }catch(err){
+    return res.status(500).json({
+      message: "Something is wrong!",
+      error: true,
+      success: false,
+    });
+  }
+}
+
+
+// get review
+export async function getReview(req,res){
+  try{
+    const productId=req.query.productId;
+    const reviews=await ReviewModel.find({productId:productId});
+    if(!reviews){
+      return res.status(400).json({
+        message:err.message,
+        error:true,
+        success:false
+      })
+    }
+    return res.status(200).json({
+      reviews:reviews,
       error:false,
       success:true
     })
