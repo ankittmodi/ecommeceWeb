@@ -150,11 +150,14 @@ const Footer = () => {
       <Drawer open={context.openCart} onClose={context.toggleCartPanel(false)} anchor='right' className='drawer'>
         <div className="cart-panel">
           <div className="cart-header">
-            <h4>Shopping Cart (1)</h4>
+            <h4>Shopping Cart ({context?.cartData?.length})</h4>
             <Button className='cart-panel-btn'
             onClick={context.toggleCartPanel(false)}><RxCross2/></Button>
           </div>
-          <CartPanel/>
+          {
+            context?.cartData?.length!==0 ? <CartPanel data={context?.cartData}/>:"Cart Empty"
+          }
+          
         </div>
       </Drawer>
     </>

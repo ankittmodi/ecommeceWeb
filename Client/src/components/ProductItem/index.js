@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import './style.css';
 import { Link } from 'react-router-dom';
 import Rating from '@mui/material/Rating';
@@ -7,9 +7,77 @@ import { FaRegHeart } from "react-icons/fa";
 import { FaCodeCompare } from "react-icons/fa6";
 import { MdOutlineZoomOutMap } from "react-icons/md";
 import Tooltip from '@mui/material/Tooltip';
+import { AiOutlineMinus } from "react-icons/ai";
+import { FaPlus } from "react-icons/fa6";
 import { myContext } from '../../App';
+import { deleteData, editData } from '../../utils/Api';
 const ProductItem = (props) => {
+  const[quantity,setQuantity]=useState(1);
+  const[isAdded,setIsAdded]=useState(false);
+  const[cartItem,setCartItem]=useState([]);
   const context=useContext(myContext);
+
+  useEffect(() => {
+  const matched = context?.cartData?.filter(cartItem =>
+    cartItem.productId === props?.item?._id
+  );
+
+  setQuantity(matched[0]?.quantity || 1);
+  if (matched?.length > 0) {
+    setCartItem(matched);
+    setIsAdded(true);
+  }
+}, [context?.cartData]);
+
+  const addToCart=(product,userId,quantity)=>{
+    context?.addToCarts(product,userId,quantity);
+    setIsAdded(true);
+  }
+
+  const addQty = () => {
+    const newQty = quantity + 1;
+    setQuantity(newQty);
+
+    const obj = {
+      _id: cartItem[0]?._id,
+      qty: newQty,  // ✅ correct value
+      subTotal: cartItem[0]?.price * newQty
+    };
+
+    editData(`/api/cart/update-qty`, obj).then((res) => {
+      // console.log(res);
+      context.openAlertBox("success",res?.data?.message);
+      context.getCartItems();
+    });
+  };
+
+  const removeQty = () => {
+    const newQty = quantity - 1;
+
+    if (newQty <= 0) {
+      // Delete from backend
+      deleteData(`/api/cart/delete-cart-item/${cartItem[0]?._id}`).then((res) => {
+        // console.log(res);
+        context.openAlertBox("success","Item Deleted !");
+        setIsAdded(false);
+        setQuantity(1); // reset
+        context.getCartItems(); // refresh cart
+      });
+    } else {
+      const obj = {
+        _id: cartItem[0]?._id,
+        qty: newQty,  // ✅ correct value
+        subTotal: cartItem[0]?.price * newQty
+      };
+
+      editData(`/api/cart/update-qty`, obj).then((res) => {
+        // console.log(res);
+        context.getCartItems();
+      });
+       setQuantity(newQty);
+      }
+  };
+
   return (
     // <div className='container'>
       <div className="image-wrap group">
@@ -22,6 +90,9 @@ const ProductItem = (props) => {
             )}
           </div>
           </Link>
+          <div className='image-overlay'>
+            
+          </div>
           <span className='discount'>
             {props?.item?.discount ? `${props.item.discount}% OFF` : ""}
           </span>
@@ -46,7 +117,16 @@ const ProductItem = (props) => {
             <span className="new-price"> &#x20b9; {props?.item?.price}</span>
           </div>
           <div>
-            <Button className='add-to-cart'>Add to cart</Button>
+            {
+              isAdded===false?
+              <Button className='add-to-cart' onClick={()=>addToCart(props?.item,context?.userData?._id,quantity)}>Add to cart</Button>:
+              <div className='quantity-btn'>
+              <Button className='quant-btn' onClick={removeQty}><AiOutlineMinus /></Button>
+              <span style={{color:"#000",fontSize:"14px"}}>{quantity}</span>
+              <Button className='quant-btn1' onClick={addQty}><FaPlus /></Button>
+            </div>
+            }
+            
           </div>
           </div>
         </div>

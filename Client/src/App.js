@@ -24,7 +24,7 @@ import Orders from './Pages/Orders';
 import toast, { Toaster } from 'react-hot-toast';
 import Verify from './Pages/Verify';
 import ForgotPassword from './Pages/ForgotPassword';
-import { fetchDataFromApi } from './utils/Api';
+import { fetchDataFromApi, postData } from './utils/Api';
 import Address from './Pages/MyAccount/Address';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
@@ -59,6 +59,7 @@ function App() {
       model:''
     });
   const[catData,setCatData]=useState([]);
+  const[cartData,setCartData]=useState([]);
 
     useEffect(()=>{
         fetchDataFromApi('/api/category').then((res)=>{
@@ -95,6 +96,42 @@ function App() {
     if (status === "error") toast.error(msg);
   };
 
+  const addToCarts=(product,userId,quantity)=>{
+    // console.log(product,userId);
+    if(userId===undefined){
+      openAlertBox("error","You are not login Please login first");
+      return false;
+    }
+    const data={
+      productTitle:product?.name,
+      image:product?.images[0],
+      rating:product?.rating,
+      price:product?.price,
+      quantity:quantity,
+      subTotal:parseInt(product?.price*quantity),
+      productId:product?._id,
+      countInStock:product?.countInStock,
+      userId:userId
+    }
+    postData('/api/cart/add',data).then((res)=>{
+      if(!res?.error){
+        openAlertBox("success",res?.message);
+        getCartItems();
+      }
+      else{
+        openAlertBox("error",res?.message);
+      }
+    })
+  }
+
+  const getCartItems=()=>{
+    fetchDataFromApi('/api/cart/get').then((res)=>{
+          if(!res?.error){
+            setCartData(res?.data);
+          }
+        })
+  }
+
   // handle window resize
   useEffect(() => {
     const handleResize = () => setWindoWidth(window.innerWidth);
@@ -116,7 +153,7 @@ function App() {
         if (res.success) {
           setUserData(res.data);
           // console.log(res);
-          if(res?.response?.data?.error === true){
+          if(res?.error === true){
             localStorage.removeItem("accessToken");
             localStorage.removeItem("refreshToken");
             openAlertBox("error","Your session is closed please login again!")
@@ -126,6 +163,7 @@ function App() {
           setUserEmail(res.data.email);
           localStorage.setItem("userName", res.data.name);
           localStorage.setItem("userEmail", res.data.email);
+          getCartItems();
         } else {
           setIsLogin(false);
           localStorage.removeItem("accessToken");
@@ -159,7 +197,11 @@ function App() {
     setIsOpenFullScreen,
     catData,
     setCatData,
-    handleOpenProductDetailsModel
+    handleOpenProductDetailsModel,
+    addToCarts,
+    cartData,
+    setCartData,
+    getCartItems
   };
 
   return (

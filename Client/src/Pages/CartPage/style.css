@@ -143,12 +143,22 @@
   text-transform: capitalize;
   font-size: 18px;
 }
-.add-section .right-part .cart-total .cart-btn Button:hover{
-  background-color: #363333;
-  color:#fff;
-  font-weight: 600;
+
+.btn-group Button:hover{
+  background-color: #363333 !important;
+  color:#fff !important;
+  font-weight: 600 !important;
 }
 .add-section .right-part .cart-total .cart-btn Button svg{
   font-size: 24px;
   margin-right: 5px;
+}
+
+.css-1160xiw-MuiPaper-root-MuiDrawer-paper{
+  width: 380px !important;
+}
+
+.cart-btn:hover{
+  background-color: #000 !important;
+  color:#fff;
 }

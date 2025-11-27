@@ -40,12 +40,12 @@ const ItemSize = (props) => {
       <div className="cart-item">
               <div className="img">
                 <Link to='/product/45875' className='group'>
-                <img src="https://serviceapi.spicezgold.com/download/1742462383493_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-1-202308161431.jpg" alt=""/></Link>
+                <img src={props?.data?.image} alt=""/></Link>
               </div>
               <div className="info">
                 <RxCross2 className='cross-icon'/>
-                <h6><Link to='/product/_id' className='link-color'>Koskii</Link></h6>
-                <h3><Link to='/product/_id'>Floral Beads and Stones Pure Chiffon Saree</Link></h3>
+                {/* <h6><Link to='/product/_id' className='link-color'>Koskii</Link></h6> */}
+                <h3><Link to='/product/_id'>{props?.data?.productTitle}</Link></h3>
 
                 <div className="size-dropdown">
                   <div className="relative">

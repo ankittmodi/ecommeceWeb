@@ -52,6 +52,7 @@ const logout = async () => {
       localStorage.removeItem("userName");
       localStorage.removeItem("userEmail");
       context.setIsLogin(false);
+      context.setUserData(null);
       history("/");
     } else {
       context.openAlertBox("error", res.message || "Logout failed");
@@ -217,7 +218,7 @@ const logout = async () => {
                     aria-label="cart"
                     onClick={() => context.setOpenCart(true)}
                   >
-                    <StyledBadge badgeContent={4} color="secondary">
+                    <StyledBadge badgeContent={context?.cartData?.length} color="secondary">
                       <IoCartOutline className="header-icon" />
                     </StyledBadge>
                   </IconButton>

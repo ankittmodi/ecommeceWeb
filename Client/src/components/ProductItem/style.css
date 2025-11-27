@@ -10,6 +10,7 @@
   display: block;
   gap: 5px;
 } */
+
 .discount{
   position: absolute;
   top:0px;
@@ -174,7 +175,36 @@ opacity: 1;
 .infor .MuiRating-root{
   color:gold !important;
 }
+.quantity-btn{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  overflow: hidden;
+  border-radius: 20px;
+  border:1px solid rgb(246, 246, 198);
+  margin-top: 1rem;
+  /* gap: 1rem; */
+}
+.quantity-btn .quant-btn{
+  width: 35px !important;
+  height: 30px !important;
+  min-width: 35px !important;
+  /* border: 1px solid #ff5252; */
+  border-bottom-left-radius: 20px;
+  border-top-left-radius: 20px;
+  background-color: #d4d2d2 !important;
+  color:#000 !important;
+}
 
+.quantity-btn .quant-btn1{
+  width: 35px !important;
+  height: 30px !important;
+  min-width: 35px !important;
+  border-bottom-right-radius: 20px;
+  border-top-right-radius: 20px;
+  background-color: #ff5252 !important;
+  color:#fff !important;
+}
 @media(max-width:992px){
   
 }

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './style.css';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
@@ -23,6 +23,10 @@ const Register = () => {
     email: "",
     password: ""
   });
+
+  useEffect(()=>{
+      window.scrollTo(0,0);
+  })
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
