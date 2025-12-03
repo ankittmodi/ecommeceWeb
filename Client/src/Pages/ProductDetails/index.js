@@ -28,7 +28,7 @@ const ProductDetails = (props) => {
   useEffect(()=>{
     setIsLoading(true);
     fetchDataFromApi(`/api/product/${id}`).then((res)=>{
-      console.log(res);
+      // console.log(res);
       if(!res?.error){
         setProductData(res?.product);
 

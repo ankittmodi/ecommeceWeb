@@ -6,6 +6,7 @@
   width: 80%;
   max-width: 80%;
   gap:30px;
+  align-items: flex-start;
 }
 .add-section .left-part{
   width: 70%;
@@ -131,6 +132,11 @@
   font-weight: 500;
 }
 
+.add-section .right-part{
+  position: sticky;
+  z-index: 90;
+  top: 170px;
+}
 .add-section .right-part .cart-total{
   background-color: #fff;
   border-radius: 5px;
@@ -161,4 +167,8 @@
 .cart-btn:hover{
   background-color: #000 !important;
   color:#fff;
+}
+
+.selected{
+  color:#ff5252 !important;
 }

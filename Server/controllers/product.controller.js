@@ -152,6 +152,9 @@ export async function getAllProducts(req,res){
 
 
     const products=await ProductModel.find().populate("category")
+    .populate("size")          // 👈 add this
+      .populate("productWeight") // 👈 add this
+      .populate("productRam")
     .skip((page-1)*perPage)
     .limit(perPage)
     .exec();
@@ -177,6 +180,34 @@ export async function getAllProducts(req,res){
     })
   }
 }
+
+export async function getProducts(req,res){
+  try{
+    const product = await ProductModel.findById(req.params.id)
+      .populate("category")
+
+    if(!product){
+      return res.status(404).json({
+        message:"Product Not found",
+        err:true,
+        success:false
+      });
+    }
+
+    return res.status(200).json({
+      success:true,
+      err:false,
+      product:product
+    })
+  }catch(err){
+    return res.status(500).json({
+      success:false,
+      err:true,
+      message:err.message
+    })
+  }
+}
+
 
 // get all products by category id
 export async function getAllProductsByCatId(req,res){

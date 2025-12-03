@@ -1,14 +1,21 @@
-import React,{useState} from 'react'
+import React,{useContext, useState} from 'react'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { RxCross2 } from "react-icons/rx";
 import { GoTriangleDown } from "react-icons/go";
 import { Link } from 'react-router-dom';
-import Button from '@mui/material/Button';
+import { deleteData} from '../../utils/Api';
+import { myContext } from '../../App';
+
 const MyListItem = (props) => {
     const [sizeanchorEl, setsizeAnchorEl] = useState(null);
     const [selectSize, setselectSize] = useState(props.size);
+    const [QtyanchorEl, setQtyAnchorEl] = useState(null);
+    const [selectQty, setselectQty] = useState(props.qty);
+    const openQty = Boolean(QtyanchorEl);
     const open = Boolean(sizeanchorEl);
+    const context=useContext(myContext);
+
     const handleClick = (event) => {
       setsizeAnchorEl(event.currentTarget);
     };
@@ -21,9 +28,7 @@ const MyListItem = (props) => {
 
       }
     };
-    const [QtyanchorEl, setQtyAnchorEl] = useState(null);
-    const [selectQty, setselectQty] = useState(props.qty);
-    const openQty = Boolean(QtyanchorEl);
+
     const handleClickQty = (event) => {
       setQtyAnchorEl(event.currentTarget);
     };
@@ -36,18 +41,29 @@ const MyListItem = (props) => {
 
       }
     };
+
+  const removeItem=(id)=>{
+    deleteData(`/api/myList/remove/${id}`).then((res)=>{
+      if(!res?.error){
+        context.openAlertBox("success","Item deleted from wishlist");
+        context.getMyListData();
+      }
+    })
+  }
   return (
     <>
       <div className="cart-item">
               <div className="img">
-                <Link to='/product/45875' className='group'>
-                <img src="https://serviceapi.spicezgold.com/download/1742462383493_siril-georgette-brown-color-saree-with-blouse-piece-product-images-rvegeptjtj-1-202308161431.jpg" alt=""/></Link>
+                <Link to={`/product/${props?.item?.productId}`} className='group'>
+                <img src={props?.item?.image} alt=""/></Link>
               </div>
               <div className="info">
-                <RxCross2 className='cross-icon'/>
-                <h6><Link to='/product/_id' className='link-color'>Koskii</Link></h6>
-                <h3><Link to='/product/_id'>Floral Beads and Stones Pure Chiffon Saree</Link></h3>
-
+                <RxCross2 className='cross-icon' onClick={()=>removeItem(props?.item?._id)}/>
+                <h6 style={{color:"#000"}}><Link to={`/product/${props?.item?.productId}`} className='link-color'>{props?.item?.brand}</Link></h6>
+                <h3 style={{color:"#000"}}><Link to={`/product/${props?.item?.productId}`}>{props?.item?.productTitle.substr(0,80)+'...'}</Link></h3>
+                <div>
+                  {/* <Rating name="rating" value={props?.item?.rating || 0} readOnly className='list-rating'/> */}
+                </div>
                 <div className="size-dropdown">
                   <div className="relative">
                     <span className='span' onClick={handleClick}>size: {selectSize} <GoTriangleDown/></span>
@@ -91,11 +107,11 @@ const MyListItem = (props) => {
                   </div>
                 </div>
                 <div className="price">
-                  <span className="new-price"><strong>Rs. 599</strong></span>
-                  <span className="old-price">Rs. 999</span>
-                  <span className="new-price"><strong>Rs. 50% OFF</strong></span>
+                  <span className="new-price"><strong>&#x20b9; {props?.item?.price}</strong></span>
+                  <span className="old-price">&#x20b9; {props?.item?.oldPrice}</span>
+                  <span className="new-price"><strong>{props?.item?.discount}%OFF</strong></span>
                 </div>
-                <Button className='my-btn'>Add to Cart</Button>
+                {/* <Button className='bg-org' onClick={()=>addToCart(props?.item?.productId)}>Add to Cart</Button> */}
               </div>
             </div>
     </>

@@ -220,7 +220,17 @@
   height: 40px;
   width: 70px;
 }
-
+.cart-img{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2rem;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.cart-btn{
+  width: 80% !important;
+}
 
 
 

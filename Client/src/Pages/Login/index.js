@@ -94,7 +94,7 @@ const Login = () => {
 
           // Clear form
           setFormFeilds({ email: "", password: "" });
-
+          context.getCartItems();
           history('/');
         } else {
           context.openAlertBox("error", res.message);

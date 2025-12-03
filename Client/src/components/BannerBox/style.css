@@ -34,6 +34,14 @@
   flex-direction: column;
   gap: 5px;
 }
+.text Button{
+  text-transform: capitalize !important;
+  color: black;
+  font-weight: 600;
+  border:1px solid gray;
+  width: 50%;
+  margin-left: 7rem;
+}
 
 /* LEFT alignment */
 .text.left {

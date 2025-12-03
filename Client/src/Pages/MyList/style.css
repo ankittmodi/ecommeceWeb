@@ -59,6 +59,9 @@
   position: relative;
   
 }
+.list-rating{
+  margin-right: 0px !important;
+}
 .cart-box .cart-item .info .my-btn{
   background-color: #ff5252 !important;
   color:#fff !important;
@@ -110,7 +113,9 @@
   text-decoration: none;
 }
 .cart-box .cart-item .info .price{
-  margin-top: 5px;}
+  margin-top: 5px;
+  margin-bottom: 0.5rem;
+}
 .cart-box .cart-item .info span{
   color:#000;
   margin-right: 15px;
@@ -155,4 +160,22 @@
 .my-list-part .right-part .cart-total .cart-btn Button svg{
   font-size: 24px;
   margin-right: 5px;
+}
+
+.wishlist{
+  display: flex;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-direction: column;
+  height: 200px;
+  width: 100% !important;
+  margin-top: 1rem;
+  gap: 0.5rem;
+}
+.wishlist img{
+  height: 100%;
+  width: 100%;
+}
+.wishlist-btn{
+  width: 100%;
 }

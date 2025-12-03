@@ -6,15 +6,8 @@ import { IoBagCheckOutline } from "react-icons/io5";
 import ItemSize from './ItemSize';
 import { myContext } from '../../App';
 const CartPage = () => {
-  const [sizeanchorEl, setsizeAnchorEl] = useState(null);
-  // const open = Boolean(sizeanchorEl);
-  // const handleClick = (event) => {
-  //   setsizeAnchorEl(event.currentTarget);
-  // };
-  // const handleClose = () => {
-  //   setsizeAnchorEl(null);
-  // };
   const context=useContext(myContext);
+  // console.log(context?.cartData);
   return (
     <section className='add-section'>
       <div className="container">
@@ -25,7 +18,7 @@ const CartPage = () => {
             {
               context?.cartData?.length!==0 && context?.cartData?.map((item,index)=>{
                 return(
-                  <ItemSize size="small" qty={item?.quantity} key={index} data={item}/>
+                  <ItemSize size="small" qty={item?.quantity} key={index} item={item} selected={item?.size}/>
                 )
               })
             }
@@ -40,7 +33,10 @@ const CartPage = () => {
             <hr />
             <div className="bottom-info">
                 <span>Subtotal</span>
-                <span>Rs: <strong>599.00</strong></span>
+                <span><strong>{
+                  (context?.cartData?.length!==0?
+                  context?.cartData?.map(item=>parseInt(item.price)*item.quantity).reduce((total,value)=>total+value,0):0)?.toLocaleString('en-US',{style:'currency',currency:'INR'})
+                }</strong></span>
               </div>
               <div className="bottom-info">
                 <span>Shipping</span>

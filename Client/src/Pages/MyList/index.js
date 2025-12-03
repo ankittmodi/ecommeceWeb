@@ -1,20 +1,13 @@
-import React,{useState} from 'react'
+import React,{useContext} from 'react';
 import './style.css';
-import { Link } from 'react-router-dom';
-import Button from '@mui/material/Button';
-import { IoBagCheckOutline } from "react-icons/io5";
-import ItemSize from './MyListItem';
 import MyListItem from './MyListItem';
 import MyAccountSidebar from '../../components/MyAccountSidebar';
+import { myContext } from '../../App';
+import wishlist from '../../assets/wishlist.jpg'
+import { Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 const MyList = () => {
-  const [sizeanchorEl, setsizeAnchorEl] = useState(null);
-  const open = Boolean(sizeanchorEl);
-  const handleClick = (event) => {
-    setsizeAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setsizeAnchorEl(null);
-  };
+  const context=useContext(myContext);
   return (
     <section className='my-list-part'>
       <div className="container">
@@ -24,11 +17,24 @@ const MyList = () => {
         <div className="left-part">
           <div className="cart-box">
           <h2>My Product List</h2>
-          <p>There are <span>4</span> products in your List</p>
-            <MyListItem />
+          <p>There are <span>{context?.myListData?.length}</span> products in your List</p>
+          {
+            context?.myListData?.length!==0 ? context?.myListData?.map((item,index)=>{
+              return(
+                <MyListItem key={index} item={item} />
+                )
+            })
+            :
+            <div className='wishlist'>
+              <img src={wishlist} />
+              <p>My List is currently empty</p>
+              <Link to='/'><Button className='bg-org wishlist-btn'>Continue Shopping</Button></Link>
+            </div>
+          }
+            {/* <MyListItem />
             <MyListItem/>
             <MyListItem />
-            <MyListItem/>
+            <MyListItem/> */}
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import auth from "../middlewares/Auth.js";
 import upload from '../middlewares/multer.js';
-import { createProduct, createProductRams, createProductSize, createProductWeight, deleteMultipleProduct, deleteProduct, deleteProductRams, deleteProductSize, deleteProductWeight, filters, getAllFeaturedProducts, getAllProductCount, getAllProducts, getAllProductsByCatId, getAllProductsByCatName, getAllProductsByPrice, getAllProductsByRating, getAllProductsBySubCatId, getAllProductsBySubCatName, getAllProductsByThirdSubCatId, getAllProductsByThirdSubCatName, getProduct, getProductRams, getProductRamsById, getProductSizeById, getProductSizes, getProductWeightById, getProductWeights, productImage, sortBy, updateProduct, updateProductRams, updateProductSize, updateProductWeight, uploadBannerImages, uploadImages } from "../controllers/product.controller.js";
+import { createProduct, createProductRams, createProductSize, createProductWeight, deleteMultipleProduct, deleteProduct, deleteProductRams, deleteProductSize, deleteProductWeight, filters, getAllFeaturedProducts, getAllProductCount, getAllProducts, getAllProductsByCatId, getAllProductsByCatName, getAllProductsByPrice, getAllProductsByRating, getAllProductsBySubCatId, getAllProductsBySubCatName, getAllProductsByThirdSubCatId, getAllProductsByThirdSubCatName, getProduct, getProductRams, getProductRamsById, getProducts, getProductSizeById, getProductSizes, getProductWeightById, getProductWeights, productImage, sortBy, updateProduct, updateProductRams, updateProductSize, updateProductWeight, uploadBannerImages, uploadImages } from "../controllers/product.controller.js";
 
 const productRouter=Router();
 
@@ -9,6 +9,7 @@ productRouter.put('/uploadImages',auth,upload.array('images'),uploadImages);
 productRouter.put('/uploadBannerImages',auth,upload.array('bannerImages'),uploadBannerImages);
 productRouter.post('/create',auth,createProduct);
 productRouter.get('/getAllProducts',getAllProducts);
+productRouter.get('/getProductById/:id', getProducts);
 productRouter.get('/getAllProductsByCatId/:id',getAllProductsByCatId);
 productRouter.get('/getAllProductsByCatName',getAllProductsByCatName);
 productRouter.get('/getAllProductsBySubCatId/:id',getAllProductsBySubCatId);

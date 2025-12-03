@@ -20,6 +20,7 @@ import { RxCross2 } from "react-icons/rx";
 import Drawer from '@mui/material/Drawer';
 import CartPanel from '../CartPanel';
 import { myContext } from '../../App';
+import cart from '../../assets/cart.jpg';
 const Footer = () => {
   const context=useContext(myContext);
   return (
@@ -155,7 +156,12 @@ const Footer = () => {
             onClick={context.toggleCartPanel(false)}><RxCross2/></Button>
           </div>
           {
-            context?.cartData?.length!==0 ? <CartPanel data={context?.cartData}/>:"Cart Empty"
+            context?.cartData?.length!==0 ? <CartPanel data={context?.cartData}/>:
+            <div className='cart-img'>
+              <img src={cart} />
+              <p>Your Cart is currently empty</p>
+              <Button className='bg-org cart-btn' onClick={context.toggleCartPanel(false)}>Continue Shopping</Button>
+            </div>
           }
           
         </div>

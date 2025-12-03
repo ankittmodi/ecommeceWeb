@@ -184,6 +184,7 @@ opacity: 1;
   border:1px solid rgb(246, 246, 198);
   margin-top: 1rem;
   /* gap: 1rem; */
+  padding: 0.1rem 0rem;
 }
 .quantity-btn .quant-btn{
   width: 35px !important;
@@ -204,6 +205,67 @@ opacity: 1;
   border-top-right-radius: 20px;
   background-color: #ff5252 !important;
   color:#fff !important;
+}
+
+.image-overlay{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 300px;
+   background-color: rgba(0,0,0,0.7);
+  z-index: 60;
+  padding: 1rem;
+  border-radius: 10px;
+  gap: 0.5rem;
+  width: 100%;
+}
+.overlay-item{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.1rem;
+  background-color: rgba(255,255,255,0.8);
+  height: 29px;
+  width: 35px;
+  min-width: 48px;
+  border-radius: 3px;
+  cursor: pointer;
+  color:#ff5252;
+}
+.tab-color1{
+  background-color: #ff5252;
+  color:#fff;
+}
+.tab-color2{
+  background-color: rgba(255,255,255,0.8);
+}
+.overlay-item:hover{
+  background-color: rgb(246, 244, 244);
+  color: #ff5252;
+}
+.overlay-close{
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 90;
+  font-size: 24px !important;
+  color:#fff;
+  height: 2rem;
+  width: 2rem;
+  cursor: pointer;
+  background-color: rgba(255,255,255,0.5);
+  border-radius: 50%;
+
+}
+.overlay-close.svg{
+  font-size: 24px;
+}
+
+.list-color{
+  background-color: red;
 }
 @media(max-width:992px){
   

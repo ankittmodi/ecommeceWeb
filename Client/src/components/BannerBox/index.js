@@ -10,8 +10,8 @@ const BannerBox = ({ align, bannerTitle, price, image }) => {
           <img src={image} alt="" />
           
           <div className={`text ${align}`}>   {/* align apply */}
-            <p>{bannerTitle}</p>
-            <p>{price}</p>
+            <p style={{color:"#ff5252"}}>{bannerTitle}</p>
+            <p >{price}</p>
             <Button>Shop Now</Button>
           </div>
 

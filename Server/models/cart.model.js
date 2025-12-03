@@ -14,15 +14,15 @@ const cartProductSchema=mongoose.Schema({
     },
     rating:{
         type:Number,
-        required:true
+        // required:true
     },
     price:{
         type:Number,
-        required:true
+        // required:true
     },
     oldPrice:{
         type:Number,
-        required:true
+        // required:true
     },
     size:{
         type:String
@@ -35,11 +35,11 @@ const cartProductSchema=mongoose.Schema({
     },
     discount:{
         type:Number,
-        required:true
+        // required:true
     },
     subTotal:{
         type:Number,
-        required:true
+        // required:true
     },
     userId:{
         type:mongoose.Schema.ObjectId,

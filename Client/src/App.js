@@ -60,6 +60,7 @@ function App() {
     });
   const[catData,setCatData]=useState([]);
   const[cartData,setCartData]=useState([]);
+  const[myListData,setMyListData]=useState([]);
 
     useEffect(()=>{
         fetchDataFromApi('/api/category').then((res)=>{
@@ -102,19 +103,28 @@ function App() {
       openAlertBox("error","You are not login Please login first");
       return false;
     }
-    const data={
-      productTitle:product?.name,
-      image:product?.images[0],
-      rating:product?.rating,
-      price:product?.price,
-      quantity:quantity,
-      subTotal:parseInt(product?.price*quantity),
-      productId:product?._id,
-      countInStock:product?.countInStock,
-      userId:userId
-    }
+    const data = {
+      productTitle: product?.name,
+      image: product?.image,
+      rating: product?.rating,
+      price: product?.price,
+      oldPrice: product?.oldPrice,
+      discount: product?.discount,
+
+      // FIX → use selected values coming from ProductDetail
+      size: product.size || "",
+      ram: product.ram || "",
+      weight: product.weight || "",
+
+      quantity,
+      subTotal: parseInt(product?.price * quantity),
+      productId: product?._id,
+      countInStock: product?.countInStock,
+      userId
+    };
+
     postData('/api/cart/add',data).then((res)=>{
-      if(!res?.error){
+      if(res.success){
         openAlertBox("success",res?.message);
         getCartItems();
       }
@@ -130,6 +140,12 @@ function App() {
             setCartData(res?.data);
           }
         })
+  }
+
+  const getMyListData=()=>{
+    fetchDataFromApi('/api/myList/get').then((res)=>{
+      setMyListData(res?.data);
+    })
   }
 
   // handle window resize
@@ -164,6 +180,7 @@ function App() {
           localStorage.setItem("userName", res.data.name);
           localStorage.setItem("userEmail", res.data.email);
           getCartItems();
+          getMyListData();
         } else {
           setIsLogin(false);
           localStorage.removeItem("accessToken");
@@ -174,6 +191,7 @@ function App() {
       setUserData({ name: "", email: "" });
     }
   }, []);
+
 
   // context values for global access
   const values = {
@@ -201,7 +219,10 @@ function App() {
     addToCarts,
     cartData,
     setCartData,
-    getCartItems
+    getCartItems,
+    getMyListData,
+    myListData,
+    setMyListData
   };
 
   return (
@@ -226,39 +247,40 @@ function App() {
           </Routes>
           <Footer />
           <Toaster />
+          {/* Product details dialog */}
+          <Dialog
+            fullWidth={fullWidth}
+            maxWidth={maxWidth}
+            open={openProductDetailsModel.open}
+            onClose={handleCloseProductDetailsModel}
+            className='productDetailModel'
+          >
+            <DialogContent>
+              <div className="model-box">
+                <Button className='model-btn' onClick={handleCloseProductDetailsModel}><RxCross2 /></Button>
+                {
+                openProductDetailsModel?.item &&
+                openProductDetailsModel?.item?.images &&
+                openProductDetailsModel?.item?.images.length > 0 && (
+                  <>
+                    <div className="col1">
+                      <ZoomProduct images={openProductDetailsModel.item.images} />
+                    </div>
+                    <div className="col2">
+                      <div className="col2-desc">
+                        <ProductDetail data={openProductDetailsModel.item}  goToReviews={() => {}}      // required prop
+                    reviewsCount={0}/>
+                      </div>
+                    </div>
+                  </>
+                )
+              } 
+              </div>
+            </DialogContent>
+          </Dialog>
         </myContext.Provider>
       </BrowserRouter>
 
-      {/* Product details dialog */}
-      <Dialog
-        fullWidth={fullWidth}
-        maxWidth={maxWidth}
-        open={openProductDetailsModel.open}
-        onClose={handleCloseProductDetailsModel}
-        className='productDetailModel'
-      >
-        <DialogContent>
-          <div className="model-box">
-            <Button className='model-btn' onClick={handleCloseProductDetailsModel}><RxCross2 /></Button>
-            {
-            openProductDetailsModel?.item &&
-            openProductDetailsModel?.item?.images &&
-            openProductDetailsModel?.item?.images.length > 0 && (
-              <>
-                <div className="col1">
-                  <ZoomProduct images={openProductDetailsModel.item.images} />
-                </div>
-                <div className="col2">
-                  <div className="col2-desc">
-                    <ProductDetail data={openProductDetailsModel.item} />
-                  </div>
-                </div>
-              </>
-            )
-          } 
-          </div>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

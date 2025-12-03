@@ -40,6 +40,8 @@ const Header = () => {
   const context = useContext(myContext);
   const { windoWidth, userData, isLogin } = context;
   const history=useNavigate();
+
+  window.scrollTo(0,0);
 const logout = async () => {
   setAnchorEl(null);
 
@@ -53,6 +55,8 @@ const logout = async () => {
       localStorage.removeItem("userEmail");
       context.setIsLogin(false);
       context.setUserData(null);
+      context.setCartData([]);
+      context.setMyListData([]);
       history("/");
     } else {
       context.openAlertBox("error", res.message || "Logout failed");
@@ -203,11 +207,13 @@ const logout = async () => {
               {windoWidth > 992 && (
                 <li>
                   <Tooltip title="Wishlist">
-                    <IconButton aria-label="cart">
-                      <StyledBadge badgeContent={4} color="secondary">
+                    <Link to='/mylist'>
+                      <IconButton aria-label="cart">
+                      <StyledBadge badgeContent={context?.myListData?.length} color="secondary">
                         <FaRegHeart className="header-icon" />
                       </StyledBadge>
                     </IconButton>
+                    </Link>
                   </Tooltip>
                 </li>
               )}

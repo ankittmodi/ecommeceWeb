@@ -85,44 +85,47 @@ export const getCartItemController = async (req, res) => {
 
 
 // update cart
-export const updateCartItemQtyController=async (req,res)=>{
-    try{
-        const userId=req.userId;
-        const {_id,qty,subTotal}=req.body;
+export const updateCartItemQtyController = async (req, res) => {
+    try {
+        const userId = req.userId;
+        const { _id, qty, subTotal, size, weight, ram } = req.body;
 
-        if(!_id || !qty){
+        if (!_id || !qty) {
             return res.status(400).json({
-            message: "provide id, qty",
-            err: true,
-            success: false,
+                message: "Provide id and qty",
+                err: true,
+                success: false,
             });
         }
 
-        const updateCartItem=await CartProductModel.updateOne({
-            _id:_id,
-            userId:userId
-        },
-        {
-            quantity:qty,
-            subTotal:subTotal
-        },{
-          new:true
-        });
+        const updateFields = {
+            quantity: qty,
+            subTotal: subTotal,
+            size:size,
+            ram:ram,
+            weight:weight
+        };
+
+        const updateCartItem = await CartProductModel.updateOne(
+            { _id: _id, userId: userId },
+            { $set: updateFields },
+            { new: true }
+        );
 
         return res.status(200).json({
-            message:"Update cart",
+            message: "Cart updated",
             err: false,
             success: true,
-            data:updateCartItem
+            data: updateCartItem
         });
-    }catch(err){
+    } catch (err) {
         return res.status(500).json({
-        message: err.message || err,
-        err: true,
-        success: false,
+            message: err.message || err,
+            err: true,
+            success: false,
         });
     }
-}
+};
 
 // delete cart item
 export const deleteCartItemController = async (req, res) => {

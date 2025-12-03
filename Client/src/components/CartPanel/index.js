@@ -85,7 +85,7 @@ const CartPanel = (props) => {
               <div className="bottom-details">
               <div className="bottom-info">
                 <span>{context?.cartData?.length} item</span>
-                <span>Rs. <strong>{
+                <span><strong>{
                   (context?.cartData?.length!==0?
                   context?.cartData?.map(item=>parseInt(item.price)*item.quantity).reduce((total,value)=>total+value,0):0)?.toLocaleString('en-US',{style:'currency',currency:'INR'})
                 }</strong></span>
@@ -103,7 +103,7 @@ const CartPanel = (props) => {
               </div>
               <br />
               <div className="btn-group">
-              <Link to='/cart'><Button>View Cart</Button></Link>
+              <Link to='/cart' onClick={context.toggleCartPanel(false)}><Button>View Cart</Button></Link>
               <Link to='/checkout'><Button>Checkout</Button></Link>
             </div>
             </div>

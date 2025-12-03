@@ -58,6 +58,7 @@
   background-color: #fff;
   color:#000;
   text-transform: capitalize;
+  border: 1px solid rgba(0,0,0,0.3);
 }
 
 .itemViewAction Button.active svg{
