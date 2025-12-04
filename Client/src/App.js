@@ -43,6 +43,7 @@ function App() {
   const [fullWidth] = useState(true);
   const [maxWidth] = useState('lg');
   const [openCart, setOpenCart] = useState(false);
+  const[openAddressPanel,setOpenAddressPanel]=useState(false);
   const [isLogin, setIsLogin] = useState(false);
   
   // user info states (persistent)
@@ -89,6 +90,10 @@ function App() {
   // toggle cart panel
   const toggleCartPanel = (newOpen) => () => {
     setOpenCart(newOpen);
+  };
+
+  const toggleAddressPanel = (newOpen) => () => {
+    setOpenAddressPanel(newOpen);
   };
 
   // toast alert
@@ -222,7 +227,10 @@ function App() {
     getCartItems,
     getMyListData,
     myListData,
-    setMyListData
+    setMyListData,
+    openAddressPanel,
+    setOpenAddressPanel,
+    toggleAddressPanel
   };
 
   return (

@@ -3,7 +3,7 @@ import userModel from "../models/user.model.js";
 
 export const addAddressController = async (req, res) => {
   try {
-    const { address_line1, city, state, pincode, country, mobile, status, selected, userId } = req.body;
+    const { address_line1, city, state, pincode, country, mobile, landmark, addressType, userId } = req.body;
 
     // ✅ Check duplicates using body
     const existingAddress = await AddressModel.findOne({
@@ -31,8 +31,8 @@ export const addAddressController = async (req, res) => {
       pincode,
       country,
       mobile,
-      status,
-      selected,
+      landmark,
+      addressType,
       userId
     });
 
@@ -63,41 +63,36 @@ export const addAddressController = async (req, res) => {
 };
 
 
-export const getAddressController=async (req,res)=>{
-    try{
-        const address=await AddressModel.find({userId:req?.query?.userId});
-        if(!address){
-            return res.status(400).json({
-            message: "Address not found",
-            err: true,
-            success: false
-            });
-        }
-        else{
-            const userAddress=await userModel.updateOne({_id:req?.query?.userId},{
-                $push:{
-                    address:address?._id
-                }
-            })
-            return res.status(200).json({
-                err:false,
-                success:true,
-                data:address
-            })
-        }
-        return res.status(400).json({
-            err: false,
-            success: true,
-            address:address
-        });
-    }catch(err){
-        return res.status(400).json({
-        message: err.message,
-        err: true,
-        success: false
-    });
-    }
-}
+// export const getAddressController=async (req,res)=>{
+//     try{
+//         const address=await AddressModel.find({userId:req?.query?.userId});
+//         if(!address){
+//             return res.status(400).json({
+//             message: "Address not found",
+//             err: true,
+//             success: false
+//             });
+//         }
+//         else{
+//             const userAddress=await userModel.updateOne({_id:req?.query?.userId},{
+//                 $push:{
+//                     address:address?._id
+//                 }
+//             })
+//             return res.status(200).json({
+//                 err:false,
+//                 success:true,
+//                 data:address
+//             })
+//         }
+//     }catch(err){
+//         return res.status(400).json({
+//         message: err.message,
+//         err: true,
+//         success: false
+//     });
+//     }
+// }
 
 
 // export const selectAddressController=async(req,res)=>{
@@ -135,6 +130,25 @@ export const getAddressController=async (req,res)=>{
 //     });
 //   }
 // }
+export const getAddressController = async (req, res) => {
+  try {
+    const address = await AddressModel.find({ userId: req?.query?.userId });
+
+    return res.status(200).json({
+      err: false,
+      success: true,
+      data: address
+    });
+
+  } catch (err) {
+    return res.status(400).json({
+      message: err.message,
+      err: true,
+      success: false
+    });
+  }
+}
+
 
 
 export const deleteAddressController=async(req,res)=>{

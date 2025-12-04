@@ -7,11 +7,15 @@ import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import { fetchDataFromApi, postData } from '../../utils/Api';
 import { myContext} from '../../App';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
 const AddAddress = ({ onClose, onSuccess }) => {
     const [phone, setPhone] = useState('');
     const[userId,setUserId]=useState();
     const [isLoading, setIsLoading] = useState(false);
     const [status, setStatus] =useState(true);
+    const[addressType,setAddressType]=useState("");
     const context=useContext(myContext);
     const [formFeilds, setFormFeilds] = useState({
           address_line1:"",
@@ -19,19 +23,21 @@ const AddAddress = ({ onClose, onSuccess }) => {
           state:"",
           pincode:"",
           country:"",
+          landmark:"",
           mobile:"",
-          status:true,
-          selected:false,
+          addressType:"",
+          // status:true,
+          // selected:false,
           userId:context.userData?._id
         });
     
      const onChangeInput = (e) => {
-    const { name, value } = e.target;
-    setFormFeilds(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  }
+      const { name, value } = e.target;
+      setFormFeilds(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   useEffect(()=>{
     setFormFeilds(prev => ({
       ...prev,
@@ -39,12 +45,19 @@ const AddAddress = ({ onClose, onSuccess }) => {
     }));
     },[context?.userData])
   //  Status dropdown
-  const handleChangeStatus = (event) => {
-    setStatus(event.target.value);
-    setFormFeilds(prev => ({
-      ...prev,
-      status: event.target.value
-    }));
+  // const handleChangeStatus = (event) => {
+  //   setStatus(event.target.value);
+  //   setFormFeilds(prev => ({
+  //     ...prev,
+  //     status: event.target.value
+  //   }));
+  // }
+  const handleChangeAddressType=(event)=>{
+    setAddressType(event.target.value);
+    setFormFeilds(()=>({
+      ...formFeilds,
+      addressType:event.target.value
+    }))
   }
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -73,12 +86,17 @@ const AddAddress = ({ onClose, onSuccess }) => {
         if (!formFeilds.mobile) {
           context.openAlertBox("error", "Please enter your 10 digit mobile number");
           setIsLoading(false);
+          return ;
+        }
+        if (!formFeilds.addressType) {
+          context.openAlertBox("error", "Please select address type");
+          setIsLoading(false);
           return;
         }
     
         postData(`/api/address/add`, formFeilds, { withCredentials: true })
         .then((data) => {
-            // console.log(data);
+            console.log(data);
             setIsLoading(false);
 
             if (!data.err) {
@@ -159,6 +177,14 @@ const AddAddress = ({ onClose, onSuccess }) => {
                         />
                     </div>
                     <div className='col'>
+                        <h3>Landmark</h3>
+                        <input type='text' className='search'
+                            name='landmark'
+                            value={formFeilds.landmark}
+                            onChange={onChangeInput}
+                        />
+                    </div>
+                    {/* <div className='col'>
                         <h3>Status</h3>
                         <Select
                         labelId="demo-simple-select-label"
@@ -173,7 +199,23 @@ const AddAddress = ({ onClose, onSuccess }) => {
                         <MenuItem value={true}>True</MenuItem>
                         <MenuItem value={false}>False</MenuItem>
                         </Select>
+                    </div> */}
+                </div>
+                <div className='products product-grid2'>
+                    <div className='col'>
+                      <h4 style={{opacity:"0.8",fontSize:"14px"}}>Address Type</h4>
+                      <RadioGroup
+                        row
+                        aria-labelledby="demo-row-radio-buttons-group-label"
+                        name="row-radio-buttons-group"
+                        value={addressType}
+                        onChange={handleChangeAddressType}
+                      >
+                        <FormControlLabel value="Home" control={<Radio />} label="Home" />
+                        <FormControlLabel value="Office" control={<Radio />} label="Office" />
+                      </RadioGroup>
                     </div>
+                    
                 </div>
             </div>
             <br/>

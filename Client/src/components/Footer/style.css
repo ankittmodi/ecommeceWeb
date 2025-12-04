@@ -231,8 +231,9 @@
 .cart-btn{
   width: 80% !important;
 }
-
-
+.address-panel{
+  padding: 1rem;
+}
 
 /* responsiveness */
 @media (max-width: 480px){

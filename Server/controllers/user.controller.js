@@ -355,26 +355,26 @@ export async function updateUserDetails(req,res){
       return res.status(400).send('The user can not be updated');
     }
     // verifying user if user exist
-    let verifyCode="";
-    if(email!==userExist.email){
-      verifyCode=Math.floor(100000+Math.random()*900000).toString();
-    }
-    let hashPassword="";
-    if(password){
-      const salt=await bcrypt.genSalt(10);
-      hashPassword=await bcrypt.hash(password,salt);
-    }
-    else{
-      hashPassword=userExist.password;
-    }
+    // let verifyCode="";
+    // if(email!==userExist.email){
+    //   verifyCode=Math.floor(100000+Math.random()*900000).toString();
+    // }
+    // let hashPassword="";
+    // if(password){
+    //   const salt=await bcrypt.genSalt(10);
+    //   hashPassword=await bcrypt.hash(password,salt);
+    // }
+    // else{
+    //   hashPassword=userExist.password;
+    // }
     const updateUser=await userModel.findByIdAndUpdate(userId,{
       name:name,
       mobile:mobile,
       email:email,
-      isVerified:email!==userExist.email?false:true,
-      password:hashPassword,
-      otp:verifyCode!==""?verifyCode:null,
-      otpExpires:verifyCode!==""?Date.now()+600000:''
+      // isVerified:email!==userExist.email?false:true,
+      // password:hashPassword,
+      // otp:verifyCode!==""?verifyCode:null,
+      // otpExpires:verifyCode!==""?Date.now()+600000:''
     },{new:true});
 
     // send verification email

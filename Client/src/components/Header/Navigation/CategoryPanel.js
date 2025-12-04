@@ -14,14 +14,14 @@ const CategoryPanel = (props) => {
     props.setisopen(newOpen);
   };
 
-  const openSubmenu = (index) => {
-    setsubmenuindex(submenuindex === index ? null : index);
-    setsubmenuindex1(null);    // FIX: reset sub-submenu when switching
-  };
+  // const openSubmenu = (index) => {
+  //   setsubmenuindex(submenuindex === index ? null : index);
+  //   setsubmenuindex1(null);    // FIX: reset sub-submenu when switching
+  // };
 
-  const openSubmenu1 = (index) => {
-    setsubmenuindex1(submenuindex1 === index ? null : index);
-  };
+  // const openSubmenu1 = (index) => {
+  //   setsubmenuindex1(submenuindex1 === index ? null : index);
+  // };
 
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" className='box'>

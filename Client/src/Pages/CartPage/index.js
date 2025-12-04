@@ -1,4 +1,4 @@
-import React,{useContext, useState} from 'react'
+import React,{useContext, useEffect, useState} from 'react'
 import './style.css';
 import { Link } from 'react-router-dom';
 import Button from '@mui/material/Button';
@@ -8,6 +8,9 @@ import { myContext } from '../../App';
 const CartPage = () => {
   const context=useContext(myContext);
   // console.log(context?.cartData);
+  useEffect(()=>{
+    context.getCartItems();
+  })
   return (
     <section className='add-section'>
       <div className="container">

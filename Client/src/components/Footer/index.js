@@ -21,8 +21,10 @@ import Drawer from '@mui/material/Drawer';
 import CartPanel from '../CartPanel';
 import { myContext } from '../../App';
 import cart from '../../assets/cart.jpg';
+import AddressPanel from '../AddressPanel';
+
 const Footer = () => {
-  const context=useContext(myContext);
+    const context=useContext(myContext);
   return (
     <>
     <div className="footer-section">
@@ -166,6 +168,21 @@ const Footer = () => {
           
         </div>
       </Drawer>
+
+      {/* Address panel */}
+      <div className='panel'>
+        <Drawer open={context.openAddressPanel} onClose={context.toggleAddressPanel(false)} anchor='right' className='drawer'>
+          <div className="cart-panel address-panel">
+            <div className="cart-header">
+              <h4>Add Delivery Address</h4>
+              <Button className='cart-panel-btn'
+              onClick={context.toggleAddressPanel(false)}><RxCross2/></Button>
+            </div>
+            <AddressPanel/>
+          </div>
+        </Drawer>
+      </div>
+      
     </>
   )
 }

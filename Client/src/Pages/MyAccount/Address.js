@@ -54,7 +54,8 @@ const Address = () => {
               {/* Add Address button */}
               <div
                 className="address"
-                onClick={() => setShowForm(true)}
+                // onClick={() => setShowForm(true)}
+                onClick={() => context.toggleAddressPanel(true)()}
                 style={{ cursor: "pointer" }}
               >
                 <span style={{ color: "#000" }}>Add Address</span>
@@ -84,15 +85,18 @@ const Address = () => {
                     return (
                       <div className="address-part" key={index}>
                         <div>
-                          <Radio
+                          {/* <Radio
                           checked={selectedValue === item._id}
                           onChange={handleChange}
                           value={item._id}
                           name="radio-buttons"
-                        />
-
+                        /> */}
+                        <span style={{color:"#000",opacity:"0.8",paddingBottom:"0.1rem" }}>{item?.addressType}</span>
+                        <h4>{context?.userData?.name} +
+                            <span style={{ color: "#000" }}>{item?.mobile}</span>
+                        </h4>
                         <span style={{ color: "#000" }} >
-                          {item.address_line1}, {item.city}, {item.state} -{" "}
+                          {item?.landmark}, {item.address_line1}, {item.city}, {item.state} -{" "}
                           {item.pincode}, {item.country}
                         </span>
                         </div>
