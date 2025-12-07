@@ -184,4 +184,22 @@
   align-items: center;
   justify-content: center;
 }
+/* 🟢 PayPal FIX: Safe wrapper */
+.paypal-wrapper {
+  width: 100%;
+  pointer-events: auto !important;
+  margin-top: 1rem;
+}
+
+.paypal-wrapper iframe {
+  max-width: 100% !important;
+}
+.cash-delivery{
+  background-color: #0e0e0e !important;
+  color:#fff !important;
+  text-transform: capitalize !important;
+  margin-bottom: 1rem !important;
+  padding: 0.5rem !important;
+  font-size: 16px !important;
+}
 

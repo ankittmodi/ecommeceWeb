@@ -169,3 +169,21 @@ export const deleteCartItemController = async (req, res) => {
   }
 };
 
+export  const emptyCartController=async(req,res)=>{
+    try{
+        const userId=req.params.id;
+        // const cartItems=await CartProductModel.find({userId:userId});
+        await CartProductModel.deleteMany({userId:userId});
+        return res.status(200).json({
+            err:false,
+            success:true,
+            message:"Order placed"
+        })
+    }catch(err){
+        return res.status(400).json({
+            err:true,
+            success:false,
+            message:err.message
+        })
+    }
+}

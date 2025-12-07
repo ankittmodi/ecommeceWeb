@@ -14,6 +14,7 @@ import myListRouter from './Route/myList.route.js';
 import addressRouter from './Route/address.route.js';
 import homeSliderRouter from './Route/homeSlider.route.js';
 import { bannerV1Router } from './Route/bannerV1.route.js';
+import orderRouter from './Route/order.route.js';
 const app=express();
 app.use(cors({
   origin: ["http://localhost:3000", "http://localhost:3001"], // react app
@@ -42,6 +43,7 @@ app.use('/api/myList',myListRouter);
 app.use('/api/address',addressRouter);
 app.use('/api/homeSlide',homeSliderRouter);
 app.use('/api/bannerV1',bannerV1Router);
+app.use('/api/order',orderRouter);
 connectDB()
   .then(() => {
     app.listen(process.env.PORT, () => {

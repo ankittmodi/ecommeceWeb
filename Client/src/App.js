@@ -28,6 +28,8 @@ import { fetchDataFromApi, postData } from './utils/Api';
 import Address from './Pages/MyAccount/Address';
 import CloseIcon from '@mui/icons-material/Close';
 import Slide from '@mui/material/Slide';
+import Success from './Pages/Orders/Success';
+import Failed from './Pages/Orders/Failed';
 
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -251,6 +253,8 @@ function App() {
             <Route path='/myaccount' element={<MyAccount />} />
             <Route path='/mylist' element={<MyList />} />
             <Route path='/myorder' element={<Orders />} />
+            <Route path='/order/success' element={<Success/>} />
+            <Route path='/order/failed' element={<Failed/>} />
             <Route path='/address' element={<Address />} />
           </Routes>
           <Footer />

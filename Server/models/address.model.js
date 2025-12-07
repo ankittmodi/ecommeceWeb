@@ -26,14 +26,6 @@ const addressSchema=new mongoose.Schema({
   type: mongoose.Schema.Types.ObjectId,
   required: true
   },
-  // status: {
-  //   type: Boolean,
-  //   default: true
-  // },
-  // selected: {
-  //   type: Boolean,
-  //   default: true
-  // },
   landmark: {
     type: String,
   },
