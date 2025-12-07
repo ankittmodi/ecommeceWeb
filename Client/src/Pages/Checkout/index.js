@@ -51,7 +51,7 @@ const Checkout = () => {
   }, [context?.userData]);
 
   /* ------------------------------------------
-           CART TOTAL CALCULATION          
+            CART TOTAL CALCULATION
   -------------------------------------------*/
   useEffect(() => {
     if (context?.cartData?.length) {
